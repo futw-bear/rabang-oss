@@ -1,0 +1,173 @@
+# Snapshot Movers
+
+股票漲跌幅排行（依市場別）
+
+```text
+snapshot/movers/{market}
+
+```
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name          | Type   | Description                                                                      |
+| ------------- | ------ | -------------------------------------------------------------------------------- |
+| `market`\*    | string | 市場別                                                                           |
+| `direction`\* | string | 上漲／下跌，可選 `up` 上漲；`down` 下跌                                          |
+| `change`\*    | string | 漲跌／漲跌幅，可選 `percent` 漲跌幅；`value` 漲跌                                |
+| `gt`          | number | 篩選大於漲跌／漲跌幅的股票                                                       |
+| `type`        | string | 標的類型，可選 `ALLBUT099` 包含一般股票、特別股及ETF ； `COMMONSTOCK` 為一般股票 |
+| `gte`         | number | 篩選大於或等於漲跌／漲跌幅的股票                                                 |
+| `lt`          | number | 篩選小於漲跌／漲跌幅的股票                                                       |
+| `lte`         | number | 篩選小於或等於漲跌／漲跌幅的股票                                                 |
+| `eq`          | number | 篩選等於漲跌／漲跌幅的股票                                                       |
+
+## Response[​](#response "Direct link to Response")
+
+| Name               | Type      | Description  |
+| ------------------ | --------- | ------------ |
+| `date`\*           | string    | 日期         |
+| `time`\*           | string    | 時間         |
+| `market`\*         | string    | 市場別       |
+| `change`\*         | string    | 漲跌／漲跌幅 |
+| `data`\*           | object\[] | 快照資料     |
+| >> `type`          | string    | Ticker 類型  |
+| >> `symbol`        | string    | 股票代碼     |
+| >> `name`          | string    | 股票簡稱     |
+| >> `openPrice`     | number    | 開盤價       |
+| >> `highPrice`     | number    | 最高價       |
+| >> `lowPrice`      | number    | 最低價       |
+| >> `closePrice`    | number    | 收盤價       |
+| >> `change`        | number    | 漲跌         |
+| >> `changePercent` | number    | 漲跌幅       |
+| >> `tradeVolume`   | number    | 成交量       |
+| >> `tradeValue`    | number    | 成交金額     |
+| >> `lastUpdated`   | number    | 快照時間     |
+
+info
+
+'\*' 表示必揭示欄位。
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+
+reststock = sdk.marketdata.rest_client.stock 
+# reststock.snapshot.movers(market='TSE', direction='up', change='percent')  # 2.2.3 及以前版本
+
+## 2.2.4 及以後版本 (使用 Exception 進行例外處理)
+from fubon_neo.fugle_marketdata.rest.base_rest import FugleAPIError
+
+try:  
+  reststock.snapshot.movers(market='TSE', direction='up', change='percent')
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"}  
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+client.stock.snapshot.movers({ market: 'TSE', direction: 'up', change: 'percent' })
+  .then(data => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+using FugleMarketData.QueryModels;
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.Stock;
+
+var movers = await rest.Snapshot.Movers(FugleMarketData.QueryModels.MarketType.TSE, FugleMarketData.QueryModels.DirectionType.Up, 
+                                          FugleMarketData.QueryModels.ChangeType.Percent);
+
+var movers_cont = movers.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(movers_cont);
+
+```
+
+Response Body：
+
+```json
+{
+  "date": "2023-05-29",
+  "time": "133500",
+  "market": "TSE",
+  "change": "percent",
+  "data": [
+    {
+      "type": "EQUITY",
+      "symbol": "2901",
+      "name": "欣欣",
+      "openPrice": 27.1,
+      "highPrice": 29.7,
+      "lowPrice": 27.1,
+      "closePrice": 29.7,
+      "change": 2.7,
+      "changePercent": 10,
+      "tradeVolume": 640,
+      "tradeValue": 18824300,
+      "lastUpdated": 1685338200000000
+    },
+    {
+      "type": "EQUITY",
+      "symbol": "2345",
+      "name": "智邦",
+      "openPrice": 357.5,
+      "highPrice": 357.5,
+      "lowPrice": 346.5,
+      "closePrice": 357.5,
+      "change": 32.5,
+      "changePercent": 10,
+      "tradeVolume": 9350,
+      "tradeValue": 3331334500,
+      "lastUpdated": 1685338200000000
+    },
+    {
+      "type": "EQUITY",
+      "symbol": "3025",
+      "name": "星通",
+      "openPrice": 42.3,
+      "highPrice": 44.65,
+      "lowPrice": 41.8,
+      "closePrice": 44.65,
+      "change": 4.05,
+      "changePercent": 9.98,
+      "tradeVolume": 25625,
+      "tradeValue": 1114127050,
+      "lastUpdated": 1685338200000000
+    },
+    ......
+  ]
+}
+
+```

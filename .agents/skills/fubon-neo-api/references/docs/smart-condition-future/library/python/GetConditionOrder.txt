@@ -1,0 +1,122 @@
+# 條件單查詢
+
+get\_condition\_order
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數              | 類別                                                                                                                                                                      | 說明       |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| account           | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#account)                                                                       | 帳號       |
+| marketType        | [FutOptConditionMarketType](https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/EnumMatrix.txt#futoptconditionmarkettype) (Optional) default : 日盤 | 盤別       |
+| condition\_status | [ConditionStatus](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/EnumMatrix.txt#conditionstatus) (Optional)                                           | 條件單狀態 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | List                | 條件單回傳資訊                   |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionDetail 欄位[​](#委託資訊-conditiondetail--欄位 "Direct link to 委託資訊 ConditionDetail  欄位")
+
+Return type : Object
+
+| 參數                         | 類別   | 說明             |
+| ---------------------------- | ------ | ---------------- |
+| guid                         | string | 條件單號         |
+| batch\_no                    | string | 分單批號         |
+| order\_level                 | string | 條件單層級       |
+| last\_time                   | string | 更新時間         |
+| parent\_guid                 | string | 父單單號         |
+| symbol                       | string | 商品代號         |
+| order\_amount                | string | 委託金額         |
+| child\_batch\_no             | string | 子單分單批號     |
+| account                      | string | 帳號             |
+| condition\_content           | string | 條件內容         |
+| action                       | string | 處理方式         |
+| condition\_buy\_sell         | string | 買賣別           |
+| condition\_symbol            | string | 商品名稱         |
+| condition\_price             | string | 價格             |
+| condition\_volume            | string | 委託數量         |
+| condition\_filled\_volume    | string | 成交數量         |
+| creat\_time                  | string | 建立時間         |
+| start\_date                  | string | 預約開始時間     |
+| status                       | string | 目前狀態         |
+| error\_message               | string | 目前狀態異常說明 |
+| detail\_records\_count       | string | 明細筆數         |
+| detail\_records              | List   | 明細資料         |
+| >> guid                      | string | 條件單號         |
+| >> account                   | string | 帳號             |
+| >> condition\_content        | string | 條件內容         |
+| >> action                    | string | 處理方式         |
+| >> condition\_buy\_sell      | string | 買賣別           |
+| >> condition\_symbol         | string | 商品名稱         |
+| >> condition\_price          | string | 價格             |
+| >> condition\_volume         | string | 委託數量         |
+| >> condition\_filled\_volume | string | 成交數量         |
+| >> start\_date               | string | 預約時間         |
+| >> status                    | string | 目前狀態         |
+| >> error\_message            | string | 目前狀態異常說明 |
+| tpslCount                    | string | 停損停利筆數     |
+| tpslRecord                   | List   | 停損停利明細資料 |
+| >> guid                      | string | 條件單號         |
+| >> account                   | string | 帳號             |
+| >> condition\_content        | string | 條件內容         |
+| >> action                    | string | 處理方式         |
+| >> condition\_buy\_sell      | string | 買賣別           |
+| >> condition\_symbol         | string | 商品名稱         |
+| >> condition\_price          | string | 價格             |
+| >> condition\_volume         | string | 委託數量         |
+| >> condition\_filled\_volume | string | 成交數量         |
+| >> start\_date               | string | 預約時間         |
+| >> status                    | string | 目前狀態         |
+| >> error\_message            | string | 目前狀態異常說明 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+sdk.futopt.get_condition_order(account)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+
+Result {
+    is_success: True,
+    message: None,
+    data : [
+         ConditionDetail {
+            guid: "1d97125b-9847-4b30-a066-2b490be17b2d",
+            batch_no: "",
+            order_level: "0",
+            last_time: "2024-09-15 10:33:33",
+            condition_type: "移動鎖利",
+            parent_guid: "",
+            symbol: "FITX202411",
+            order_amount: "0",
+            child_batch_no: "",
+            account: "9974825",
+            condition_content: "當自2024/09/15至2024/11/16內台指期202411成交價小於等於20000點 全部成交為止",
+            action: "下單(新倉)",
+            condition_buy_sell: "買",
+            condition_symbol: "台指期202411 買",
+            condition_price: "賣出價(3) 檔(ROD)",
+            condition_volume: "1口",
+            condition_filled_volume: "0口",
+            create_time: "2024-09-15 10:33:33",
+            start_date: "2024/09/15",
+            status: "洗價中(Y)",
+            error_message: None,
+            detail_records_count: "0",
+            detail_records: [],
+            TPSLCount: "0",
+            TPSLRecord: [],
+        }, 
+        ...
+    ]
+}
+
+```

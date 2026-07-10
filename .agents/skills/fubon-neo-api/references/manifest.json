@@ -1,0 +1,2522 @@
+{
+  "document_count": 419,
+  "documents": [
+    {
+      "path": "download/download-sdk.txt",
+      "sha256": "79eba1b257ef658ab87e630b0cdd2691a9a4ce90860d6fb6a3bf65745073d622",
+      "size": 10547,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/download/download-sdk.txt"
+    },
+    {
+      "path": "install-compatibility.txt",
+      "sha256": "aae928d99ce56b8f3a4f986f82cd7ba93d3d4c594a9649107d2a346ff7b4f0b9",
+      "size": 4193,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/install-compatibility.txt"
+    },
+    {
+      "path": "key.txt",
+      "sha256": "a665e9174f4f44d265d4ce1aa9fed80ae3388fc6013216dc5030f520e3f59133",
+      "size": 3298,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/key.txt"
+    },
+    {
+      "path": "market-data-future/http-api/getting-started.txt",
+      "sha256": "17cb2acc75d97b33c97dfc3fe04ad4ecfe8f5aa7d4fef980be3f00a9a6f07f0e",
+      "size": 3059,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/http-api/getting-started.txt"
+    },
+    {
+      "path": "market-data-future/http-api/intraday/candles.txt",
+      "sha256": "4dbb2953e5a247aee5d922110bcbf77f206bb7128f6f8be9aa63046373abfa66",
+      "size": 4227,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/http-api/intraday/candles.txt"
+    },
+    {
+      "path": "market-data-future/http-api/intraday/products.txt",
+      "sha256": "13102b8f84b05f6de021b20e69333dce55c32f7c63f9078640d3a66413b5ff91",
+      "size": 6829,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/http-api/intraday/products.txt"
+    },
+    {
+      "path": "market-data-future/http-api/intraday/quote.txt",
+      "sha256": "19ee865228fc4e956ad51e31344be99af0ca43e1f4bc65816300660397dfb310",
+      "size": 5671,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/http-api/intraday/quote.txt"
+    },
+    {
+      "path": "market-data-future/http-api/intraday/ticker.txt",
+      "sha256": "ca80180a8ea14706d7a0ae9f54fa703e76bbfb80a290de8a5deb8c4beefe0e3f",
+      "size": 3181,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/http-api/intraday/ticker.txt"
+    },
+    {
+      "path": "market-data-future/http-api/intraday/tickers.txt",
+      "sha256": "0da9bfa909303399070f600b10a2aaaa20d64e3fb13360bb4a052ddb6ac59091",
+      "size": 6198,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/http-api/intraday/tickers.txt"
+    },
+    {
+      "path": "market-data-future/http-api/intraday/trades.txt",
+      "sha256": "99cf782287bf4a1032e2a9add487440e0b13f4e758914e412e7e54a5fff1dbcf",
+      "size": 3607,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/http-api/intraday/trades.txt"
+    },
+    {
+      "path": "market-data-future/http-api/intraday/volumes.txt",
+      "sha256": "ed14b66c6dac1366ec78db2f9b70a46a5f86500e15d63c2d2f8568318da2a86f",
+      "size": 4560,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/http-api/intraday/volumes.txt"
+    },
+    {
+      "path": "market-data-future/intro.txt",
+      "sha256": "fb750e8904a052ab50ebb196acee9abfbff3cffe0cc66371e7e629fc0236c56d",
+      "size": 4179,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/intro.txt"
+    },
+    {
+      "path": "market-data-future/making-connection.txt",
+      "sha256": "f72ad218e39c790b8d5c6bd71cfbc4273eafda5f0fa976298cd2bdb270bcf838",
+      "size": 4077,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/making-connection.txt"
+    },
+    {
+      "path": "market-data-future/rate-limit.txt",
+      "sha256": "7ba89afdec8262a117b98fec15298edd2965a280c7530b9f1b10d5c94d1b135b",
+      "size": 1362,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/rate-limit.txt"
+    },
+    {
+      "path": "market-data-future/websocket-api/getting-started.txt",
+      "sha256": "f63c5f461e33d6188ff279c20455967ce9de77e2d659ee347fdd7d672359102d",
+      "size": 9683,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/websocket-api/getting-started.txt"
+    },
+    {
+      "path": "market-data-future/websocket-api/market-data-channels/aggregates.txt",
+      "sha256": "3026309d76b93c0cb5e14f58fa7b111ef536d097080b10ddabcd20f930cfcb3b",
+      "size": 6055,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/websocket-api/market-data-channels/aggregates.txt"
+    },
+    {
+      "path": "market-data-future/websocket-api/market-data-channels/books.txt",
+      "sha256": "b91de8d6e8e521f09d3cac3f8520edb9166307716a75def9c145a50b38a16338",
+      "size": 4615,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/websocket-api/market-data-channels/books.txt"
+    },
+    {
+      "path": "market-data-future/websocket-api/market-data-channels/candles.txt",
+      "sha256": "d24552f8f75717c611acebfac2e1b954e2fe746052f473a3a73c78057a0fee18",
+      "size": 4509,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/websocket-api/market-data-channels/candles.txt"
+    },
+    {
+      "path": "market-data-future/websocket-api/market-data-channels/trades.txt",
+      "sha256": "2740899171d1f1eba4fac2424051b0b55a512a82b4aa915ab726606eb5af6550",
+      "size": 4255,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/websocket-api/market-data-channels/trades.txt"
+    },
+    {
+      "path": "market-data-future/websocket-api/upgrade-guide.txt",
+      "sha256": "c7f70bef3f8a337b478521318dc690efc93e874cabdc59772f3d0ebabcef6397",
+      "size": 1765,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data-future/websocket-api/upgrade-guide.txt"
+    },
+    {
+      "path": "market-data/http-api/corporate-actions/captital-changes.txt",
+      "sha256": "21c0ac1ae58c162eb5b2fedf5abc54ede577b010d74241b573c40f59896ac59b",
+      "size": 12895,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/corporate-actions/captital-changes.txt"
+    },
+    {
+      "path": "market-data/http-api/corporate-actions/dividends.txt",
+      "sha256": "c7e77c47b5467fece4d09a6e039248a436a203537843c7922c8fdee937b353d2",
+      "size": 6413,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/corporate-actions/dividends.txt"
+    },
+    {
+      "path": "market-data/http-api/corporate-actions/listing-applicants.txt",
+      "sha256": "5b48c1d510b9a7bbca3c5d133ee2142e12ed78932e844af4ca3dd4e07f8a4674",
+      "size": 6114,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/corporate-actions/listing-applicants.txt"
+    },
+    {
+      "path": "market-data/http-api/getting-started.txt",
+      "sha256": "ac226c91f8866d372241fd11dd9c23754792577f0580d8ce0dda3f86db1bac55",
+      "size": 4093,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/getting-started.txt"
+    },
+    {
+      "path": "market-data/http-api/historical/candles.txt",
+      "sha256": "e2eb319a484b64a85befcf451d5c394116adbbb5c959c9338249872a04c08518",
+      "size": 5005,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/historical/candles.txt"
+    },
+    {
+      "path": "market-data/http-api/historical/stats.txt",
+      "sha256": "439a202b64a2e5f5fbddeac4c62a399bfd3222d2025cadf10d62c0a6b326dc21",
+      "size": 3502,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/historical/stats.txt"
+    },
+    {
+      "path": "market-data/http-api/intraday/candles.txt",
+      "sha256": "072379136371aaa8245aec6644529b8d02b84cbec4dc4a2590aaccf718f652ae",
+      "size": 5148,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/candles.txt"
+    },
+    {
+      "path": "market-data/http-api/intraday/quote.txt",
+      "sha256": "c40c5a728f439c978c7a11aac9f9b1b47e0e22fe999fe03708f94429d2e689e3",
+      "size": 9379,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/quote.txt"
+    },
+    {
+      "path": "market-data/http-api/intraday/ticker.txt",
+      "sha256": "c7435228d9ddbc84cea71caefc72cef409080b33805cf9ad73f47750725c6a19",
+      "size": 9930,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/ticker.txt"
+    },
+    {
+      "path": "market-data/http-api/intraday/tickers.txt",
+      "sha256": "826486dbd8936dc5a5e446b811f88900cf57eba854d6b92ec98000750bd45d74",
+      "size": 6176,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/tickers.txt"
+    },
+    {
+      "path": "market-data/http-api/intraday/trades.txt",
+      "sha256": "f7a7f3bf13d8880e9d67edea1756d91c742a2a46227bfa03626089c15672c80f",
+      "size": 3610,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/trades.txt"
+    },
+    {
+      "path": "market-data/http-api/intraday/volumes.txt",
+      "sha256": "3b11eff40d10b814781a82f6354223ac003129f0b05d42e9ab5886b24b6d7eb0",
+      "size": 4252,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/volumes.txt"
+    },
+    {
+      "path": "market-data/http-api/snapshot/actives.txt",
+      "sha256": "a2e571571eefc2d6d7a5d7696c8f35e5225c089aa930c0198696649ae5e18f20",
+      "size": 4812,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/snapshot/actives.txt"
+    },
+    {
+      "path": "market-data/http-api/snapshot/movers.txt",
+      "sha256": "195ecc3371c72ff5029c2377d8d32708b90f4e98e71b436726244ec4a5d3d407",
+      "size": 5646,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/snapshot/movers.txt"
+    },
+    {
+      "path": "market-data/http-api/snapshot/quotes.txt",
+      "sha256": "158ea9cd7c23f9ce2d021fda8c421bb564e18691c205d87408e3a0022beb336c",
+      "size": 4892,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/snapshot/quotes.txt"
+    },
+    {
+      "path": "market-data/http-api/technical/bbands.txt",
+      "sha256": "33b95e704762da14d5ab10ec3542b319e1cf8021bb6f74fd58332e2a337ca441",
+      "size": 5219,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/technical/bbands.txt"
+    },
+    {
+      "path": "market-data/http-api/technical/kdj.txt",
+      "sha256": "f2c1bde43147a4221454f404836c7c16acbeedd06098ce20d20a8a9490c0e1f5",
+      "size": 5640,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/technical/kdj.txt"
+    },
+    {
+      "path": "market-data/http-api/technical/macd.txt",
+      "sha256": "c97c3c1d489fab95e6fc26436e25fe2a72d3510ad5a3f9d0710c3d569571878f",
+      "size": 5637,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/technical/macd.txt"
+    },
+    {
+      "path": "market-data/http-api/technical/rsi.txt",
+      "sha256": "9deba81e38db96c39deb10d153c869a8afdd4940ee9856cdf6b72b306f36c47d",
+      "size": 4651,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/technical/rsi.txt"
+    },
+    {
+      "path": "market-data/http-api/technical/sma.txt",
+      "sha256": "c8b0218324082271c5f531584020b753ce38392ef2a0dedf0fac462afc7ad83b",
+      "size": 4562,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/technical/sma.txt"
+    },
+    {
+      "path": "market-data/intro.txt",
+      "sha256": "d499a3eb52c12030610682440cfb0bbd6955f6f2e0a4ce500db3dc8714d8ee8c",
+      "size": 4041,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/intro.txt"
+    },
+    {
+      "path": "market-data/making-connection.txt",
+      "sha256": "b46210413850ed62247f57422ba95bc5748a45f937a289a66d03564d81fc11a2",
+      "size": 4243,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/making-connection.txt"
+    },
+    {
+      "path": "market-data/rate-limit.txt",
+      "sha256": "327329d75ac90dfa4b9ad2f51b1d9c7c24749f580e94340623519af633dd6c94",
+      "size": 1485,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/rate-limit.txt"
+    },
+    {
+      "path": "market-data/websocket-api/getting-started.txt",
+      "sha256": "14c70626e1b1bc5ca3f3bbcc9e58c8e99470055037d0f40813d2ac06241a568d",
+      "size": 9853,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/getting-started.txt"
+    },
+    {
+      "path": "market-data/websocket-api/market-data-channels/aggregates.txt",
+      "sha256": "2053572c979f0f1f8a03ce15c60339778d04fe36b02e622917c46d4c63eb24c5",
+      "size": 9293,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/market-data-channels/aggregates.txt"
+    },
+    {
+      "path": "market-data/websocket-api/market-data-channels/books.txt",
+      "sha256": "e0f9e15d000cb9b4a552696340f5c305825c57e0e5040be1a79d603b4ac4e5e8",
+      "size": 4068,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/market-data-channels/books.txt"
+    },
+    {
+      "path": "market-data/websocket-api/market-data-channels/candles.txt",
+      "sha256": "e8a5967ae086a55c8b9f93fc60375a3caab38e55ead40a9784841ce0723f2c7d",
+      "size": 4410,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/market-data-channels/candles.txt"
+    },
+    {
+      "path": "market-data/websocket-api/market-data-channels/indices.txt",
+      "sha256": "42fa729f1857c3978aabb8e4d22a2adffca2f87817170b5ce8babc6bf36206e3",
+      "size": 2135,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/market-data-channels/indices.txt"
+    },
+    {
+      "path": "market-data/websocket-api/market-data-channels/trades.txt",
+      "sha256": "840c4b7ea3c7c76a4b3efab59de104712e96b79c2bef8d73922d03a3495014b7",
+      "size": 4782,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/market-data-channels/trades.txt"
+    },
+    {
+      "path": "market-data/websocket-api/upgrade-guide.txt",
+      "sha256": "c3654934c1c697093c5976eaa26bd92f3b3921d2a5cd14e01ec0c098023826ab",
+      "size": 1603,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/upgrade-guide.txt"
+    },
+    {
+      "path": "smart-condition-future/Agreements.txt",
+      "sha256": "ef122fa7b5557d4134e7bd12c56a19c0598a62117f54d73e9b36a3b28466e8e8",
+      "size": 5559,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/Agreements.txt"
+    },
+    {
+      "path": "smart-condition-future/advance/TPSL-introduce.txt",
+      "sha256": "3d85e00704538f2a3dd91c214d9271fab0e8f492bd4f31054b2fe56daf39127f",
+      "size": 3797,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/advance/TPSL-introduce.txt"
+    },
+    {
+      "path": "smart-condition-future/advance/TrailProfit-introduce.txt",
+      "sha256": "4579d3417038b131366945e86005aa42cc606c09cdd204a886df7dcc684a73b9",
+      "size": 1845,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/advance/TrailProfit-introduce.txt"
+    },
+    {
+      "path": "smart-condition-future/error-codes.txt",
+      "sha256": "6b6411ba73e4b4fe50746d0442032627d7670e9eafc270df46dc22a586d13fc0",
+      "size": 1367,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/error-codes.txt"
+    },
+    {
+      "path": "smart-condition-future/introduction.txt",
+      "sha256": "8d3871a15873e0236c4b9e0ec9f33b127264ff17ec72ee9ee277baa6e0b5b97b",
+      "size": 2246,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/introduction.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/CancelCondition.txt",
+      "sha256": "52ddb26171fe37e1d119b759947dfa18685aa5fb42536134ec77088479a3b4cd",
+      "size": 2238,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/CancelCondition.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/EnumMatrix.txt",
+      "sha256": "fd83a788f993e20001752ad89e2dd084a783e2922fcbcf824b29d20c5c4a2630",
+      "size": 20398,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/EnumMatrix.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/GetConditionById.txt",
+      "sha256": "40ecea99d876e072b3f8a15743f0f35126a0585945433873ee6a65369bc5fa04",
+      "size": 7574,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/GetConditionById.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/GetConditionHistory.txt",
+      "sha256": "0c425268411186c2494b67afc350d579c804a225097ff420a4032fc3a550949f",
+      "size": 8031,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/GetConditionHistory.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/GetConditionOrder.txt",
+      "sha256": "b2a61999954a79e367f5aebe511c9990d2ab2136512d966acff657c1f193233b",
+      "size": 7564,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/GetConditionOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/MultiCondition.txt",
+      "sha256": "aa0c4240b1f889b7b79eef8cdd855d3967fae15d2d0c279ff3dd53786949c764",
+      "size": 3817,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/MultiCondition.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/MultiConditionTPSL.txt",
+      "sha256": "67f5a95544f11860b1bcdaa4a177d87430dd1569b0adf65755116a646e965308",
+      "size": 4784,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/MultiConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/SingleCondition.txt",
+      "sha256": "7a8fff029c06d37119e746b37fc3c882adc7f183534709881339caaecd141b59",
+      "size": 3619,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/SingleCondition.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/SingleConditionTPSL.txt",
+      "sha256": "74d12b485982351f254dedb6beb732970baa05ae39a9779778fd317002b768c1",
+      "size": 4529,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/SingleConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/timeslice/GetTimeSliceOrder.txt",
+      "sha256": "c2353f7a36006d35b54b5c95957635623676480cb73ffda7da1df0e44ddb1926",
+      "size": 6273,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/timeslice/GetTimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/timeslice/TimeSliceOrder.txt",
+      "sha256": "f81c7d5d99666bbd0a378848df84125b8947c1ef367422b85b95fb12080c20df",
+      "size": 3547,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/timeslice/TimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/trailprofit/GetTrailHistory.txt",
+      "sha256": "620cd3298bb73b3fe082cc882865e5531189b390433cec463ad4f6bc4d83e654",
+      "size": 6340,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/trailprofit/GetTrailHistory.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/trailprofit/GetTrailOrder.txt",
+      "sha256": "6ce61003e35288c903a99c8551dd59ebf04d1988bce93245fa6ae8ab70fafffe",
+      "size": 5920,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/trailprofit/GetTrailOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/csharp/trailprofit/TrailOrder.txt",
+      "sha256": "4d4d871bf94853bdacb5082cedd7cddaf73fc9e7fd0ab3e80dcbd39095bf4499",
+      "size": 3245,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/trailprofit/TrailOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/CancelCondition.txt",
+      "sha256": "c63e38c7ca5e26374e18f2f8e2132a6b2b37c4b3648754cba208a31593cfe805",
+      "size": 2201,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/CancelCondition.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/EnumMatrix.txt",
+      "sha256": "010ff22cce4e21f44a8af1c3b175294f53b6036cf92b55bab2603aa51208dddb",
+      "size": 20110,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/EnumMatrix.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/GetConditionById.txt",
+      "sha256": "d8f15e304ebe3cf509ab01247b5c9884408f9200179fe39d0d6f803835f2dd58",
+      "size": 7761,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/GetConditionById.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/GetConditionHistory.txt",
+      "sha256": "bfeb6d662a2c88b5202e896358234f42228641a3c3ba742c34f3a3665b8a36f0",
+      "size": 8276,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/GetConditionHistory.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/GetConditionOrder.txt",
+      "sha256": "859a6e648ab118d1280cf2024133f63d83c3e4f9aefe1dd7b1b3227cb52fe928",
+      "size": 7754,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/GetConditionOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/MultiCondition.txt",
+      "sha256": "d791cba64c119f6acb2f3fc5870c6618d5933ab2a888c0886ab52c0049ad447e",
+      "size": 3807,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/MultiCondition.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/MultiConditionTPSL.txt",
+      "sha256": "da6d45b467a49579cb3f914585dfe85f8737b44b1afcdb8e2872163c5add08d2",
+      "size": 4836,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/MultiConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/SingleCondition.txt",
+      "sha256": "950b192b076d5c455637c47371d7eb87feef91e2bd2d9ff849d44aa284bd6ef5",
+      "size": 3565,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/SingleCondition.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/SingleConditionTPSL.txt",
+      "sha256": "526c1add77838f58f3d509f5e4b50a9caad669271c16aecbed002ee8cbd7845f",
+      "size": 4608,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/SingleConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/timeslice/GetTimeSliceOrder.txt",
+      "sha256": "1c383ead380878a57c045770b1f8dbf12e22a13ca5446161c41e58587f4fed75",
+      "size": 6181,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/timeslice/GetTimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/timeslice/TimeSliceOrder.txt",
+      "sha256": "0c02672672be08c939102e7c1e53d3b25e0eed76e005932088c01a073c191553",
+      "size": 3573,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/timeslice/TimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/trailprofit/GetTrailHistory.txt",
+      "sha256": "8d60341b30d6449f07341036e188d1b1b86030cd6159846585d401ef4626be4a",
+      "size": 6277,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/trailprofit/GetTrailHistory.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/trailprofit/GetTrailOrder.txt",
+      "sha256": "559e249548fef6f3a49d105ffb62cb554580941a1e390824aa0a653894043c65",
+      "size": 5858,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/trailprofit/GetTrailOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/nodejs/trailprofit/TrailOrder.txt",
+      "sha256": "f0995ce46d4bc083ae532f32f487a9c1665d1b48b34f6acc87f33941ac78015c",
+      "size": 3346,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/trailprofit/TrailOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/CancelCondition.txt",
+      "sha256": "c34f42b46870264d9867ccda6614749650ba3af6a939e3688745e9948966a59f",
+      "size": 2243,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/CancelCondition.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/EnumMatrix.txt",
+      "sha256": "e0555e99bdecbd211b81a2450d7ccc9dd1b09f05b4dec8a94462042006a52cb6",
+      "size": 20831,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/EnumMatrix.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/GetConditionById.txt",
+      "sha256": "34c5b96d060432f744b3b7509e6dba86fcd9f01ed880fbcaac694f3eeb1526de",
+      "size": 7905,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/GetConditionById.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/GetConditionHistory.txt",
+      "sha256": "5f5e1ab5fdf4ee5c5cfa87762630de56d3eb0eca46c69cdc6403449db170805a",
+      "size": 6866,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/GetConditionHistory.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/GetConditionOrder.txt",
+      "sha256": "c895a0595e9fc1a19bc9673875893694af23b3fa2778e8142b991bf92160d9c7",
+      "size": 6394,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/GetConditionOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/MultiCondition.txt",
+      "sha256": "cb4341cca4aebebdd8388a1060dd0fdb5e1049179d91f50533245c59405fcb87",
+      "size": 3945,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/MultiCondition.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/MultiConditionTPSL.txt",
+      "sha256": "b2bce93276dbd2f5dee49c97849646d21b43aaef2005c024b1024a6184cecbf2",
+      "size": 4983,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/MultiConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/SingleCondition.txt",
+      "sha256": "5cb8c23a8d15aebfa77b3270ea751d52317a2d6f8043e7e36269fff4a08f9def",
+      "size": 3710,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/SingleCondition.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/SingleConditionTPSL.txt",
+      "sha256": "c4c10c7e209aefa41da8091c0c3bec590bc6e77b46f4bfe95d448134b5070535",
+      "size": 4753,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/SingleConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/timeslice/GetTimeSliceOrder.txt",
+      "sha256": "73bc97cdbba1bbb2e432b8ef56b58a6ac369d19a1d0a2e19b0ede084eca38be6",
+      "size": 6370,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/timeslice/GetTimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/timeslice/TimeSliceOrder.txt",
+      "sha256": "bd1f571feb32522559c72dd2efae6e04405bd7096b9028d3718c1620696d463f",
+      "size": 3700,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/timeslice/TimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/trailprofit/GetTrailHistory.txt",
+      "sha256": "a0beed01491506d66ce56136d5ea68ea403160c4a493c1d6fa4d15fc97446cd6",
+      "size": 6443,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/trailprofit/GetTrailHistory.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/trailprofit/GetTrailOrder.txt",
+      "sha256": "28ff896d965b7b591bb8a351860084d6f32d0b1b7f935942106bc0897e80d1ea",
+      "size": 6021,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/trailprofit/GetTrailOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/library/python/trailprofit/TrailOrder.txt",
+      "sha256": "08274aab021ba1d60aba96658b52609ae751fe885314059ed6491d50130f0cd3",
+      "size": 3404,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/python/trailprofit/TrailOrder.txt"
+    },
+    {
+      "path": "smart-condition-future/prepare.txt",
+      "sha256": "77eec5a8575f9a9c031dff609ebfff8396de2ac57361609af45d17727ef746d8",
+      "size": 1443,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/prepare.txt"
+    },
+    {
+      "path": "smart-condition-future/trobleshoot.txt",
+      "sha256": "c6bbe92400747aa5d56d2d836fb3132f7aded7743ae70c129721edd4ce60201f",
+      "size": 357,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/trobleshoot.txt"
+    },
+    {
+      "path": "smart-condition/Agreements.txt",
+      "sha256": "a2b80301b1eab1d0a5bd879c84b842f1836cb5bb513aa50d57e7220faa450306",
+      "size": 5556,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/Agreements.txt"
+    },
+    {
+      "path": "smart-condition/advance/TPSL-introduce.txt",
+      "sha256": "ac47fd5d3dceeb355121bf924fe1a52f442b2446d668cacabaf81de055040ab7",
+      "size": 4151,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/advance/TPSL-introduce.txt"
+    },
+    {
+      "path": "smart-condition/advance/TrailProfit-introduce.txt",
+      "sha256": "164642ffb96ba1837c8f6719a3baa320f3a760f48610aacf6145c8d7601313ee",
+      "size": 1797,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/advance/TrailProfit-introduce.txt"
+    },
+    {
+      "path": "smart-condition/error-codes.txt",
+      "sha256": "f998ce35de51a4110ceef6002d57af269e9c186463d55783b9bb2372cbfd7bf4",
+      "size": 1361,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/error-codes.txt"
+    },
+    {
+      "path": "smart-condition/introduction.txt",
+      "sha256": "126202243a61aca4c4b8aab8cf9b2c5d7101208310acf5722d961f00dcd92d12",
+      "size": 2188,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/introduction.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/CancelCondition.txt",
+      "sha256": "dcec94d35c7fb1d229b895bd650d7118054e3774e17788a90b6efc01e8bc6e92",
+      "size": 2253,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/CancelCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/EnumMatrix.txt",
+      "sha256": "3ef0009ce5b4af896f45b0e1fdda61dee43615cbebd01a53791e1cc9762910cf",
+      "size": 22160,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/EnumMatrix.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/GetConditionById.txt",
+      "sha256": "60f7286ad28f74da25984e1fc452c53f9a4c05cbf5ce0f8757e1ca742da2753f",
+      "size": 6490,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/GetConditionById.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/GetConditionHistory.txt",
+      "sha256": "f66e5cc0abd68bb0991592db57d28770117202e72f173ab04788d9fec5a18540",
+      "size": 12293,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/GetConditionHistory.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/GetConditionOrder.txt",
+      "sha256": "d15f04c59747b28dfb0497d525bc893e31f4feb7749be4a06c3db3ae03a2a245",
+      "size": 11546,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/GetConditionOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/MultiCondition.txt",
+      "sha256": "c4480a75c97fa18c9d863ebe7bf007ecf9ba4a4379a8004c05db7a163b5c343a",
+      "size": 4362,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/MultiCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/MultiConditionTPSL.txt",
+      "sha256": "a1a0ed0ffe9726a7b32850d8caf80127490108c2741c9e483c4071c36525a0d8",
+      "size": 5290,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/MultiConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/SingleCondition.txt",
+      "sha256": "4565bb61ee0a070576ddf3df42f82cedeca4e3ae019aa60279c305a728fbecd5",
+      "size": 4120,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/SingleCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/SingleConditionTPSL.txt",
+      "sha256": "dd414603f9a126c4c9540eddf52e2548bf83dd7beb7c4d627738566c43f46600",
+      "size": 5037,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/SingleConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/daytrade/GetDayTradeConditionById.txt",
+      "sha256": "e27f508e82c26a30c5d7c11261bd798311552098d32a418f2e4012203d2ebae7",
+      "size": 6540,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/daytrade/GetDayTradeConditionById.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/daytrade/MultiConditionDayTrade.txt",
+      "sha256": "b449fa82f412d9695bd613253211bfa4c4dcf5a56c406b9d8c1d862654b10d98",
+      "size": 6195,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/daytrade/MultiConditionDayTrade.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/daytrade/SingleConditionDayTrade.txt",
+      "sha256": "b52343a1ae270b6518a8f89d26acd3d570592c419c006074255709ac01d30b26",
+      "size": 5941,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/daytrade/SingleConditionDayTrade.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/timeslice/GetTimeSliceOrder.txt",
+      "sha256": "9bdc6905458351385b58ebc02e6b1422f4ed4a41b02664325fdd24dbe412ae09",
+      "size": 7510,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/timeslice/GetTimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/timeslice/TimeSliceOrder.txt",
+      "sha256": "2e5c4f2d4e3a0f3126986a686882d30ca79203aac0fb5057f5ea6040a2193cda",
+      "size": 4070,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/timeslice/TimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/trailprofit/GetTrailHistory.txt",
+      "sha256": "31b291b5228434db1bc125e9bb306371d5ec6cfa97123e7b7267236ad1f57d61",
+      "size": 7765,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/trailprofit/GetTrailHistory.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/trailprofit/GetTrailOrder.txt",
+      "sha256": "6df7449b84bb25394c5dcea2944d93b338fd169633d135aaab7784c19635cecc",
+      "size": 7417,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/trailprofit/GetTrailOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/cpp/trailprofit/TrailOrder.txt",
+      "sha256": "b772cfab067e14eba8b1f355b4ba0d3c1aa158da34455ea530ae7652e5f5e684",
+      "size": 3843,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/trailprofit/TrailOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/CancelCondition.txt",
+      "sha256": "ab918a7e9fc87af0d1c54749216d6f5a09e4a52992056ffafef1a95fa50b7184",
+      "size": 1711,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/CancelCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/EnumMatrix.txt",
+      "sha256": "b5bd9ee7f382f612df74ef4eac3cd5344a084499e09143be2aa9adb23c5a0102",
+      "size": 20267,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/EnumMatrix.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/GetConditionById.txt",
+      "sha256": "f057c1c6477c2ccc42d6cb83fe554013c487ed931724f19530a99d7581a10fc3",
+      "size": 5750,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/GetConditionById.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/GetConditionHistory.txt",
+      "sha256": "3e148cf855f0aa4887a85b92647d22e03b24a42677742086c98058ff74357262",
+      "size": 10389,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/GetConditionHistory.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/GetConditionOrder.txt",
+      "sha256": "b9ba11611b00bbedbecb5bf72384561b7369882a68c65cb53901726742e73b76",
+      "size": 9900,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/GetConditionOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/MultiCondition.txt",
+      "sha256": "e5f661e45ee5a17fedbd325112cc87375739517fa077b3bc2bacc62a3160bebe",
+      "size": 3812,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/MultiCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/MultiConditionTPSL.txt",
+      "sha256": "813d6f421ec2e5ec6f9d7ca5cbbdfc58c1bcd8e3a74958e51f681f9ff3f7cc31",
+      "size": 4958,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/MultiConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/SingleCondition.txt",
+      "sha256": "09bfdff9cb351ff48757e0115a4122d500d85a0d3b56b3b380779f6f2bd9ba48",
+      "size": 3568,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/SingleCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/SingleConditionTPSL.txt",
+      "sha256": "6e85d9f9bec6a68ff21d5afc4c89f409435beb2e8864c7d71fb5770aba2e62d5",
+      "size": 4717,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/SingleConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/daytrade/GetConditionDayTradeId.txt",
+      "sha256": "895f6a4ba751fd3d2a027a163bbf9622a3b4200e14295806f566320eff9cdd2c",
+      "size": 5764,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/daytrade/GetConditionDayTradeId.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/daytrade/MultiConditionDayTrade.txt",
+      "sha256": "a0820bc64cc1cfc11577875e56089c3c77d113d00c1deb5e8f71214389c74a87",
+      "size": 5608,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/daytrade/MultiConditionDayTrade.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/daytrade/SingleConditionDayTrade.txt",
+      "sha256": "0deaeebce38f83c296e8c9bd5f08c70023bf260efd03d1e020101e56ed8e1e0d",
+      "size": 5358,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/daytrade/SingleConditionDayTrade.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/timeslice/GetTimeSliceOrder.txt",
+      "sha256": "33e5ed513b51389da818c52972d5a0a6d96bbc1d564ed0bead4c6b9b00095c6c",
+      "size": 6786,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/timeslice/GetTimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/timeslice/TimeSliceOrder.txt",
+      "sha256": "d743a5093b8d5d4641e4cb575cf9eb14b429d42ee53dc39680483d1df8def612",
+      "size": 3580,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/timeslice/TimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/trailprofit/GetTrailHistory.txt",
+      "sha256": "766bd3aca20e450d4d9362d93079a787aead64b5a883b8e458d0ae2234adec43",
+      "size": 7053,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/trailprofit/GetTrailHistory.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/trailprofit/GetTrailOrder.txt",
+      "sha256": "2d40b87ad06bd301e7a70c26caacec7e8e9b84435f591f91d329da0dfbb6e146",
+      "size": 6733,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/trailprofit/GetTrailOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/csharp/trailprofit/TrailOrder.txt",
+      "sha256": "d725d89ca8575f3471e909821fba5e61218ea90b40740a6ee076138d45168886",
+      "size": 3433,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/csharp/trailprofit/TrailOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/CancelCondition.txt",
+      "sha256": "d74003e0a0d6b88653712ac4ea56d5ef273a3c2f7c669568901a51e77bd1a0dd",
+      "size": 1675,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/CancelCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/EnumMatrix.txt",
+      "sha256": "495f63323a618356aa5cc7acd60650490557c3a4c57bf0f00274c95d6f338d40",
+      "size": 20306,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/EnumMatrix.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/GetConditionById.txt",
+      "sha256": "1c0c0c7f8951ac45a8fed954f5a7db39b945d0b6dae8cdc080f91b8fa24a8b38",
+      "size": 5643,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/GetConditionById.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/GetConditionHistory.txt",
+      "sha256": "41822a1ca342f913a9527becfe9b62e35609712be17d27341c64a40cf36de794",
+      "size": 9031,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/GetConditionHistory.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/GetConditionOrder.txt",
+      "sha256": "c49ac04ebae5e7cedfc152e2ec4bee608cadee163de81cf1a2855813d9d5bcb4",
+      "size": 8644,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/GetConditionOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/MultiCondition.txt",
+      "sha256": "71fd2c61b639cec7ad11a18d58bf83cdf208fb0697a79b1ca3546520660f4dbf",
+      "size": 3807,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/MultiCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/MultiConditionTPSL.txt",
+      "sha256": "ad142845755ea8c879ebd799bca5ed44eae9a9482ff40b0ef27b1956321a268f",
+      "size": 5115,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/MultiConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/SingleCondition.txt",
+      "sha256": "9ac4ebdb1f7913a85771ce4049c27e886cc41b6dbe6785c26c5662a240f48b5f",
+      "size": 3618,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/SingleCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/SingleConditionTPSL.txt",
+      "sha256": "370ca845f7810ab0bddcdf5060676e2a6779bf6c80504a6bf9ac530b172c1b08",
+      "size": 4923,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/SingleConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/daytrade/GetConditionDaytradeById.txt",
+      "sha256": "0cdbcc64e92f42e93f5d33b341aaa28169083e37616d7dcdade97b0ca5cdefa3",
+      "size": 5639,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/daytrade/GetConditionDaytradeById.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/daytrade/MultiConditionDayTrade.txt",
+      "sha256": "c7b546d5f79280c7ea93f350954f7e4017df7b91d5c954a399c74d5d6c0fd944",
+      "size": 5790,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/daytrade/MultiConditionDayTrade.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/daytrade/SingleConditionDayTrade.txt",
+      "sha256": "3fbcab1365baed1398330f702891205acd2ae36ee7bb086f156ca264a3acaf52",
+      "size": 5569,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/daytrade/SingleConditionDayTrade.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/timeslice/GetTimeSliceOrder.txt",
+      "sha256": "57dbd89913c4ea6fda97cb20f0ed18cbb0f26981be2d0b2e675fea846d25d9dc",
+      "size": 6692,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/timeslice/GetTimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/timeslice/TimeSliceOrder.txt",
+      "sha256": "045c3b0f19b65325570444737c9a0825ecae6f03dc2c4fd7ad1e7b9d34528b36",
+      "size": 3577,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/timeslice/TimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/trailprofit/GetTrailHistory.txt",
+      "sha256": "f119dada0b7bd51a1f033a5b9f7efe3ab70a44fd52cabfcf42d083c0773c9f51",
+      "size": 6632,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/trailprofit/GetTrailHistory.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/trailprofit/GetTrailOrder.txt",
+      "sha256": "93756aad34d5ee2e049b1a34ff06689faae79d9b2acfbac3089384579acc469c",
+      "size": 6307,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/trailprofit/GetTrailOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/nodejs/trailprofit/TrailOrder.txt",
+      "sha256": "ccf3339a1c2ace8b44cd6e884df32ea44da20d28d7882a13728923edf103e9a5",
+      "size": 3550,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/trailprofit/TrailOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/python/CancelCondition.txt",
+      "sha256": "f2ff89cbdb1ab1ba555c1f6272bc3168a00381abbda283a2774791df9276f405",
+      "size": 1720,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/CancelCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/python/EnumMatrix.txt",
+      "sha256": "25c00f9444e9045e0eb3f4e2cfc9c332e1585efe052902ea0501ca5328d7fe04",
+      "size": 20532,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/EnumMatrix.txt"
+    },
+    {
+      "path": "smart-condition/library/python/GetConditionById.txt",
+      "sha256": "8394b6ba71c62328edd2ee0a24a263ec35a150b8966d93e10d3194a96c4bae76",
+      "size": 5985,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/GetConditionById.txt"
+    },
+    {
+      "path": "smart-condition/library/python/GetConditionHistory.txt",
+      "sha256": "ca1a43c47f00c1ec0839a66831b0bf8db28087392d659194ce25649ac648daf6",
+      "size": 10769,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/GetConditionHistory.txt"
+    },
+    {
+      "path": "smart-condition/library/python/GetConditionOrder.txt",
+      "sha256": "45befe38ee5ca3990f37aa5ac3896d284e6b2710b05000b5b877d05f8ee6b284",
+      "size": 10264,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/GetConditionOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/python/MultiCondition.txt",
+      "sha256": "58706e95d4b325346cf5ea67fbbcb93713f34643774dc6d2916f60d7eafd29f5",
+      "size": 3944,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/MultiCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/python/MultiConditionTPSL.txt",
+      "sha256": "203d50d1085d503f3eed5c36c877c9cde35ad0521b4c8d48d263c7f1add52ab9",
+      "size": 5239,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/MultiConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition/library/python/SingleCondition.txt",
+      "sha256": "c3036ab99528a19d557a72d929309f8fe0ddd8a666a349c0a4d134089df3c4aa",
+      "size": 3735,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/SingleCondition.txt"
+    },
+    {
+      "path": "smart-condition/library/python/SingleConditionTPSL.txt",
+      "sha256": "53be7280ac6d36dcaf3c071c4e3ef389b3ae962bb4cfec576cfcfe7956ebc905",
+      "size": 5039,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/SingleConditionTPSL.txt"
+    },
+    {
+      "path": "smart-condition/library/python/daytrade/GetConditionById.txt",
+      "sha256": "a240cd38d65124cb5bd66960978ec3bd966d4757d30dc8da338d61dd1ba99591",
+      "size": 5979,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/daytrade/GetConditionById.txt"
+    },
+    {
+      "path": "smart-condition/library/python/daytrade/MultiConditionDayTrade.txt",
+      "sha256": "77ecdc597102c3a9325a0c03e183855403e06a2483e4d5e35b923c90122902a8",
+      "size": 6018,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/daytrade/MultiConditionDayTrade.txt"
+    },
+    {
+      "path": "smart-condition/library/python/daytrade/SingleConditionDayTrade.txt",
+      "sha256": "c88507bccdf9b9388bad198ae9de5b512bcc351e1965cddcbc67fabc84a05f2a",
+      "size": 5721,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/daytrade/SingleConditionDayTrade.txt"
+    },
+    {
+      "path": "smart-condition/library/python/timeslice/GetTimeSliceOrder.txt",
+      "sha256": "a183084aed7a7c979b68e2ea5ddd3deb85a728aa92d50e54197c5c7ee118719d",
+      "size": 6855,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/timeslice/GetTimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/python/timeslice/TimeSliceOrder.txt",
+      "sha256": "c7a84c0856184f6ef6f96e01b2001d7f18a12440443ee11dc7173290d85b21e8",
+      "size": 3684,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/timeslice/TimeSliceOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/python/trailprofit/GetTrailHistory.txt",
+      "sha256": "770d38b957eeb58552a0a9f1d1650ef51bad26fb6a297ddde8e12bc03c4c972f",
+      "size": 7133,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/trailprofit/GetTrailHistory.txt"
+    },
+    {
+      "path": "smart-condition/library/python/trailprofit/GetTrailOrder.txt",
+      "sha256": "96ea68928f1cbfbdad0d339cbf1ce18ce49951eba8a918caf8efd395456f728e",
+      "size": 6801,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/trailprofit/GetTrailOrder.txt"
+    },
+    {
+      "path": "smart-condition/library/python/trailprofit/TrailOrder.txt",
+      "sha256": "66fa4c9cb509e27af845d23ac271a85aa66162db038d18908a30fe2cd5200b28",
+      "size": 3560,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/trailprofit/TrailOrder.txt"
+    },
+    {
+      "path": "smart-condition/prepare.txt",
+      "sha256": "caab8ac74690c2d2634865c3d39b68209b80f11c71258db44c2577b17b6b7b79",
+      "size": 2517,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/prepare.txt"
+    },
+    {
+      "path": "smart-condition/trobleshoot.txt",
+      "sha256": "62f8e16516ebb05015986db92cdccc39ee9c5ea3000d870b33df562a1a241c1d",
+      "size": 352,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/smart-condition/trobleshoot.txt"
+    },
+    {
+      "path": "trading-future/guide/account_example.txt",
+      "sha256": "45c42d2002deda61badf0fd998ca0ccbeac01cdb56dddd7945c3de67082c4778",
+      "size": 13064,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/guide/account_example.txt"
+    },
+    {
+      "path": "trading-future/guide/advance/asyn_order.txt",
+      "sha256": "da1dcb998f388895fcd43d555bcf1cdef3b803a4c242205bc257ba15a77518ae",
+      "size": 3843,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/guide/advance/asyn_order.txt"
+    },
+    {
+      "path": "trading-future/guide/advance/python_callback_decorator.txt",
+      "sha256": "f67b135e1f677622f3b6887be2507bbbcc4d03e2066fcabfab55e3aead818f0e",
+      "size": 2275,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/guide/advance/python_callback_decorator.txt"
+    },
+    {
+      "path": "trading-future/guide/advance/reconnect.txt",
+      "sha256": "c9d6d203511f04fcb1c5507e59899b679b55a79e62391206f1f6b942bd185f15",
+      "size": 1957,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/guide/advance/reconnect.txt"
+    },
+    {
+      "path": "trading-future/guide/error-codes.txt",
+      "sha256": "f2827729199a5841c2901bdc593928c53f577079e63ae05ee3892f378421dac5",
+      "size": 3044,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/guide/error-codes.txt"
+    },
+    {
+      "path": "trading-future/guide/report_example.txt",
+      "sha256": "6663812b2adcf25cc58560c76104c25d7857aebd02df71f4ba42850fc42805b5",
+      "size": 10056,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/guide/report_example.txt"
+    },
+    {
+      "path": "trading-future/guide/trade_example.txt",
+      "sha256": "771e0453bec1b33a0480c4c92b29aa10ddbad1b5e97870b3f8bffa62862cc649",
+      "size": 9248,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/guide/trade_example.txt"
+    },
+    {
+      "path": "trading-future/introduction.txt",
+      "sha256": "a565d75528f0382fe168536b9d74c0067249918ad3d0889ac1f7a8f0dcadbfdd",
+      "size": 2531,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/introduction.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/EnumMatrix.txt",
+      "sha256": "67c07ad118b4934ed6344f0cfce8925c03674123a4559cc244ed986253562aec",
+      "size": 21330,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/accountManagement/ClosePositionRecord.txt",
+      "sha256": "c5af2c8a916233410cb8a82338ec788c8728ab83645606e310dd51f4d3cce79e",
+      "size": 8027,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/accountManagement/ClosePositionRecord.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/accountManagement/HybridPosition.txt",
+      "sha256": "3a18d36db85001c5eedea0944f02d4c74b7485fd4354f49376116422a5539ee9",
+      "size": 26439,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/accountManagement/HybridPosition.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/accountManagement/QueryEquity.txt",
+      "sha256": "dbd6bfd6474195554cac68dd636e21546996575622475dc82ae613bad382c6c8",
+      "size": 9367,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/accountManagement/QueryEquity.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/accountManagement/SinglePosition.txt",
+      "sha256": "d9cdebc60f336941a50c9def6ff3dbdac9730e68ca9ffba3cc862c64e8046a08",
+      "size": 13495,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/accountManagement/SinglePosition.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/login/loginAPIKey.txt",
+      "sha256": "18e02316929b7d78a6c04f688f023652aad534f687cba8ac8cb2d8520d267ad2",
+      "size": 2094,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/login/loginAPIKey.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/login/loginPassword.txt",
+      "sha256": "14c703b72db558f3ae2ac6bd781f98efffedf5699ae5323da0c86091d97b7b55",
+      "size": 1916,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/login/loginPassword.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/logout.txt",
+      "sha256": "452a494f01b6df0ab4c5c43f618d17304e3d651c7f9c9455a9cdadf8332f8a38",
+      "size": 432,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/logout.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/CancelOrder.txt",
+      "sha256": "9c44ed96bbbe892f7f0b70b5bc2b4489b4ae8b48efcc71a418859aa0377619e5",
+      "size": 17264,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/CancelOrder.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/ConvertSymbol.txt",
+      "sha256": "5682ce814a4fe82f63fdc8f85c7bc10cb139b9f580acab461a3c8c48985fb358",
+      "size": 1810,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/ConvertSymbol.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/EstimateMargin.txt",
+      "sha256": "2c875f53c9a3b8a00a6d156dabd00d9c277e5d1fdcea0c5b7e59029b5fb3d295",
+      "size": 2184,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/EstimateMargin.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/FilledHistory.txt",
+      "sha256": "25ff552a460ed3326f11c2e22a4775677e9d87f0dd2d3bf6c395c1463f9685fa",
+      "size": 9472,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/FilledHistory.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/GetOrderResults.txt",
+      "sha256": "62b0b11eaf432f18f59c9e8913eb6443369f46e0f330f7cddca5cbdd919498da",
+      "size": 17500,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/GetOrderResults.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/GetOrderResultsDetail.txt",
+      "sha256": "680334c873648e3d46f7b77eafedbc83cfd99f68063fa4081237b3f7b294162b",
+      "size": 20496,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/GetOrderResultsDetail.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/ModifyPrice.txt",
+      "sha256": "73030f35229c9ac931bb398efa2ff11a47cb968b9aaeba9c6207edab5f28a4a1",
+      "size": 18668,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/ModifyPrice.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/ModifyQuantity.txt",
+      "sha256": "8dd55fbf221deee30b3712fac448a0c4915e5712256d96c01dc14f17ecb09323",
+      "size": 18473,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/ModifyQuantity.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/OrderHistory.txt",
+      "sha256": "caa42790a8b1e2331c1484484daf562e0edf1e505fd71cf8765a1492be17b728",
+      "size": 25896,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/OrderHistory.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/PlaceOrder.txt",
+      "sha256": "c1a19c1eafb26b921dba4371c3c30927cb4d3063736491becee5516f89d19708",
+      "size": 21014,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/PlaceOrder.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/batchOrder/BatchCancelOrder.txt",
+      "sha256": "9906c6b3f67ea8ec12c5d0da55471b403e1b79e9aaa12f70aefd3a1ba5dd3405",
+      "size": 19898,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/batchOrder/BatchCancelOrder.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/batchOrder/BatchModifyPrice.txt",
+      "sha256": "257ab067c18e28bc13365efd675cd47f4ae011d6b09b6f12796efdb9f0e6effe",
+      "size": 27352,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/batchOrder/BatchModifyPrice.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/batchOrder/BatchModifyQuantity.txt",
+      "sha256": "04286f564c7a53c94f920361a7f5605f4c78947a4e9ed3acd09961eb6d92ad7f",
+      "size": 26066,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/batchOrder/BatchModifyQuantity.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/batchOrder/BatchOrderDetail.txt",
+      "sha256": "9c2d1a0b8df2a3b94c46d7d6bd0e7306f427f82f73ac82bbb8b6857eb9926cd2",
+      "size": 17184,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/batchOrder/BatchOrderDetail.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/batchOrder/BatchOrderList.txt",
+      "sha256": "05ac5778b7d7be6dc9cf4733aecd979a2703488cdb927a48bb2299b93468de8e",
+      "size": 2538,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/batchOrder/BatchOrderList.txt"
+    },
+    {
+      "path": "trading-future/library/csharp/trade/batchOrder/BatchPlaceOrder.txt",
+      "sha256": "c37d0785e4f5aa1d06ba9c6644f9fbdc9d02eb8796c25216b7056f27fcc7f505",
+      "size": 20273,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/trade/batchOrder/BatchPlaceOrder.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/EnumMatrix.txt",
+      "sha256": "56adfee45dee7ee074c393c68ca72acaaf7b7091e2e1c763684b85d187958f6c",
+      "size": 21765,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/accountManagement/ClosePositionRecord.txt",
+      "sha256": "b5280918058f5704e2ded856e29f1df12acca573cc44ffd5f1f9bad752e999a7",
+      "size": 7730,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/accountManagement/ClosePositionRecord.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/accountManagement/HybridPosition.txt",
+      "sha256": "42332fd0cf1bb246f684a21bb8ebcd8b9e5f7ff0fa0b89597cdeb6c71c021418",
+      "size": 24808,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/accountManagement/HybridPosition.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/accountManagement/QueryEquity.txt",
+      "sha256": "b05c555f54884ff510c2048987112447a78bfec6bb85596d1c66cf1a7233db55",
+      "size": 8764,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/accountManagement/QueryEquity.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/accountManagement/SinglePosition.txt",
+      "sha256": "5c0d2fbed4c6280f3f191279b67cb3b49e5989b0e3d06abd699b243d9620a1e3",
+      "size": 13186,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/accountManagement/SinglePosition.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/login/loginAPIKey.txt",
+      "sha256": "3be79cdda54d75ed574a1cee18f8aac4b265bf69dad3ea710a18cc3381e19c90",
+      "size": 2196,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/login/loginAPIKey.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/login/loginPassword.txt",
+      "sha256": "78cef363a2c11327aafaaa5bcab229f3bb79a7b217ca6b783101d071d9cf32d1",
+      "size": 2024,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/login/loginPassword.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/logout.txt",
+      "sha256": "008b8fcf421b414ff49a3f031bf5c035de6fad9fde4cea5c75016111e78b5e72",
+      "size": 501,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/logout.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/CancelOrder.txt",
+      "sha256": "2c85ab8a8977fa5a19b2983268d1d717253be3e5ce31edf771d36ab765b0bf97",
+      "size": 17003,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/CancelOrder.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/ConvertSymbol.txt",
+      "sha256": "07dd589398238bda1888f16f7b7825317c744d38e367e7eb3539247903e39a6f",
+      "size": 1799,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/ConvertSymbol.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/EstimateMargin.txt",
+      "sha256": "f6bf17bb780a01b85391329d4d1624dab55799482ce2bd900bc09e4d3da396a3",
+      "size": 2108,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/EstimateMargin.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/FilledHistory.txt",
+      "sha256": "a0b28730f7f67c9d3b7143521866f485c90df4fddffee084af793de08610cf0c",
+      "size": 9129,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/FilledHistory.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/GetOrderResults.txt",
+      "sha256": "87a143570d2e5d862c3fd3f6646f0cc5e35cdd914c5ba347134e55a007238eec",
+      "size": 17509,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/GetOrderResults.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/GetOrderResultsDetail.txt",
+      "sha256": "e8f38dd6df48e6c797313e0cf6aaa024bbe0bcb507c0057299e1562d85ab97cc",
+      "size": 20393,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/GetOrderResultsDetail.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/ModifyPrice.txt",
+      "sha256": "9dd8ec36b1488944d40cdefd37f4edf886d02a851b0b6ed757606739f9191fdc",
+      "size": 18571,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/ModifyPrice.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/ModifyQuantity.txt",
+      "sha256": "fd141ef22a2fa2d76afbbf6ed8823633efc74e06a5639758c9baafd6ebc73b27",
+      "size": 18411,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/ModifyQuantity.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/OrderHistory.txt",
+      "sha256": "53b0f49570333ca8f4a0715c3b6fe0a4226094d1e075b1b60aebd751d34ff2c4",
+      "size": 23872,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/OrderHistory.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/PlaceOrder.txt",
+      "sha256": "59e9ff4550aa878b917533121fcb29dace9ea0f28098a91ac511fa1b05bcfd12",
+      "size": 21794,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/PlaceOrder.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/batchOrder/BatchCancelOrder.txt",
+      "sha256": "39696456985b2f64d8c8334a4a926f5fab0e53cd885552e44ee577540928f412",
+      "size": 18721,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/batchOrder/BatchCancelOrder.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/batchOrder/BatchModifyPrice.txt",
+      "sha256": "30117e71f482775adb90aafd062ffdf8079a06a9bc3a8bc4aae17222dbfda02f",
+      "size": 24215,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/batchOrder/BatchModifyPrice.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/batchOrder/BatchModifyQuantity.txt",
+      "sha256": "b80ad06f6c6cb6f9da29a970f7c4ca30249adbe3296d033447e74d11b4fbe470",
+      "size": 25288,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/batchOrder/BatchModifyQuantity.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/batchOrder/BatchOrderDetail.txt",
+      "sha256": "636fb8f1c1fe533a0cb2122d178805accda8344e7792b61b0ad34aa1d89dc461",
+      "size": 17145,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/batchOrder/BatchOrderDetail.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/batchOrder/BatchOrderList.txt",
+      "sha256": "f3b60f281df0ad9f68457a8f591ee3f1d9fa133360929a6be1bcd44212826496",
+      "size": 2271,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/batchOrder/BatchOrderList.txt"
+    },
+    {
+      "path": "trading-future/library/nodejs/trade/batchOrder/BatchPlaceOrder.txt",
+      "sha256": "6d3d91bcf6ec1c50b1ab1c31a3a24fcc46553eeb89c72f9c768bad2ace601297",
+      "size": 20716,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/batchOrder/BatchPlaceOrder.txt"
+    },
+    {
+      "path": "trading-future/library/python/EnumMatrix.txt",
+      "sha256": "66cf48af1e30eecf52d081beea3ae45854ce4fb73a531dce6381a42d0be95888",
+      "size": 22170,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt"
+    },
+    {
+      "path": "trading-future/library/python/accountManagement/ClosePositionRecord.txt",
+      "sha256": "0336209ccd02925bfaabfd7f2230c39630d7dcdb0fc5c250e58ad0b9c1c1bb2c",
+      "size": 8138,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/accountManagement/ClosePositionRecord.txt"
+    },
+    {
+      "path": "trading-future/library/python/accountManagement/HybridPosition.txt",
+      "sha256": "8aaadf7a11ff761dfc01587bf275fb6a33ba68a3623f194ed6123913d8b0fb98",
+      "size": 30956,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/accountManagement/HybridPosition.txt"
+    },
+    {
+      "path": "trading-future/library/python/accountManagement/QueryEquity.txt",
+      "sha256": "a06eff0dae9d7ce44d4cfceb7f205cfc1340b927f795c6ceec2b908def661565",
+      "size": 9052,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/accountManagement/QueryEquity.txt"
+    },
+    {
+      "path": "trading-future/library/python/accountManagement/SinglePosition.txt",
+      "sha256": "168890c7397f6da914cfe4723caae1934334c3346501909067fa7d49052f2e47",
+      "size": 12721,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/accountManagement/SinglePosition.txt"
+    },
+    {
+      "path": "trading-future/library/python/login/loginAPIKey.txt",
+      "sha256": "911435739a84f5097fc3e30e6812a48ae0aa5527197b8a9dbdcfe5f67d7c697f",
+      "size": 2264,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/login/loginAPIKey.txt"
+    },
+    {
+      "path": "trading-future/library/python/login/loginPassword.txt",
+      "sha256": "c7bef4030dddca540bac53c4cbb0eab0fd0fd302347dd7cd9b5114733e2b203e",
+      "size": 2083,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/login/loginPassword.txt"
+    },
+    {
+      "path": "trading-future/library/python/logout.txt",
+      "sha256": "4deb13c88ac3af89f64811c7dffe4c2243b17c0d3c9f191addc59678fe3afaab",
+      "size": 524,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/logout.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/CancelOrder.txt",
+      "sha256": "982e37b09a1abc9232f61cbca618d4753c888b4ec1f27e61078d577ba2e3d98e",
+      "size": 17273,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/CancelOrder.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/ConvertSymbol.txt",
+      "sha256": "5cf6ad3ef676a82ca2e21271b849f8ee281321f7fd434f9200c4d9fd4bffe54d",
+      "size": 1811,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/ConvertSymbol.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/EstimateMargin.txt",
+      "sha256": "f8d7ea756131249d1676bda15b55c3caf63ea4b779a27d16ae6390555350399d",
+      "size": 2254,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/EstimateMargin.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/FilledHistory.txt",
+      "sha256": "4527d1b71902fdef4ec110ef02c0938cb8941e30c8b4f496d8ef95d5e60189a3",
+      "size": 9211,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/FilledHistory.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/GetOrderResults.txt",
+      "sha256": "ff557704563e9a4b304446c9d5ad97b70df58f0966b63182df712f6b62454921",
+      "size": 17507,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/GetOrderResults.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/GetOrderResultsDetail.txt",
+      "sha256": "57c91f17d7590b67a7e4a9f1f2952f6801c522f975ea61ec971a1f94db3f9165",
+      "size": 20184,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/GetOrderResultsDetail.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/ModifyPrice.txt",
+      "sha256": "37a8399111cfd115dd461ff3089c3ccb59ec131458a28aef87dac9cfaee67a91",
+      "size": 18436,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/ModifyPrice.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/ModifyQuantity.txt",
+      "sha256": "094f7a8521b073a4e8088fe9cc22f37315dc61bb0dd446fb800d2cbd4de87f32",
+      "size": 18197,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/ModifyQuantity.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/OrderHistory.txt",
+      "sha256": "673dab0cdde6923dd587aa1a583270b1d32004653c71e8c8c2d10e3c08b513f6",
+      "size": 25722,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/OrderHistory.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/PlaceOrder.txt",
+      "sha256": "6304ca84e48a7e95b00be2eeffe39a51740f8aae7938811fdbf196d38c8a4b1e",
+      "size": 20443,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/PlaceOrder.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/batchOrder/BatchCancelOrder.txt",
+      "sha256": "0e352a40bfbab6b3b66c1e696d29e8317122f1d45ecebed3b922c9e128005074",
+      "size": 24140,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/batchOrder/BatchCancelOrder.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/batchOrder/BatchModifyPrice.txt",
+      "sha256": "90b4dad58b7eb3140929d36ea16040a9f92155e3d4c753c79767400b6656401e",
+      "size": 26926,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/batchOrder/BatchModifyPrice.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/batchOrder/BatchModifyQuantity.txt",
+      "sha256": "66441f0015884ec7731cc49f7ce38b2ee8cc410890b226141f8ac00749efc24c",
+      "size": 26362,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/batchOrder/BatchModifyQuantity.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/batchOrder/BatchOrderDetail.txt",
+      "sha256": "cb1f256801c6d15d936cdbaa5a49839de11d63a0f7999271e79629543b2be3ec",
+      "size": 21952,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/batchOrder/BatchOrderDetail.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/batchOrder/BatchOrderList.txt",
+      "sha256": "f5b00e0e9982018eb31c81ef39ad3763f34f08cd48db784884c836969de1b014",
+      "size": 2892,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/batchOrder/BatchOrderList.txt"
+    },
+    {
+      "path": "trading-future/library/python/trade/batchOrder/BatchPlaceOrder.txt",
+      "sha256": "1f0cfac0b79e5c2e1e9d68c2d5726d0a256e2517a9ad0fd8b983db34b41e128a",
+      "size": 20804,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/trade/batchOrder/BatchPlaceOrder.txt"
+    },
+    {
+      "path": "trading-future/prepare.txt",
+      "sha256": "4cbe1216d3fd2f7cf5cd904eda90772b1e788ce0c23786ac441b0b4ddc705531",
+      "size": 6609,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/prepare.txt"
+    },
+    {
+      "path": "trading-future/quickstart.txt",
+      "sha256": "ce974dc16ab404eada61d9022c4dc5c38f9f6d234e6cc258e8aacb0821597481",
+      "size": 3857,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/quickstart.txt"
+    },
+    {
+      "path": "trading-future/trade-rate-limit.txt",
+      "sha256": "93285f29570d5cb3ec21e39ac537ffaf52cf81296b214850bd4522ea582fa0e2",
+      "size": 657,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading-future/trade-rate-limit.txt"
+    },
+    {
+      "path": "trading/api-key-apply.txt",
+      "sha256": "b6582a4a9e230c20faa89ede16619afc8b5b65f5300985645d981627237824c2",
+      "size": 2625,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/api-key-apply.txt"
+    },
+    {
+      "path": "trading/guide/account_example.txt",
+      "sha256": "0d8a9c949861beb83cebbf9bc3eb6d8762e3b7c068b09759ced11193518aa6f2",
+      "size": 10274,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/account_example.txt"
+    },
+    {
+      "path": "trading/guide/advance/asyn_order.txt",
+      "sha256": "fa7d8ace1597c47b418b72ed33b073ca8817c48d1af64fdda023d96460aa204b",
+      "size": 5937,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/advance/asyn_order.txt"
+    },
+    {
+      "path": "trading/guide/advance/callback/callback_example_dt3.txt",
+      "sha256": "86852b07973a1ec5e7021aba2fcace68815ec212987c5ad92219daa032ca94c7",
+      "size": 68302,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/advance/callback/callback_example_dt3.txt"
+    },
+    {
+      "path": "trading/guide/advance/callback/callback_example_standard.txt",
+      "sha256": "bade65402607b4fbec8bbce0a9b03698a579094be2a8a287f2c6cbb139fa7885",
+      "size": 67194,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/advance/callback/callback_example_standard.txt"
+    },
+    {
+      "path": "trading/guide/advance/ping_pong.txt",
+      "sha256": "7321be426526f4fc83965b0e08ebbc1b943e43e56095eb15b7e94d70caaa3112",
+      "size": 1499,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/advance/ping_pong.txt"
+    },
+    {
+      "path": "trading/guide/advance/python_callback_decorator.txt",
+      "sha256": "f67b135e1f677622f3b6887be2507bbbcc4d03e2066fcabfab55e3aead818f0e",
+      "size": 2275,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/advance/python_callback_decorator.txt"
+    },
+    {
+      "path": "trading/guide/advance/reconnect.txt",
+      "sha256": "5424989858a2c89bbc145e8c98274b6e790df1982e30b8ffdc30037e0120b51f",
+      "size": 11130,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/advance/reconnect.txt"
+    },
+    {
+      "path": "trading/guide/error-codes.txt",
+      "sha256": "2cff79b7ac47075406907973fa6ddab25a668c7037e01c5d83d97319e25f0cd1",
+      "size": 3860,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/error-codes.txt"
+    },
+    {
+      "path": "trading/guide/report_example.txt",
+      "sha256": "403f2835d4d82941a637d4d39a73bf4ad776a9ea066daaff21cdc2b98ca2976d",
+      "size": 15537,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/report_example.txt"
+    },
+    {
+      "path": "trading/guide/trade_example.txt",
+      "sha256": "848c78db8e0930df432e8971d99febec631087dea6fc00dd2820d792be5b8ebc",
+      "size": 9148,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/guide/trade_example.txt"
+    },
+    {
+      "path": "trading/introduction.txt",
+      "sha256": "5fbb3d591dfbb45cab68bb64d9b5f273869d2acd35b5aae58ea93cbdf3fdaba9",
+      "size": 2505,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/introduction.txt"
+    },
+    {
+      "path": "trading/library/cpp/EnumMatrix.txt",
+      "sha256": "d1bfb19b7c9e06f093656cef026ee5d779e164650e4066624a1c8db64ee92d0f",
+      "size": 23374,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt"
+    },
+    {
+      "path": "trading/library/cpp/accountManagement/Balance.txt",
+      "sha256": "288e18165a2c2f80f5e7c2d8b1913508949c6354b8585fb6b6cc34a3a3b17e08",
+      "size": 2333,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/accountManagement/Balance.txt"
+    },
+    {
+      "path": "trading/library/cpp/accountManagement/Inventories.txt",
+      "sha256": "75ab01ee14e53295c76eb240bcf9601880d34f63eb765d59d153730debb43cff",
+      "size": 9489,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/accountManagement/Inventories.txt"
+    },
+    {
+      "path": "trading/library/cpp/accountManagement/Maintenance.txt",
+      "sha256": "e66bfb9f29778ee6bfbe09a8260625a63f4695894b0baedadac0514c8f615c9f",
+      "size": 8442,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/accountManagement/Maintenance.txt"
+    },
+    {
+      "path": "trading/library/cpp/accountManagement/QuerySettlement.txt",
+      "sha256": "0614af02f044cf29a4504571ecdc74970eae0beebeb835388ae1124bc2d87afa",
+      "size": 8187,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/accountManagement/QuerySettlement.txt"
+    },
+    {
+      "path": "trading/library/cpp/accountManagement/RealizedPnLDetail.txt",
+      "sha256": "07390a81f8c4d399f8dc57df8d09dd23142024d32221cc4768bf0f5b1eccd3c8",
+      "size": 4829,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/accountManagement/RealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/cpp/accountManagement/RealizedPnLSum.txt",
+      "sha256": "7346c34f3c0e00494c367a8609aa923d09758139bd835cbb993c28feb2105de5",
+      "size": 5249,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/accountManagement/RealizedPnLSum.txt"
+    },
+    {
+      "path": "trading/library/cpp/accountManagement/UnrealizedPnLDetail.txt",
+      "sha256": "9e3af808e5e8c6466b009dadcfbfea43560aea94747e7cfdb86d0e7b4b1d4551",
+      "size": 4954,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/accountManagement/UnrealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/cpp/login/login_apikey.txt",
+      "sha256": "54666bc267938946834850567e5ebfb2308057907e4abe32914cd170a894dd42",
+      "size": 2070,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/login/login_apikey.txt"
+    },
+    {
+      "path": "trading/library/cpp/login/login_password.txt",
+      "sha256": "037046ca4cd000cfe388de21b243844fb0fd398d92dec709831ae6cf0ab61334",
+      "size": 1992,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/login/login_password.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/CancelOrder.txt",
+      "sha256": "d52bc24cbf83770a708f6f6123918c6980f94e5522b7e190bdd59ec14822e104",
+      "size": 13848,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/CancelOrder.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/DaytradeAndStockInfo.txt",
+      "sha256": "b275b7f6c95a290eac459467d135d64e938562f6bb65ceb9b2d9ece24f8068a2",
+      "size": 4050,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/DaytradeAndStockInfo.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/FilledHistory.txt",
+      "sha256": "ba73b4b8cb63ec8a717132019b4d473685d1c78efb3873c798a733a560eb1a64",
+      "size": 7002,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/FilledHistory.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/GetOrderResults.txt",
+      "sha256": "53795488e286a65183e9786ada139b61f2408c113771c8afcbfa1802e7c05f67",
+      "size": 13656,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/GetOrderResults.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/GetOrderResultsDetail.txt",
+      "sha256": "67eeffd1e83c4c07e304fe24b5eb43bb870a90ad248e281802cf6e63768f0934",
+      "size": 16674,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/GetOrderResultsDetail.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/MarginQuota.txt",
+      "sha256": "f2efed8be26dc5788749a8d2bf6953ea5eb26416548ec5e2f1671d06dcf1b2c1",
+      "size": 3049,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/MarginQuota.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/ModifyPrice.txt",
+      "sha256": "df58a365dde80548a4b09fcee2aadcbf1e245cf9d3fc7ab67ab067e430c49d24",
+      "size": 15357,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/ModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/ModifyQuantity.txt",
+      "sha256": "74d591af2c2199c26510bab23b9b350f98bb4f8c8e47591282b36e03c4a16e76",
+      "size": 15242,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/ModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/OrderHistory.txt",
+      "sha256": "0eaa32d9a4eb0f727aa648527fd062dfcdb3bde99fb6369e6ab111c0232bd884",
+      "size": 16990,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/OrderHistory.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/PlaceOrder.txt",
+      "sha256": "2b7e0d266742a7aef87ba23dfe13aff5f7b9849637db58dc72221ab25eb16c97",
+      "size": 14240,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/PlaceOrder.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/QuerySymbolQuote.txt",
+      "sha256": "85edf8bf6817d65c919b5080ded051604534c27c0d111d4148fd0bae31337ac8",
+      "size": 5995,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/QuerySymbolQuote.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/QuerySymbolSnapshot.txt",
+      "sha256": "ccae169f1eee870e0d2492ed2ea630ede3e6a2f0d726b85aba420a8870ad6150",
+      "size": 6550,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/QuerySymbolSnapshot.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/batchOrder/BatchCancelOrder.txt",
+      "sha256": "25a5e0b145cf43196f4ee781b02c45791a71452b13c5f8962c47cd583314b512",
+      "size": 15176,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/batchOrder/BatchCancelOrder.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/batchOrder/BatchModifyPrice.txt",
+      "sha256": "9e548f400916058a265f5193353450dda7265b4092bf87ef47d975c2cf22a1f7",
+      "size": 20174,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/batchOrder/BatchModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/batchOrder/BatchModifyQuantity.txt",
+      "sha256": "eda44edafff221816d1247b1ad06d339a32765902b0430072c78ac19dd0f5518",
+      "size": 21008,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/batchOrder/BatchModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/batchOrder/BatchOrderDetail.txt",
+      "sha256": "fd1f3a528f0fd37a4885432a5926a982b539909fde302cbac4eca0bce656f274",
+      "size": 13729,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/batchOrder/BatchOrderDetail.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/batchOrder/BatchOrderList.txt",
+      "sha256": "93c9809401621fec9e82d2152d0f69c61b0de2e34e17613b304bbcfff85d8bd2",
+      "size": 2917,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/batchOrder/BatchOrderList.txt"
+    },
+    {
+      "path": "trading/library/cpp/trade/batchOrder/BatchPlaceOrder.txt",
+      "sha256": "7d42a387787b9cd3de7893d7ca781b930f406bc80c5244963e2911c391647644",
+      "size": 16234,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/trade/batchOrder/BatchPlaceOrder.txt"
+    },
+    {
+      "path": "trading/library/csharp/EnumMatrix.txt",
+      "sha256": "9c4f9f8d9d56c4a83e138810af863fa04da7a30d25483675d55671757e8c9e8e",
+      "size": 20308,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt"
+    },
+    {
+      "path": "trading/library/csharp/accountManagement/Balance.txt",
+      "sha256": "04717e634128e3b7dd396752d59042faa5c129c6e7e89d344b7faf921a01e13d",
+      "size": 1922,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/accountManagement/Balance.txt"
+    },
+    {
+      "path": "trading/library/csharp/accountManagement/Inventories.txt",
+      "sha256": "3be881d2b119a096bb2047785602a44e01bc25ededd6964eba5d8396a5d32c13",
+      "size": 8830,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/accountManagement/Inventories.txt"
+    },
+    {
+      "path": "trading/library/csharp/accountManagement/Maintenance.txt",
+      "sha256": "bfc14a772f64e9e8c8f67313399243c7f735ddb8e999cfdda5a17a7d1ecc7164",
+      "size": 8256,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/accountManagement/Maintenance.txt"
+    },
+    {
+      "path": "trading/library/csharp/accountManagement/QuerySettlement.txt",
+      "sha256": "8bd27f3231c5e446dacf51085a62146446d013c8b0a09ee93653f104ccda285a",
+      "size": 7902,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/accountManagement/QuerySettlement.txt"
+    },
+    {
+      "path": "trading/library/csharp/accountManagement/RealizedPnLDetail.txt",
+      "sha256": "6262017f62c6cdb9d872165ba63361c81e5d67d7fe5ea6dac35a5e434ce5af01",
+      "size": 4594,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/accountManagement/RealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/csharp/accountManagement/RealizedPnLSum.txt",
+      "sha256": "a2a9ad3e1acf8a27434c778c31245f8af348169237b0b27b67e3f54d04817e7b",
+      "size": 4900,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/accountManagement/RealizedPnLSum.txt"
+    },
+    {
+      "path": "trading/library/csharp/accountManagement/UnrealizedPnLDetail.txt",
+      "sha256": "3c21e097e8878928372a9a9c65547d363b89474fff88d9bf2f487278f4ce5f5f",
+      "size": 4897,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/accountManagement/UnrealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/csharp/login/loginAPIKey.txt",
+      "sha256": "1f0313b7ea4bf7c925490189a34fba8825430900db19561c0c5750dccf171b40",
+      "size": 2102,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/login/loginAPIKey.txt"
+    },
+    {
+      "path": "trading/library/csharp/login/loginPassword.txt",
+      "sha256": "14c703b72db558f3ae2ac6bd781f98efffedf5699ae5323da0c86091d97b7b55",
+      "size": 1916,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/login/loginPassword.txt"
+    },
+    {
+      "path": "trading/library/csharp/logout.txt",
+      "sha256": "dfdc6ba9fcaf42b0644f23ae07c6a31dcda5ff5ab959a7c36661574d3d878135",
+      "size": 435,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/logout.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/CancelOrder.txt",
+      "sha256": "8b9fb804b530172682a81a193d9358bf43d0a85b028968adf6ba22604a003800",
+      "size": 11898,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/CancelOrder.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/DaytradeAndStockInfo.txt",
+      "sha256": "736f48958788a00307f9f7a5ec024c04f70e1cd82a313b7496159b767d4d5d59",
+      "size": 4351,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/DaytradeAndStockInfo.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/FilledHistory.txt",
+      "sha256": "691aa12f37c7795549b0fba0683141491cba8fd5c724e5cbc2906540515f022d",
+      "size": 6413,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/FilledHistory.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/GetOrderResults.txt",
+      "sha256": "aa6e6a2dd94e00ca19812d976c7088409406f41ed3e482fade0dd7f0ab2576d4",
+      "size": 11733,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/GetOrderResults.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/GetOrderResultsDetail.txt",
+      "sha256": "4b746e4ea30c2accea0e7860bbb9ec4376c385e7aad2ba49e54c871a7e6c0a06",
+      "size": 14434,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/GetOrderResultsDetail.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/MarginQuota.txt",
+      "sha256": "a59b77cfe50f6249275fd39e62de0fc75d04c4dff4ab55922ddf40daec56ba04",
+      "size": 2561,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/MarginQuota.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/ModifyPrice.txt",
+      "sha256": "94172a0abe49cda2a2fea1756d4cd1a1b11d9ce0d7f4a24cf3fee6659bafb13c",
+      "size": 13461,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/ModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/ModifyQuantity.txt",
+      "sha256": "6c6c6f1480916d1031784f968cff25550d9fbfdde7844c8ad442ec9220556edd",
+      "size": 13089,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/ModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/OrderHistory.txt",
+      "sha256": "906127095708ee317c79c592e30e7fee31ab9ea01e38193712c812dfe12469e7",
+      "size": 14558,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/OrderHistory.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/PlaceOrder.txt",
+      "sha256": "c1571161de508ba3638a87abc638dd45e1f2f3467d400ea33d911062f40fb7fd",
+      "size": 12363,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/PlaceOrder.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/QuerySymbolQuote.txt",
+      "sha256": "c8821a4d5b9347d805ab0fc43cc798eed5f183f3651f78328f34c2e7e406ab9f",
+      "size": 8379,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/QuerySymbolQuote.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/QuerySymbolSnapshot.txt",
+      "sha256": "cd7479ec399e993bd0af843d17290e555efd5cc5fcbb9ec9387ebbc9a29ef98b",
+      "size": 8796,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/QuerySymbolSnapshot.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/batchOrder/BatchCancelOrder.txt",
+      "sha256": "73f23dc695ed574bbeaf8723ea87f75f73763d2da6f9edd319b3b4b7f01fee81",
+      "size": 13415,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/batchOrder/BatchCancelOrder.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/batchOrder/BatchModifyPrice.txt",
+      "sha256": "ee1102a11a9b328c42248b1fffef2673b2918a739ef64411efda71bc394b443f",
+      "size": 18754,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/batchOrder/BatchModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/batchOrder/BatchModifyQuantity.txt",
+      "sha256": "be832ad690e12b11d4da029cb681a7893b6600cf6653aea7625042b815509e86",
+      "size": 19464,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/batchOrder/BatchModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/batchOrder/BatchOrderDetail.txt",
+      "sha256": "c947bef53cf5d6242801ede29e8d1987f6dd2296e60744dc4a1cd6c0b36a1461",
+      "size": 12007,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/batchOrder/BatchOrderDetail.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/batchOrder/BatchOrderList.txt",
+      "sha256": "e55da1d4dfcc327502a54231b5686e552b5b8921c85d912abfd5cbb68ba5d56b",
+      "size": 2488,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/batchOrder/BatchOrderList.txt"
+    },
+    {
+      "path": "trading/library/csharp/trade/batchOrder/BatchPlaceOrder.txt",
+      "sha256": "63b1f5f4e424f04794c1dfd1bd7fe74b21c6633994472a9b0ad4e3a9de4f6bae",
+      "size": 14370,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/trade/batchOrder/BatchPlaceOrder.txt"
+    },
+    {
+      "path": "trading/library/csharp/upgrade-guide.txt",
+      "sha256": "a676e65a82d1f31130fd5587872841741107e87894769f822caa1bf8a7188fad",
+      "size": 2732,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/upgrade-guide.txt"
+    },
+    {
+      "path": "trading/library/go/EnumMatrix.txt",
+      "sha256": "01a60bc40a30bed00974e9a4c151b2edaa64b34a720c9993fdf0a5b2c57f63a5",
+      "size": 25826,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt"
+    },
+    {
+      "path": "trading/library/go/accountManagement/Balance.txt",
+      "sha256": "87d412e680f5fd69be963f9bc23769b7bc3d5f9a8fff8781361693872be6a831",
+      "size": 3055,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/accountManagement/Balance.txt"
+    },
+    {
+      "path": "trading/library/go/accountManagement/Inventories.txt",
+      "sha256": "e60e43edfa62d0c1d51ce4529a46ff18945e788c3a096631aa276e21d899a98f",
+      "size": 9258,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/accountManagement/Inventories.txt"
+    },
+    {
+      "path": "trading/library/go/accountManagement/Maintenance.txt",
+      "sha256": "a9a01b85a61d77d34aaeddfa4e3da9aa16b51e9134c51af98d83981ff296ffaa",
+      "size": 8892,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/accountManagement/Maintenance.txt"
+    },
+    {
+      "path": "trading/library/go/accountManagement/QuerySettlement.txt",
+      "sha256": "a4ed5f87276664ed3133f064d7ccea2f96a5992e076ed1d201fc9d3e201a08bb",
+      "size": 5723,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/accountManagement/QuerySettlement.txt"
+    },
+    {
+      "path": "trading/library/go/accountManagement/RealizedPnLDetail.txt",
+      "sha256": "08591ebabc247f5949cb15045c1cdad2aac2143bc0f24a2ad659cc88ae23df2f",
+      "size": 4724,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/accountManagement/RealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/go/accountManagement/RealizedPnLSum.txt",
+      "sha256": "17480f25f579b45658180adb7f53dd7ef33752e6eb1da9ce74d9c086bb4fd7f1",
+      "size": 5297,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/accountManagement/RealizedPnLSum.txt"
+    },
+    {
+      "path": "trading/library/go/accountManagement/UnrealizedPnLDetail.txt",
+      "sha256": "5d94d7003e02f3f798e707c475c97086f8923c881f84c514872c435893923986",
+      "size": 5431,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/accountManagement/UnrealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/go/login/loginAPIKey.txt",
+      "sha256": "13641fd5a0ac76517c34fda87bc2c8a51fccd6cde533697bb2186617f916c535",
+      "size": 2159,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/login/loginAPIKey.txt"
+    },
+    {
+      "path": "trading/library/go/login/loginPassword.txt",
+      "sha256": "023604ace4d93ae062417efba91e1f947f9fcb0974ecbf8a217d97b52c7aff87",
+      "size": 2101,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/login/loginPassword.txt"
+    },
+    {
+      "path": "trading/library/go/logout.txt",
+      "sha256": "ab9ea13262b3406306e692c3e8ad288c0f06e3212eadde75844e50878f1e4928",
+      "size": 533,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/logout.txt"
+    },
+    {
+      "path": "trading/library/go/trade/CancelOrder.txt",
+      "sha256": "61fee4cd556111f2cadb6343d6eaa2eb5d161248566b28974784847984df793d",
+      "size": 13465,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/CancelOrder.txt"
+    },
+    {
+      "path": "trading/library/go/trade/DaytradeAndStockInfo.txt",
+      "sha256": "4f56e3a79b166d3ee02b471a49a546c61591143c0350e4d3a730f37d56530396",
+      "size": 5315,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/DaytradeAndStockInfo.txt"
+    },
+    {
+      "path": "trading/library/go/trade/FilledHistory.txt",
+      "sha256": "e905ba0e7ca74f2fe8a76f773249e183279e38549f2a8875a0382cff6c39a5fb",
+      "size": 7366,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/FilledHistory.txt"
+    },
+    {
+      "path": "trading/library/go/trade/GetOrderResults.txt",
+      "sha256": "6961c32115262de96aebf2dd12f88415680e9afde78fa390d1a23aac0ce3fc21",
+      "size": 12203,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/GetOrderResults.txt"
+    },
+    {
+      "path": "trading/library/go/trade/GetOrderResultsDetail.txt",
+      "sha256": "9d86f9781c24299358488f0030a01618da9533e304f3a90032e6418a748e15ed",
+      "size": 15602,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/GetOrderResultsDetail.txt"
+    },
+    {
+      "path": "trading/library/go/trade/MarginQuota.txt",
+      "sha256": "6ecff0e68802a44333f886223a47514dc67fbb5fd9cba6240f283946e4b7a708",
+      "size": 3603,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/MarginQuota.txt"
+    },
+    {
+      "path": "trading/library/go/trade/ModifyPrice.txt",
+      "sha256": "efd8cfd02e69f47211dc7a44faf832363acf4a6c29722e7f6288b12d41c49089",
+      "size": 14067,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/ModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/go/trade/ModifyQuantity.txt",
+      "sha256": "c5ee25d7c8eacf81146c791158e0a08ca6e11d3376242f449f24445aa4da26bc",
+      "size": 14159,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/ModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/go/trade/OrderHistory.txt",
+      "sha256": "62c7d788614a8be0d5c244370e2aaea2afaa3e3576125f4a738787567b34a0bb",
+      "size": 15886,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/OrderHistory.txt"
+    },
+    {
+      "path": "trading/library/go/trade/PlaceOrder.txt",
+      "sha256": "c7c2e6c1d794c7d865ef89f978e980580f762514ff145869738d06b2b543464d",
+      "size": 11429,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/PlaceOrder.txt"
+    },
+    {
+      "path": "trading/library/go/trade/QuerySymbolQuote.txt",
+      "sha256": "0566880a3226404bf08638d698d596048d63a4b30a0805fb2cad9402a3d38bd2",
+      "size": 8583,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/QuerySymbolQuote.txt"
+    },
+    {
+      "path": "trading/library/go/trade/QuerySymbolSnapshot.txt",
+      "sha256": "1c554035473989e1fd653b1ec2b54b27b260d7b8995740f5f31d4f521896e67f",
+      "size": 8936,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/QuerySymbolSnapshot.txt"
+    },
+    {
+      "path": "trading/library/go/trade/batchOrder/BatchCancelOrder.txt",
+      "sha256": "9fd030d4699cc00f7eab833c4343e56085d34145303e97aae47a233b2217a6a4",
+      "size": 6408,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/batchOrder/BatchCancelOrder.txt"
+    },
+    {
+      "path": "trading/library/go/trade/batchOrder/BatchModifyPrice.txt",
+      "sha256": "184ef529b19a504691179e864af66922bc28c71cd46f223d13c4bc86d107e085",
+      "size": 4807,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/batchOrder/BatchModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/go/trade/batchOrder/BatchModifyQuantity.txt",
+      "sha256": "3f45339240c906ea2689c96c1df3c13930002a4397235e8bd117fc364b090380",
+      "size": 4858,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/batchOrder/BatchModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/go/trade/batchOrder/BatchOrderDetail.txt",
+      "sha256": "9ce9d29a0d88c0ebd9824ad9c78c9b0a62e11466de9bcaac0bd0173758f9c7af",
+      "size": 13087,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/batchOrder/BatchOrderDetail.txt"
+    },
+    {
+      "path": "trading/library/go/trade/batchOrder/BatchOrderList.txt",
+      "sha256": "45f41f5ac76f82acf13ad51af0fed8602357d4fe2e3634e79d80211920c051fe",
+      "size": 3881,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/batchOrder/BatchOrderList.txt"
+    },
+    {
+      "path": "trading/library/go/trade/batchOrder/BatchPlaceOrder.txt",
+      "sha256": "94f3027f08c09a039390e1c085569393aad983a8635b1d2e694a0c4b4acb40a4",
+      "size": 15372,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/trade/batchOrder/BatchPlaceOrder.txt"
+    },
+    {
+      "path": "trading/library/nodejs/EnumMatrix.txt",
+      "sha256": "0ef1754197bc4e8d79ca557c65c07a67807c58470fba702cc48bbd332a85b10f",
+      "size": 20436,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt"
+    },
+    {
+      "path": "trading/library/nodejs/accountManagement/Balance.txt",
+      "sha256": "4a7e1b98482c528643a008ea11c0e42579bcec3d7b032921490b809182568e64",
+      "size": 1826,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/accountManagement/Balance.txt"
+    },
+    {
+      "path": "trading/library/nodejs/accountManagement/Inventories.txt",
+      "sha256": "dab306dc1ff3e6303a48643a34c4d2fccbe1d6ae24526e373451c6189c8508eb",
+      "size": 8939,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/accountManagement/Inventories.txt"
+    },
+    {
+      "path": "trading/library/nodejs/accountManagement/Maintenance.txt",
+      "sha256": "35a5f935f3c3ae7fe57c74777d1086f505e8b05811e9a74c201143fcb244ed65",
+      "size": 9037,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/accountManagement/Maintenance.txt"
+    },
+    {
+      "path": "trading/library/nodejs/accountManagement/QuerySettlement.txt",
+      "sha256": "ec670d304b4e7fb694a6750eca2d57a71b197cc5086a3a3e90364f9c23ab4e55",
+      "size": 4063,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/accountManagement/QuerySettlement.txt"
+    },
+    {
+      "path": "trading/library/nodejs/accountManagement/RealizedPnLDetail.txt",
+      "sha256": "1b35580e6817e0146f0217b40a7e80de98411127fd2ae63e7a721faf1bd7205c",
+      "size": 4533,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/accountManagement/RealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/nodejs/accountManagement/RealizedPnLSum.txt",
+      "sha256": "ee114d549165e0e48c567aab2558555852deb0d40576247e3e59dbe5c7abc295",
+      "size": 4732,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/accountManagement/RealizedPnLSum.txt"
+    },
+    {
+      "path": "trading/library/nodejs/accountManagement/UnrealizedPnLDetail.txt",
+      "sha256": "4871a0c23e13c3c86a60182704dd621636a8671a343110b34c088b555d6eae08",
+      "size": 4812,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/accountManagement/UnrealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/nodejs/login/loginAPIKey.txt",
+      "sha256": "33549d5bd4292d55b6f603ee91fb194e5e81fd09beadcc1d7fe46f423358b288",
+      "size": 2209,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/login/loginAPIKey.txt"
+    },
+    {
+      "path": "trading/library/nodejs/login/loginPassword.txt",
+      "sha256": "d1dca82636ae5940d9cee1eb57ea5dbe946216e3f00fc7d446f1155359b7c380",
+      "size": 2023,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/login/loginPassword.txt"
+    },
+    {
+      "path": "trading/library/nodejs/logout.txt",
+      "sha256": "008b8fcf421b414ff49a3f031bf5c035de6fad9fde4cea5c75016111e78b5e72",
+      "size": 501,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/logout.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/CancelOrder.txt",
+      "sha256": "ebf65f40e1b6a8f7bafb8eeee01056093a6bf25ea92bbe5fd22477b1eb77c6fa",
+      "size": 12426,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/CancelOrder.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/DaytradeAndStockInfo.txt",
+      "sha256": "660fa0d7f91247454cbc6d3fb6dd4c7a0468cbb719f5f65554ec1e10c20ce3c8",
+      "size": 3812,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/DaytradeAndStockInfo.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/FilledHistory.txt",
+      "sha256": "64e24ff8a78cc563c94ad5f37e8bd18960aad9450fa68fc258d8b52bd74f5bb3",
+      "size": 6467,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/FilledHistory.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/GetOrderResults.txt",
+      "sha256": "27fa86cd843e6a1ac55a670578f36e931f8958beff20b48a67aaac914eae0f80",
+      "size": 11295,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/GetOrderResults.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/GetOrderResultsDetail.txt",
+      "sha256": "d573e2793834435c16d8424a97f55b98f39d3c5c88c2f12ba913a9aadb2dee95",
+      "size": 14091,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/GetOrderResultsDetail.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/MarginQuota.txt",
+      "sha256": "df47d8abd70de2b8c05c81402a9c0c898c78421f558e3a9af3c21e062fc783e0",
+      "size": 2409,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/MarginQuota.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/ModifyPrice.txt",
+      "sha256": "606db372d5cd157c40c51192abcdae8a59114bd0393002d9c88ca2e951016d48",
+      "size": 13931,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/ModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/ModifyQuantity.txt",
+      "sha256": "577982f0cb5ab314e64c7b1601adefb73d9e2abfba6bc9d7ab61a402539ebfa3",
+      "size": 13670,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/ModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/OrderHistory.txt",
+      "sha256": "2d88cec95420c6a85534539ff27e7c530bebef7196b368f2f70cf8608bcd86e0",
+      "size": 13970,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/OrderHistory.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/PlaceOrder.txt",
+      "sha256": "fe219a857ba0b60290a3a3555c028a6e1d68583628e40cabde04f9eecba37a95",
+      "size": 11610,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/PlaceOrder.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/QuerySymbolQuote.txt",
+      "sha256": "0fee0648045edf8b3bde9d93de7a2d0e84cd352e4c0cb3f041f7f4319a755e18",
+      "size": 8414,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/QuerySymbolQuote.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/QuerySymbolSnapshot.txt",
+      "sha256": "e8896e56752c09f2ccd5bc515ab0837a8ccc6ae7de52ea598d1400cadb0aaae8",
+      "size": 8889,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/QuerySymbolSnapshot.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/batchOrder/BatchCancelOrder.txt",
+      "sha256": "776b4d66a2ddb9a65cf1871da2fc5de63993ab718cbdfac63f0773f9fcc09b4f",
+      "size": 13718,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/batchOrder/BatchCancelOrder.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/batchOrder/BatchModifyPrice.txt",
+      "sha256": "0300eb392fb640f6f4bf894d4ac81d265aefab8da0644a51f8f70946d9d4da32",
+      "size": 18014,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/batchOrder/BatchModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/batchOrder/BatchModifyQuantity.txt",
+      "sha256": "caa978020a648f1d7ed718c8ca299a511b74477b3a6ed9221fa3a16a49f9a1ac",
+      "size": 18656,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/batchOrder/BatchModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/batchOrder/BatchOrderDetail.txt",
+      "sha256": "db388cee06a750724642419da1aec2c9f4426d80da3dd3a13374de7e9ce618d7",
+      "size": 10502,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/batchOrder/BatchOrderDetail.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/batchOrder/BatchOrderList.txt",
+      "sha256": "3323d4a9984ea8d0f1598aaf9c1003c16accab9b97d3c95caabb66f9f93cf8a8",
+      "size": 2249,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/batchOrder/BatchOrderList.txt"
+    },
+    {
+      "path": "trading/library/nodejs/trade/batchOrder/BatchPlaceOrder.txt",
+      "sha256": "e29d030bcf4dd4bb899171922d3d1e690ee091bb682c91446a36fdc051d9bcfd",
+      "size": 11540,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/batchOrder/BatchPlaceOrder.txt"
+    },
+    {
+      "path": "trading/library/python/EnumMatrix.txt",
+      "sha256": "a1604b5f564f47fa7c20e472d72ce9ab3d80a8735b90c2841ae9f2231825f07c",
+      "size": 20902,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/EnumMatrix.txt"
+    },
+    {
+      "path": "trading/library/python/accountManagement/Balance.txt",
+      "sha256": "f9c227bb0597a08c538d0bc1a05b00775cc589780aace21520086f2cd43850eb",
+      "size": 1896,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/accountManagement/Balance.txt"
+    },
+    {
+      "path": "trading/library/python/accountManagement/Inventories.txt",
+      "sha256": "cc84afdb48362e8ea9c03caeb61b7fbcc0dbb3f1e3324016c7a7a08030edf746",
+      "size": 8722,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/accountManagement/Inventories.txt"
+    },
+    {
+      "path": "trading/library/python/accountManagement/Maintenance.txt",
+      "sha256": "b2374fd6ebfba16cc16c56ece31ec141d25a663d92f672bbc56cd977524a9af0",
+      "size": 9120,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/accountManagement/Maintenance.txt"
+    },
+    {
+      "path": "trading/library/python/accountManagement/QuerySettlement.txt",
+      "sha256": "74e5f9a9130d880fc70b275a3602b98b31b9601f7c856f885b0defd6b6ddf749",
+      "size": 7123,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/accountManagement/QuerySettlement.txt"
+    },
+    {
+      "path": "trading/library/python/accountManagement/RealizedPnLDetail.txt",
+      "sha256": "159947e934ae258f06cd779d3185dab0202340405e57ccb5376f79da06b39ff4",
+      "size": 4652,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/accountManagement/RealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/python/accountManagement/RealizedPnLSum.txt",
+      "sha256": "aed250cb59a680f591478ff506bc82d91f4ed20d9e90de69f43ebd9836161f2c",
+      "size": 5047,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/accountManagement/RealizedPnLSum.txt"
+    },
+    {
+      "path": "trading/library/python/accountManagement/UnrealizedPnLDetail.txt",
+      "sha256": "541e2d563060d3ae484c3ce49722e95f404a9cfc68f98a1791aa2e24df1b8289",
+      "size": 4999,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/accountManagement/UnrealizedPnLDetail.txt"
+    },
+    {
+      "path": "trading/library/python/login/loginAPIKey.txt",
+      "sha256": "c526dce9d85fd3a79252c5cba834d4ada541621c2163439f4eca535355eb9671",
+      "size": 2271,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/login/loginAPIKey.txt"
+    },
+    {
+      "path": "trading/library/python/login/loginPassword.txt",
+      "sha256": "d04131df673e37e911d1c11af4aeb72aae97bff4ccc774830bf41c37814b5160",
+      "size": 2082,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/login/loginPassword.txt"
+    },
+    {
+      "path": "trading/library/python/logout.txt",
+      "sha256": "4deb13c88ac3af89f64811c7dffe4c2243b17c0d3c9f191addc59678fe3afaab",
+      "size": 524,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/logout.txt"
+    },
+    {
+      "path": "trading/library/python/trade/CancelOrder.txt",
+      "sha256": "4a4eb93f745251d48762941a53e129cd07f8bd7ed4aabb673277521439090818",
+      "size": 12035,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/CancelOrder.txt"
+    },
+    {
+      "path": "trading/library/python/trade/DaytradeAndStockInfo.txt",
+      "sha256": "896d8abfb265ce6640b5de26834d6a771ab929925fc6fda913b669a680eec94b",
+      "size": 4382,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/DaytradeAndStockInfo.txt"
+    },
+    {
+      "path": "trading/library/python/trade/FilledHistory.txt",
+      "sha256": "1ef21ba65e1f09d6fde80ca3a3af846dace58b0c932e678bc45535759aa6ec58",
+      "size": 6278,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/FilledHistory.txt"
+    },
+    {
+      "path": "trading/library/python/trade/GetOrderResults.txt",
+      "sha256": "31c208a4bcb42c517f7d786ba42b242e6b367d0b811c7596462bffe9232bb4a1",
+      "size": 11563,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/GetOrderResults.txt"
+    },
+    {
+      "path": "trading/library/python/trade/GetOrderResultsDetail.txt",
+      "sha256": "b51e525144560aeab1208f9b7dd38ac73803ae37d7a0fb38fd7c284447bcc6aa",
+      "size": 14493,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/GetOrderResultsDetail.txt"
+    },
+    {
+      "path": "trading/library/python/trade/MarginQuota.txt",
+      "sha256": "6603dce0cfa9f4c5877f205ed8331e7bc128a80a8af6d34c3149621c7b99260a",
+      "size": 2524,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/MarginQuota.txt"
+    },
+    {
+      "path": "trading/library/python/trade/ModifyPrice.txt",
+      "sha256": "36644a97ee2f158d858f66da21c1a5cf094167de7d0dd305a06b2898aa405ff8",
+      "size": 13371,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/ModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/python/trade/ModifyQuantity.txt",
+      "sha256": "8d24024a81c66e1c9f020c9a539b95be8d1fdabd6e8baf16b09c1195a26d30b6",
+      "size": 13044,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/ModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/python/trade/OrderHistory.txt",
+      "sha256": "a30b1d49acc2468d43bb321b0fda616541d3b211b0da882f96583d51d8f69767",
+      "size": 14933,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/OrderHistory.txt"
+    },
+    {
+      "path": "trading/library/python/trade/PlaceOrder.txt",
+      "sha256": "986547d080061badd75e52674e1f5cfac22a478e4672fdc67cd71ea5ac138a93",
+      "size": 12227,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/PlaceOrder.txt"
+    },
+    {
+      "path": "trading/library/python/trade/QuerySymbolQuote.txt",
+      "sha256": "a15a3788a27fd6b5c25006506dd6246fd4209a0e9bb46631f112c6832587f607",
+      "size": 8269,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/QuerySymbolQuote.txt"
+    },
+    {
+      "path": "trading/library/python/trade/QuerySymbolSnapshot.txt",
+      "sha256": "5bdf3a728e63e8655def2d3ddd426be165952c59085b72c74e2fd4605912d353",
+      "size": 9007,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/QuerySymbolSnapshot.txt"
+    },
+    {
+      "path": "trading/library/python/trade/batchOrder/BatchCancelOrder.txt",
+      "sha256": "5d2729d64dc70bc79ffde35921faffc7c63c0b715b4bfc3a262fe37a45e005cb",
+      "size": 16954,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/batchOrder/BatchCancelOrder.txt"
+    },
+    {
+      "path": "trading/library/python/trade/batchOrder/BatchModifyPrice.txt",
+      "sha256": "c91fd0b8a1e45c20700d4c7ff3c8c340cc9435c43300752dc79064419e0d66ed",
+      "size": 18628,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/batchOrder/BatchModifyPrice.txt"
+    },
+    {
+      "path": "trading/library/python/trade/batchOrder/BatchModifyQuantity.txt",
+      "sha256": "32fea16984c7ef2565be168e115c50ecc7e400263ed69fc7d7ee9d5869ffba53",
+      "size": 19488,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/batchOrder/BatchModifyQuantity.txt"
+    },
+    {
+      "path": "trading/library/python/trade/batchOrder/BatchOrderDetail.txt",
+      "sha256": "51555f0525eef9a7dbbd7d905aac330e27436547b054a9db0771b63b7ea9bd2e",
+      "size": 14426,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/batchOrder/BatchOrderDetail.txt"
+    },
+    {
+      "path": "trading/library/python/trade/batchOrder/BatchOrderList.txt",
+      "sha256": "98b9b2854d17aa8620e75b551b2074e19919e1842154987127c7a91cf45131d7",
+      "size": 2907,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/batchOrder/BatchOrderList.txt"
+    },
+    {
+      "path": "trading/library/python/trade/batchOrder/BatchPlaceOrder.txt",
+      "sha256": "7a26dcc335d3595d7bb4c9359a005f81f8365342a99f7fe557679d9f59d0117c",
+      "size": 14723,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/trade/batchOrder/BatchPlaceOrder.txt"
+    },
+    {
+      "path": "trading/prepare.txt",
+      "sha256": "cd0c4554ac438af2f889721691361d214a0d49fd875cf84c6bf4df15abdb4185",
+      "size": 8279,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/prepare.txt"
+    },
+    {
+      "path": "trading/quickstart.txt",
+      "sha256": "075a679aafd48497da1335f347a0986797af002b37907573587c5f373ee0d6df",
+      "size": 8959,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/quickstart.txt"
+    },
+    {
+      "path": "trading/trade-rate-limit.txt",
+      "sha256": "fae41c62dcffb69b97301dc876f5865dde111d17572d67b9fb1e5e6121cb6c0c",
+      "size": 1040,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/trading/trade-rate-limit.txt"
+    },
+    {
+      "path": "welcome.txt",
+      "sha256": "2a4c2a03f94c99c78d0600d48c13225eaff5bd1400b914fe91e7d96f25973ef4",
+      "size": 4723,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/welcome.txt"
+    },
+    {
+      "path": "welcome/build-with-llm.txt",
+      "sha256": "57059bfb3bb33a3da7aab1d386b1047abdec11c1b3b87fb6041a6c363fa08af7",
+      "size": 702,
+      "url": "https://www.fbs.com.tw/TradeAPI/docs/welcome/build-with-llm.txt"
+    }
+  ],
+  "generated_at": "2026-07-09T07:05:42.179516+00:00",
+  "index_sha256": "3d2759a279738c80312c25f9a170dcfdbf8a7a0f4133f79d00ccf5f296da3c22",
+  "source": "https://www.fbs.com.tw/TradeAPI/llms.txt"
+}

@@ -1,0 +1,66 @@
+# 登入
+
+ApikeyLogin
+
+版本資訊
+
+v2.2.7 起新增功能
+
+相關說明請參閱 [API Key 說明](https://www.fbs.com.tw/TradeAPI/docs/trading/api-key-apply.txt) 頁面
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數       | 類別   | 說明           |
+| ---------- | ------ | -------------- |
+| personalID | String | 登入的ID       |
+| key        | String | 申請的 API Key |
+| certPath   | String | 憑證路徑       |
+| certPass   | String | 憑證密碼       |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別   | 說明                             |
+| --------- | ------ | -------------------------------- |
+| isSuccess | bool   | 是否成功                         |
+| data      | List   | 回傳帳號資訊                     |
+| message   | string | 當isSuccess = False 回傳錯誤訊息 |
+
+### 帳號資訊 Account 欄位[​](#帳號資訊-account-欄位 "Direct link to 帳號資訊 Account 欄位")
+
+Return type : Object
+
+| 參數        | 類別   | 說明                                     |
+| ----------- | ------ | ---------------------------------------- |
+| name        | String | 客戶姓名                                 |
+| account     | String | 客戶帳號                                 |
+| branchNo    | String | 分公司代號                               |
+| accountType | string | 帳號類型 回傳 `stock` 證券 `futopt` 期貨 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+using FubonNeo.Sdk;
+
+var sdk = new FubonSDK();
+
+var result = sdk.ApikeyLogin("Your ID", "Your Key","Your Cert Path","Your Cert Password");
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+{
+    isSuccess = True,
+    message = ,
+    data = [
+        Account{
+                name = 富邦Bill,   // 客戶姓名 (string)
+                account = 28,      // 客戶帳號 (string)
+                branchNo = 6460,   // 分公司代號 (string)
+                accountType = stock  // 帳號類型 (string)
+        }
+    ]
+}
+
+```

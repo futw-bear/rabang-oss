@@ -1,0 +1,66 @@
+# 已實現損益彙總
+
+RealizedGainsAndLosesSummary
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                         | 說明 |
+| ------- | -------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別   | 說明                             |
+| --------- | ------ | -------------------------------- |
+| isSuccess | bool   | 是否成功                         |
+| data      | List   | 回傳已實現彙總資訊               |
+| message   | string | 當isSuccess = False 回傳錯誤訊息 |
+
+### 已實現彙總 RealizedSummary 欄位[​](#已實現彙總-realizedsummary-欄位 "Direct link to 已實現彙總 RealizedSummary 欄位")
+
+Return type : Object
+
+| 參數                  | 類別                                                                                             | 說明                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| startDate             | string                                                                                           | 彙總起始日                                                                                      |
+| endDate               | string                                                                                           | 彙總截止日                                                                                      |
+| branchNo              | string                                                                                           | 分公司代號                                                                                      |
+| account               | string                                                                                           | 帳號                                                                                            |
+| stockNo               | string                                                                                           | 股票代號                                                                                        |
+| buySell               | [BsAction](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#bsaction)   | 買賣別 : `Buy` 買 、 `Sell` 賣                                                                  |
+| orderType             | [OrderType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#ordertype) | 委託單類型 : `Stock` 現股 、 `Margin` 融資 、 `Short` 融券 、 `DayTrade` 現沖先賣 、 `SBL` 借券 |
+| filledQty             | int                                                                                              | 成交股數                                                                                        |
+| filledAvgPrice        | double                                                                                           | 成交均價                                                                                        |
+| realizedProfitAndLoss | int                                                                                              | 已實現損益金額                                                                                  |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+Console.WriteLine(sdk.Accounting.RealizedGainsAndLosesSummary(account));
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+{
+    isSuccess = True,
+    message = ,
+    data = [
+            RealizedSummary{
+               startDate = 20230801,                // 起始日期 (string)
+               endDate = 20230801,                  // 截止日期 (string)
+               branchNo = 6460,                    // 分公司代號 (string)
+               account = 26,                       // 帳號 (string)
+               stockNo = 1101,                     // 股票代號 (string)
+               buySell = Sell,                     // 買賣別 (BsAction)
+               orderType = Stock,                  // 委託單類型 (OrderType)
+               filledQty = 3000,                   // 成交股數 (int)
+               filledAvgPrice = 35.7,              // 成交均價 (double)
+               realizedProfitAndLoss = 34026       // 已實現損益金額 (int)
+            },
+            ...
+         ]
+}
+
+```

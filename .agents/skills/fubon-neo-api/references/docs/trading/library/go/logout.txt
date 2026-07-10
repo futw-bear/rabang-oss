@@ -1,0 +1,35 @@
+# 登出
+
+Logout
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別 | 說明     |
+| --------- | ---- | -------- |
+| isSuccess | bool | 是否成功 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```go
+package main
+
+import (
+	"fmt"
+	"fubon"
+)
+
+sdk := fubon.NewFubonCore()
+
+// login ...
+
+logoutResp, err := sdk.Logout()
+fmt.Println("Logout result: ", logoutResp)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```go
+Logout result:  true
+
+```

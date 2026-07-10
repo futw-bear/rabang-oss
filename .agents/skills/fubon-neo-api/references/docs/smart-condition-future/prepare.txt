@@ -1,0 +1,39 @@
+# 事前準備
+
+caution
+
+在開始富邦新一代 API 條件單前，您必須完成簽署條件單智慧單
+
+## 簽署條件單風險預告書[​](#簽署條件單風險預告書 "Direct link to 簽署條件單風險預告書")
+
+登入富邦證券簽署中心，選擇期貨，簽署期貨條件單
+
+![線上簽署](/TradeAPI/assets/images/futurecondition-28d403275883db4916ae8c3d249373c3.png)
+
+## 引入套件 ( 僅Python、JS需要，C#不需額外操作)[​](#引入套件--僅pythonjs需要c不需額外操作 "Direct link to 引入套件 ( 僅Python、JS需要，C#不需額外操作)")
+
+引入條件單相關套件
+
+* Python
+* Node.js
+
+```py
+from fubon_neo.sdk import FubonSDK, Condition, FutOptConditionOrder
+from fubon_neo.constant import ( 
+    TriggerContent, TradingType, Operator, FutOptTPSLOrder, FutOptTPSLWrapper, SplitDescription,
+    StopSign, TimeSliceOrderType, FutOptConditionPriceType, FutOptConditionOrderType, FutOptConditionMarketType, TrailOrder, Direction, FutOptTrailOrder, ConditionStatus, HistoryStatus
+)
+
+
+```
+
+```js
+const { FubonSDK, TriggerContent, TradingType, Operator, FutOptTPSLOrder, FutOptTPSLWrapper, SplitDescription,
+    StopSign, TimeSliceOrderType, FutOptConditionPriceType, FutOptConditionOrderType, FutOptConditionMarketType, TrailOrder, Direction, FutOptTrailOrder, ConditionStatus, HistoryStatus } = require('fubon-neo');
+
+
+```
+
+info
+
+條件單目前不支援期權商品與現貨商品混用

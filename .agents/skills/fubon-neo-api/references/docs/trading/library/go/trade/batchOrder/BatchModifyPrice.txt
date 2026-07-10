@@ -1,0 +1,114 @@
+# 批次修改委託價格
+
+BatchModifyPrice
+
+### 先使用 MakeModifyPriceObj 建立 ModifyPriceObj 物件[​](#先使用-makemodifypriceobj-建立-modifypriceobj-物件 "Direct link to 先使用 MakeModifyPriceObj 建立 ModifyPriceObj 物件")
+
+| 參數        | 類別                                                                                             | 說明             |
+| ----------- | ------------------------------------------------------------------------------------------------ | ---------------- |
+| orderResult | [OrderResult](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#orderresult) | 預計修改的委託單 |
+| price       | \*string                                                                                         | 修改後的價格     |
+| priceType   | \*PriceType                                                                                      | 修改後的價格旗標 |
+
+caution
+
+當 price 欄位有填入值時，priceType 需為 nil ； 當 priceType 欄位有填入值時，price 需為 nil
+
+將回傳的物件放入 BatchModifyPrice 的方法中
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數            | 類別                                                                                     | 說明                 |
+| --------------- | ---------------------------------------------------------------------------------------- | -------------------- |
+| account         | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#account) | 帳號                 |
+| modifyPriceObjs | \[]ModifyPriceObj                                                                        | 批次修改價格物件列表 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別             | 說明                              |
+| --------- | ---------------- | --------------------------------- |
+| IsSuccess | bool             | 是否成功                          |
+| Data      | \*\[]OrderResult | 回傳修改資訊列表                  |
+| Message   | \*string         | 當 IsSuccess = false 回傳錯誤訊息 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```go
+package main
+
+import (
+    "fmt"
+    "fubon"
+)
+
+func main() {
+    sdk := fubon.NewSDK()
+    // ... 登入、連線等初始化步驟 ...
+    
+    // 方法 1: 使用批次明細回傳的內容改價
+    batchList, _ := sdk.Stock.BatchOrderLists(account)
+    if batchList.Data != nil && len(*batchList.Data) > 0 {
+        batchRes := (*batchList.Data)[0]
+        batchDetail, _ := sdk.Stock.BatchOrderDetail(account, batchRes)
+        
+        if batchDetail.Data != nil && len(*batchDetail.Data) >= 2 {
+            price1 := "41.1"
+            price2 := "41.2"
+            
+            modifyObjs := []fubon.ModifyPrice{
+                sdk.Stock.MakeModifyPriceObj((*batchDetail.Data)[0], &price1, nil),
+                sdk.Stock.MakeModifyPriceObj((*batchDetail.Data)[1], &price2, nil),
+            }
+            
+            batchPrice, err := sdk.Stock.BatchModifyPrice(account, modifyObjs)
+            if err != nil {
+                fmt.Printf("❌ Batch Modify Price Format/Parse Error: %v\n", err)
+                return
+            }
+            
+            if batchPrice.IsSuccess && batchPrice.Data != nil {
+                fmt.Printf("✅ Modified %d orders\n", len(*batchPrice.Data))
+            }
+        }
+    }
+    
+    // 方法 2: 使用不同的單筆委託改價
+    ordResult, _ := sdk.Stock.OrderResults(account)
+    if ordResult.Data != nil && len(*ordResult.Data) >= 2 {
+        price1 := "41.1"
+        price2 := "41.2"
+        
+        modifyObjs := []fubon.ModifyPrice{
+            sdk.Stock.MakeModifyPriceObj((*ordResult.Data)[0], &price1, nil),
+            sdk.Stock.MakeModifyPriceObj((*ordResult.Data)[1], &price2, nil),
+        }
+        
+        batchPrice, _ := sdk.Stock.BatchModifyPrice(account, modifyObjs)
+        // ... 處理結果
+    }
+}
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```go
+Result{
+    IsSuccess: true,
+    Message:   nil,
+    Data: &[]OrderResult{
+        {
+            FunctionType:   15,                   // 功能別 (15=改價)
+            Date:           "2023/11/22",         // 交易日期
+            SeqNo:          "00000322356",        // 委託單流水序號
+            OrderNo:        "x0018",              // 委託書號
+            StockNo:        "1101",               // 股票代號
+            BeforePrice:    "41.3",               // 改單前有效價
+            AfterPrice:     "41.1",               // 有效委託價格 (改價後)
+            // ... 其他欄位
+        },
+        // ... 更多改價結果
+    },
+}
+
+```

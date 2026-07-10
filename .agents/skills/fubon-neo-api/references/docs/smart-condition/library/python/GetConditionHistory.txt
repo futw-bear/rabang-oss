@@ -1,0 +1,209 @@
+# 歷史條件單查詢
+
+get\_condition\_history
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數                       | 類別                                                                                                                         | 說明           |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| account                    | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/EnumMatrix.txt#account)                                 | 帳號           |
+| start\_date                | string                                                                                                                       | 查詢開始日     |
+| end\_date                  | string                                                                                                                       | 查詢截止日     |
+| condition\_history\_status | [History Status](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/EnumMatrix.txt#historystatus) (Optional) | 歷史條件單狀態 |
+
+info
+
+歷史資料日期以條件單創建日期為準
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | list                | 條件單回傳資訊                   |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionDetail 欄位[​](#委託資訊-conditiondetail--欄位 "Direct link to 委託資訊 ConditionDetail  欄位")
+
+Return type : Object
+
+| 參數                         | 類別   | 說明             |
+| ---------------------------- | ------ | ---------------- |
+| guid                         | string | 條件單號         |
+| batch\_no                    | string | 分單批號         |
+| order\_level                 | string | 條件單層級       |
+| last\_time                   | string | 更新時間         |
+| parent\_guid                 | string | 父單單號         |
+| symbol                       | string | 商品代號         |
+| order\_amount                | string | 委託金額         |
+| child\_batch\_no             | string | 子單分單批號     |
+| account                      | string | 帳號             |
+| condition\_content           | string | 條件內容         |
+| action                       | string | 處理方式         |
+| condition\_buy\_sell         | string | 買賣別           |
+| condition\_symbol            | string | 商品名稱         |
+| condition\_price             | string | 價格             |
+| condition\_volume            | string | 委託數量         |
+| condition\_filled\_volume    | string | 成交數量         |
+| creat\_time                  | string | 建立時間         |
+| start\_date                  | string | 預約開始時間     |
+| status                       | string | 目前狀態         |
+| error\_message               | string | 目前狀態異常說明 |
+| detail\_records\_count       | string | 查詢明細筆數     |
+| detail\_records              | List   | 查詢明細資料     |
+| >> guid                      | string | 條件單號         |
+| >> account                   | string | 帳號             |
+| >> condition\_content        | string | 條件內容         |
+| >> action                    | string | 處理方式         |
+| >> condition\_buy\_sell      | string | 買賣別           |
+| >> condition\_symbol         | string | 商品名稱         |
+| >> condition\_price          | string | 價格             |
+| >> condition\_volume         | string | 委託數量         |
+| >> condition\_filled\_volume | string | 成交數量         |
+| >> start\_date               | string | 預約時間         |
+| >> status                    | string | 目前狀態         |
+| >> error\_message            | string | 目前狀態異常說明 |
+| tpslCount                    | string | 停損停利筆數     |
+| tpslRecord                   | List   | 停損停利明細資料 |
+| >> guid                      | string | 條件單號         |
+| >> account                   | string | 帳號             |
+| >> condition\_content        | string | 條件內容         |
+| >> action                    | string | 處理方式         |
+| >> condition\_buy\_sell      | string | 買賣別           |
+| >> condition\_symbol         | string | 商品名稱         |
+| >> condition\_price          | string | 價格             |
+| >> condition\_volume         | string | 委託數量         |
+| >> condition\_filled\_volume | string | 成交數量         |
+| >> start\_date               | string | 預約時間         |
+| >> status                    | string | 目前狀態         |
+| >> error\_message            | string | 目前狀態異常說明 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+sdk.stock.get_condition_history(account,"20240310","20240601")
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+
+Result {
+    is_success: True,
+    message: None,
+    data : [
+        ConditionDetail {
+                guid: "8ff3472b-185a-488c-be5a-b478deda080c",
+                batch_no: "",
+                order_level: "1",
+                last_time: "2024-03-14 12:39:02",
+                condition_type: "多條件",
+                parent_guid: "58e7a51e-9701-4d26-bc16-18a392a840bd",
+                symbol: "2330",
+                order_amount: "0",
+                child_batch_no: "",
+                account: "1307515",
+                condition_content: "當自2024/03/14至2024/07/04內台積電成交價大於等於580元 全部成交為止",
+                action: "下單(次日回補) ",
+                condition_buy_sell: "現股賣",
+                condition_symbol: "台積電 現股賣",
+                condition_price: "580元(ROD)",
+                condition_volume: "5張",
+                condition_filled_volume: "0張",
+                creat_time: "2024-03-14 12:39:22",
+                start_date: "2024/03/14",
+                status: "未生效(W)",
+                error_message: None,
+                detail_records_count: "0",
+                detail_records: [],
+                tpslCount: "0",
+                tpslRecord: [],
+            },
+            ConditionDetail {
+                guid: "8ff3472b-185a-488c-be5a-b478deda080c",
+                batch_no: "",
+                order_level: "1",
+                last_time: "2024-03-14 12:39:02",
+                condition_type: "多條件",
+                parent_guid: "58e7a51e-9701-4d26-bc16-18a392a840bd",
+                symbol: "2330",
+                order_amount: "0",
+                child_batch_no: "",
+                account: "1307515",
+                condition_content: "當自2024/03/14至2024/07/04內台積電成交價小於等於570元 全部成交為止",
+                action: "下單(次日回補) ",
+                condition_buy_sell: "現股賣",
+                condition_symbol: "台積電 現股賣",
+                condition_price: "市價(ROD)",
+                condition_volume: "5張",
+                condition_filled_volume: "0張",
+                creat_time: "2024-03-14 12:39:22",
+                start_date: "2024/03/14",
+                status: "未生效(W)",
+                error_message: None,
+                detail_records_count: "0",
+                detail_records: [],
+                tpslCount: "0",
+                tpslRecord: [],
+            },
+            ConditionDetail {
+                guid: "ec757279-bcb3-46f4-80ac-fccfc786bc8d",
+                batch_no: "",
+                order_level: "0",
+                last_time: "2024-05-21 10:30:00",
+                condition_type: "多條件",
+                parent_guid: "ec757279-bcb3-46f4-80ac-fccfc786bc8d",
+                symbol: "2330",
+                order_amount: "0",
+                child_batch_no: "",
+                account: "1307515",
+                condition_content: "當自2024/03/14至2024/07/04內台積電成交價大於等於575元，且 台積電成交總量大於等於1001張，且 台積電時間大於等於10:30:00 部份成交為止",
+                action: "下單(當沖) ",
+                condition_buy_sell: "現股買",
+                condition_symbol: "台積電 現股買",
+                condition_price: "576元(ROD)",
+                condition_volume: "5張",
+                condition_filled_volume: "0張",
+                creat_time: "2024-03-14 12:30:02",
+                start_date: "2024/03/14",
+                status: "觸發-委託失敗(X)",
+                error_message: "單價輸入錯誤[4385715]",
+                detail_records_count: "0",
+                detail_records: [],
+                tpslCount: "2",
+                tpslRecord: [
+                    ParentChildRecord {
+                        guid: "c94b552a-22da-43e4-be44-f27a9c2026e1",
+                        account: "1307515",
+                        condition_content: "當自2024/03/14至2024/07/04內台積電成交價大於等於580元 全部成交為止",
+                        action: "下單(次日回補) ",
+                        condition_buy_sell: "現股賣",
+                        condition_symbol: "台積電 現股賣",
+                        condition_price: "580元(ROD)",
+                        condition_volume: "5張",
+                        condition_filled_volume: "0張",
+                        start_date: "2024/03/14",
+                        status: "未生效(W)",
+                        error_message: "",
+                    },
+                    ParentChildRecord {
+                        guid: "c94b552a-22da-43e4-be44-f27a9c2026e1",
+                        account: "1307515",
+                        condition_content: "當自2024/03/14至2024/07/04內台積電成交價小於等於570元 全部成交為止",
+                        action: "下單(次日回補) ",
+                        condition_buy_sell: "現股賣",
+                        condition_symbol: "台積電 現股賣",
+                        condition_price: "市價(ROD)",
+                        condition_volume: "5張",
+                        condition_filled_volume: "0張",
+                        start_date: "2024/03/14",
+                        status: "未生效(W)",
+                        error_message: "",
+                    },
+                ],
+            }
+        ]       
+    }
+
+```

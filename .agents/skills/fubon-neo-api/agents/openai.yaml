@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fubon Neo API"
+  short_description: "Build Fubon Neo integrations from offline docs"
+  default_prompt: "Use $fubon-neo-api to implement a Fubon Neo API integration from the bundled official documentation."

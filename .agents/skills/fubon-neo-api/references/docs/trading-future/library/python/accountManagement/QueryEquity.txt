@@ -1,0 +1,128 @@
+# 權益數查詢
+
+query\_margin\_equity
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                                | 說明 |
+| ------- | --------------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別   | 說明                               |
+| ----------- | ------ | ---------------------------------- |
+| is\_success | bool   | 是否成功                           |
+| data        | List   | 回傳權益數資訊                     |
+| message     | string | 當is\_success = false 回傳錯誤訊息 |
+
+#### 權益數 Equity 欄位[​](#權益數-equity-欄位 "Direct link to 權益數 Equity 欄位")
+
+Return type : Object
+
+| 參數                 | 類別   | 說明                                                                        |
+| -------------------- | ------ | --------------------------------------------------------------------------- |
+| date                 | string | 查詢日期                                                                    |
+| branch\_no           | string | 分公司代號                                                                  |
+| account              | string | 帳號                                                                        |
+| currency             | string | 幣別 : `NTD` 約當台幣 、`TWD` 新台幣、`USD` 美元、`CNY` 人民幣 、`JPY` 日圓 |
+| yesterday\_balance   | float  | 昨日餘額                                                                    |
+| today\_balance       | float  | 今日餘額                                                                    |
+| initial\_margin      | float  | 原始保證金                                                                  |
+| maintenance\_margin  | float  | 維持保證金                                                                  |
+| clearing\_margin     | float  | 結算保證金                                                                  |
+| today\_equity        | float  | 本日權益                                                                    |
+| today\_deposit       | float  | 今日入金                                                                    |
+| today\_withdrawal    | float  | 今日出金                                                                    |
+| today\_trading\_fee  | float  | 今日交易手續費                                                              |
+| today\_trading\_tax  | float  | 今日交易稅                                                                  |
+| receivable\_premium  | float  | 收取權利金                                                                  |
+| payable\_premium     | float  | 付出權利金                                                                  |
+| excess\_margin       | float  | 超額保證金                                                                  |
+| available\_margin    | float  | 可動用保證金                                                                |
+| disgorgement         | float  | 追繳金額                                                                    |
+| opt\_pnl             | float  | 未沖銷選擇權浮動損益                                                        |
+| opt\_value           | float  | 選擇權市值                                                                  |
+| opt\_long\_value     | float  | 未沖銷選擇權買方市值                                                        |
+| opt\_short\_value    | float  | 未沖銷選擇權賣方市值                                                        |
+| fut\_realized\_pnl   | float  | 期貨平倉損益                                                                |
+| fut\_unrealized\_pnl | float  | 期貨期貨未平倉損益                                                          |
+| buy\_lot             | int    | 買進口數                                                                    |
+| sell\_lot            | int    | 賣出口數                                                                    |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+sdk.futopt_accounting.query_margin_equity(accounts)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+Result {
+    is_success: True,
+    message: None,
+    data : [Equity({
+              date: "2024/04/08",                   # 查詢日期 (string)
+              branch_no: "15901",                   # 分公司代號 (string)
+              account: "1234567",                   # 帳號 (string)
+              currency: "NTD",                      # 幣別 (string)
+              yesterday_balance: 22435152.4,        # 昨日餘額 (float)
+              today_balance: 22434910.4,            # 今日餘額 (float)
+              initial_margin: 1114946.0,            # 原始保證金 (float)
+              maintenance_margin: 939214.0,         # 維持保證金 (float)
+              clearing_margin: 915760.0,            # 結算保證金 (float)
+              today_equity: 22694910.4,             # 本日權益 (float)
+              today_deposit : 0.0,                  # 本日入金 (float)
+              today_withdrawal: 2102.0,             # 本日出金 (float)
+              today_trading_fee: 16.0,              # 本日交易手續費 (float)
+              today_trading_tax: 0.0,               # 本日交易稅 (float)
+              receivable_premium: 0.0,              # 收取權利金 (float)
+              payable_premium: 9250.0,              # 付出權利金 (float)
+              excess_margin: 28744525.0,            # 超額保證金 (float)
+              available_margin: 21453562.4,         # 可動用保證金 (float)
+              disgorgement: 0.0,                    # 追繳金額 (float)
+              opt_pnl: -248600.0,                   # 未沖銷選擇權浮動損益 (float)
+              opt_value: -193100.0,                 # 選擇權市值 (float)
+              opt_long_value: 311900.0,             # 未沖銷選擇權買方市值 (float)
+              opt_short_value: 505000.0,            # 未沖銷選擇權賣方市值 (float)
+              fut_realized_pnl: 0.0,                # 期貨平倉損益 (float)
+              fut_unrealized_pnl: 60700.0,          # 期貨期貨未平倉損益 (float)
+              buy_lot: 22,                          # 買進口數 (int)
+              sell_lot: 7                           # 賣出口數 (int)
+            }),
+            Equity({
+              date: "2024/04/08",                   # 查詢日期 (string)
+              branch_no: "15901",                   # 分公司代號 (string)
+              account: "1234567",                   # 帳號 (string)
+              currency: "TWD",                      # 幣別 (string)
+              yesterday_balance: 19880310.0,        # 昨日餘額 (float)
+              today_balance: 19880068.0,            # 今日餘額 (float)
+              initial_margin: 1114946.0,            # 原始保證金 (float)
+              maintenance_margin: 939214.0,         # 維持保證金 (float)
+              clearing_margin: 915760.0,            # 結算保證金 (float)
+              today_equity: 20140068.0,             # 本日權益 (float)
+              today_deposit : 0.0,                  # 本日入金 (float)
+              today_withdrawal: 2102.0,             # 本日出金 (float)
+              today_trading_fee: 16.0,              # 本日交易手續費 (float)
+              today_trading_tax: 0.0,               # 本日交易稅 (float)
+              receivable_premium: 0.0,              # 收取權利金 (float)
+              payable_premium: 9250.0,              # 付出權利金 (float)
+              excess_margin: 28744525.0,            # 超額保證金 (float)
+              available_margin: 18898720.0,         # 可動用保證金 (float)
+              disgorgement: 0.0,                    # 追繳金額 (float)
+              opt_pnl: -248600.0,                   # 未沖銷選擇權浮動損益 (float)
+              opt_value: -193100.0,                 # 選擇權市值 (float)
+              opt_long_value: 311900.0,             # 未沖銷選擇權買方市值 (float)
+              opt_short_value: 505000.0,            # 未沖銷選擇權賣方市值 (float)
+              fut_realized_pnl: 0.0,                # 期貨平倉損益 (float)
+              fut_unrealized_pnl: 60700.0,          # 期貨期貨未平倉損益 (float)
+              buy_lot: 22,                          # 買進口數 (int)
+              sell_lot: 7,                          # 賣出口數 (int)
+            }),
+            ...
+            ]
+}
+
+```

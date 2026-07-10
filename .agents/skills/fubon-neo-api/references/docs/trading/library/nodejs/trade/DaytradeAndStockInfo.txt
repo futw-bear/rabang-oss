@@ -1,0 +1,62 @@
+# 現冲券配額查詢
+
+daytradeAndStockInfo
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                         | 說明     |
+| ------- | -------------------------------------------------------------------------------------------- | -------- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#account) | 帳號     |
+| stockNo | string                                                                                       | 股票代碼 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | Object              | 回傳配額資訊                     |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 配額資訊 DayTradeStockInfo 欄位[​](#配額資訊-daytradestockinfo-欄位 "Direct link to 配額資訊 DayTradeStockInfo 欄位")
+
+Return type : Object
+
+| 參數                  | 類別   | 說明                                                                                                                                          |
+| --------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| stockNo               | string | 股票代號                                                                                                                                      |
+| date                  | string | 日期                                                                                                                                          |
+| daytradeOrigQuota     | number | 原始現冲券餘額                                                                                                                                |
+| daytradeTradableQuota | number | 可用現冲券餘額                                                                                                                                |
+| precollectSingle      | number | 單筆預收股數 (若不需預收則不顯示)                                                                                                             |
+| precollectAccumulate  | number | 累積預收股數 (若不需預收則不顯示)                                                                                                             |
+| status                | number | 狀態 (bitmask 加總) : `0` 全禁 、 `1` 平盤下可融券賣出、 `2` 平盤下可借券賣出、 `4` 可先買後賣當沖 、 `8`可先賣後買當沖                       |
+| dispositionStatus     | string | 警示股註記 `{ SETTYPE : 1}` : 全額交割、 `{ MARK-W : 1}` : 警示、`{ MARK-P : 1}` : 注意、`{ MARK-L : 1}` : 委託受限 【**2.2.5版本新增欄位**】 |
+
+info
+
+status 範例說明 : 若Status = 15 則為，1(平盤下可融券賣出)+2(平盤下可借券賣出)+4(可先買後賣當沖)+8(可先賣後買當沖) ，的分解項目； 若Status = 3 則為，1(平盤下可融券賣出)+2(平盤下可借券賣出)的分解項目。其餘加總以此類推。
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+sdk.stock.daytradeAndStockInfo(account, "2330")
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+{
+  isSuccess: true,
+  data:[
+    {
+      stockNo: '2330',
+      date: '2023/10/24',
+      daytradeOrigQuota: 0,
+      daytradeTradableQuota: 0,
+      status: 0
+    }
+  ]
+}
+
+```

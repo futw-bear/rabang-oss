@@ -1,0 +1,55 @@
+# 取得批次委託列表
+
+batchOrderLists
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                                | 說明 |
+| ------- | --------------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | Object              | 回傳批次單資訊                   |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 批次單 BatchResult 欄位[​](#批次單-batchresult-欄位 "Direct link to 批次單 BatchResult 欄位")
+
+Return type : Object
+
+| 參數         | 類別   | 說明                                                                           |
+| ------------ | ------ | ------------------------------------------------------------------------------ |
+| functionType | number | 功能別 : `0` 新單 、`10` 新單執行、 `15` 改價、 `20` 改量、`30`刪單 、`90`失敗 |
+| date         | string | 交易日期                                                                       |
+| branchNo     | string | 分公司代號                                                                     |
+| account      | string | 帳號                                                                           |
+| batchSeqNo   | string | 批次單流水序號                                                                 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+sdk.futopt.batchOrderLists(target_user)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+{
+  isSuccess: true,
+  data: [
+    {
+      functionType: 0,
+      date: '2023/10/24',
+      branchNo: '6460',
+      account: '26',
+      batchSeqNo: '11EE72270B4D79F48000000C29304663'
+    },
+    ...
+  ]
+}
+
+```

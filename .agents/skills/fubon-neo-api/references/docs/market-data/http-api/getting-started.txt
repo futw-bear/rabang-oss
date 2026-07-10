@@ -1,0 +1,90 @@
+# 開始使用
+
+本頁重點
+
+* 富邦行情 Web API（富邦新一代 API 行情服務）提供台股盤中、快照與歷史資料查詢。
+* 超過速率限制會回應 `429`，詳見速率限制說明。
+* 提供 Python / Node.js / C# SDK 範例。
+* 下一步可從功能列表選擇對應 API 端點。
+
+| 項目     | 說明                  |
+| -------- | --------------------- |
+| 介面     | Web API               |
+| 市場     | 台股                  |
+| 資料類型 | 盤中 / 快照 / 歷史    |
+| 速率限制 | 超過回應 `429`        |
+| SDK      | Python / Node.js / C# |
+
+富邦行情 Web API 提供開發者友善的 API 服務。您可以查詢台股的日內行情、行情快照與歷史行情等數據。
+
+## 速率限制[​](#速率限制 "Direct link to 速率限制")
+
+如果您 API 請求超過了限制，將收到帶有狀態碼 `429` 的回應。 ( 限制細節請參考[速率限制](https://www.fbs.com.tw/TradeAPI/docs/market-data/rate-limit.txt) )
+
+## 功能列表[​](#功能列表 "Direct link to 功能列表")
+
+功能列表依資料類型可分為 **盤中行情（intraday）**、**行情快照（snapshot）**、**歷史行情（historical）**。富邦行情 Web API 提供的功能如下：
+
+* `/intraday/tickers` - [股票或指數列表（依條件查詢）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/tickers.txt)
+* `/intraday/ticker/{symbol}` - [股票基本資料（依代碼查詢）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/ticker.txt)
+* `/intraday/quote/{symbol}` - [股票即時報價（依代碼查詢）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/quote.txt)
+* `/intraday/candles/{symbol}` - [股票價格Ｋ線（依代碼查詢）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/candles.txt)
+* `/intraday/trades/{symbol}` - [股票成交明細（依代碼查詢）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/trades.txt)
+* `/intraday/volumes/{symbol}` - [股票分價量表（依代碼查詢）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/intraday/volumes.txt)
+* `/snapshot/quotes/{market}` - [股票行情快照（依市場別）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/snapshot/quotes.txt)
+* `/snapshot/movers/{market}` - [股票漲跌幅排行（依市場別）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/snapshot/movers.txt)
+* `/snapshot/actives/{market}` - [股票成交量值排行（依市場別）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/snapshot/actives.txt)
+* `/historical/candles/{symbol}` - [取得 1 年內歷史股價（依代碼查詢）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/historical/candles.txt)
+* `/historical/stats/{symbol}` - [取得近 52 週股價數據（依代碼查詢）](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/historical/stats.txt)
+
+## 使用 SDK[​](#使用-sdk "Direct link to 使用 SDK")
+
+富邦行情 Web API 提供 Python 、 Node.js SDK 與 C# SDK。您可以透過以下方式存取 API：
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+# 2.2.4 以後版本, 增加下列匯入: 
+# from fubon_neo.fugle_marketdata.rest.base_rest import FugleAPIError
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime()  # 建立行情連線
+
+reststock = sdk.marketdata.rest_client.stock
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+
+const stock = client.stock;
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+
+var sdk = new FubonSDK();
+
+var result = sdk.Login("Your ID", "Your password", "Your cert path", "Your cert password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.Stock;
+
+```

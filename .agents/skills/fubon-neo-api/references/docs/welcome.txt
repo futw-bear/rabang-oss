@@ -1,0 +1,99 @@
+****
+
+# 富邦新一代 API 快速上手
+
+本頁重點
+
+* 本頁提供富邦新一代 API（Fubon Neo API）快速上手流程與資源入口。
+* 開始前需完成：開戶、憑證申請、API 使用聲明與連線測試。
+* 提供 Python / C# / JavaScript 範例程式下載與社群資源。
+* 下一步請先完成[事前準備](https://www.fbs.com.tw/TradeAPI/docs/trading/prepare.txt)。
+
+| 項目     | 說明                                                                       |
+| -------- | -------------------------------------------------------------------------- |
+| 產品     | 富邦新一代 API（Fubon Neo API）                                            |
+| 主要受眾 | 程式交易開發者                                                             |
+| 必要前置 | 開戶、憑證申請、API 使用聲明 + 連線測試                                    |
+| 支援語言 | Python / C# / JavaScript (Node.js) / C++、Go（僅支援證券交易帳務及條件單） |
+| 相關資源 | 範例程式、測試環境、社群                                                   |
+
+行前小提醒
+
+在開始新一代 API 的旅程之前，您必須完成以下步驟
+
+1. 至【[事前準備](https://www.fbs.com.tw/TradeAPI/docs/trading/prepare.txt)】完成三步驟 **a. 開戶 b.電子交易憑證申請 c. 簽署 API 使用聲明+連線測試**
+2. 選定欲使用的程式語言，並參考本頁對應之【[範例程式](#code_sample)】
+3. 加入【[Discord群組](https://discord.com/invite/M8Gv9yKfza)】獲取更多程式交易資源，解決您的疑難雜症
+
+## 環境建置與範例程式[​](#環境建置與範例程式 "Direct link to 環境建置與範例程式")
+
+環境建置僅為建議並無強制，若已有熟悉之開發環境可以直接開始執行範例程式
+
+### 環境建置[​](#環境建置 "Direct link to 環境建置")
+
+[Python安裝與使用教學](https://www.youtube.com/embed/XQo8d4-WsIg?si=Aq7l1Br0S5nqPE_m)
+
+### 範例程式[​](#code_sample "Direct link to 範例程式")
+
+行前小提醒
+
+以下僅為範例程式原始碼，SDK需另行下載安裝
+
+PYTHON 範例程式碼
+
+* **API 功能使用範例：**
+
+  * [Python 範例程式碼](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/python_sample_code.zip) (.ipynb, Jupyter 互動開發格式)
+
+* **情境式範例：**
+
+  * [盤中搶漲停](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/win_for_limitup.zip)
+  * [盤前搶券](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/win_for_short_sell.zip)
+  * [盤前限價單開盤轉市價](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/limit_to_market.zip)
+  * [庫存停損停利](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/inventory_stop_loss.zip)
+
+C# 範例程式碼
+
+* **API 功能使用範例：**
+
+  * [C# 範例程式碼](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/fubondotnetsdkgui.zip) (WPF 專案)
+  * [C# 行情及帳務範例程式碼](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/marketdata_n_accounting.zip) (Windows Forms 專案)
+
+* **情境式範例：**
+
+  * [盤前限價單開盤轉市價 ](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/limit_to_market.zip)(Windows Forms 專案)
+
+JAVASCRIPT 範例程式碼
+
+* **API 功能使用範例：**
+  * [JS 範例程式碼](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/js_sample_code.zip) (.ipynb, Jupyter 互動開發格式)
+
+## 測試環境[​](#測試環境 "Direct link to 測試環境")
+
+新一代 API 開放使用測試環境，請下載測試環境說明包：
+
+[下載測試環境說明包](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/test_environment.zip)
+
+<br />
+
+<br />
+
+註1. 目前暫僅提供證券測試帳號<br />註2. 若有任何使用上的疑問，可來信至富邦證券程式交易PM信箱 ***<pm.trading.sec@fubon.com>*** 洽詢
+
+## 更多資源[​](#更多資源 "Direct link to 更多資源")
+
+富邦證券程式交易線上講座
+
+【[不定期線上講座報名](https://www.fbs.com.tw/Course/Main;areaID=F)】每月都會有不定期的程式交易線上講座，內容涵蓋選股到API 交易程式開發
+
+GITHUB教學範例
+
+包含多種由新一代 API Python開發的常見交易圖形化介面應用程式範例，歡迎參考【[GitHub教學範例](https://github.com/Tradepm/-API)】
+
+YOUTUBE程式交易頻道
+
+新一代 API 的大小事及教學留影都在【[富邦證券YouTube](https://youtube.com/playlist?list=PLm7R8dzlvMHd6LonqpQHoIS6ga0d5fdpp\&si=NrJt2fEl0kgXS_NG)】程式交易頻道，幫您快速入門程式交易
+
+DISCORD程式交易討論
+
+開發程式交易工具卡住了嗎？快到【[Discord](https://discord.com/invite/M8Gv9yKfza)】留言您的疑難雜症，從入門到進階都有專人幫忙

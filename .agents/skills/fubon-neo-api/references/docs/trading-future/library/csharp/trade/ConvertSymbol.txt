@@ -1,0 +1,45 @@
+# 商品代號轉換
+
+ConvertSymbol
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數        | 類別                                                                                                             | 說明                              |
+| ----------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| symbol      | string                                                                                                           | 帳務商品代號                      |
+| expiryDate  | string                                                                                                           | 履約日                            |
+| strikePrice | double ( Optional )                                                                                              | 履約價                            |
+| callPut     | [CallPut](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#callput) ( Optional ) | 買賣權 : `Call` Call 、 `Put` Put |
+
+info
+
+月份代號可參閱[參數對照表](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#month)
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數   | 類別   | 說明               |
+| ------ | ------ | ------------------ |
+| symbol | string | 行情與下單商品代號 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+//期貨
+sdk.FutOpt.ConvertSymbol("FITX","202404",null, null)
+
+//選擇權
+sdk.FutOpt.ConvertSymbol("TXO","202404",20000,CallPut.Call)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+
+//期貨
+"TXFD4"
+
+//選擇權
+"TXO20000D4"
+
+```

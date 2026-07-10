@@ -1,0 +1,97 @@
+# 銀行餘額查詢
+
+BankRemain
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                     | 說明 |
+| ------- | ---------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別         | 說明                              |
+| --------- | ------------ | --------------------------------- |
+| IsSuccess | bool         | 是否成功                          |
+| Data      | \*BankRemain | 回傳餘額資訊                      |
+| Message   | \*string     | 當 IsSuccess = false 回傳錯誤訊息 |
+
+### 餘額資訊 BankRemain 欄位[​](#餘額資訊-bankremain-欄位 "Direct link to 餘額資訊 BankRemain 欄位")
+
+Return type : Object
+
+| 參數             | 類別     | 說明       |
+| ---------------- | -------- | ---------- |
+| BranchNo         | \*string | 分公司代號 |
+| Account          | \*string | 帳號       |
+| Currency         | \*string | 幣別       |
+| Balance          | \*int64  | 餘額       |
+| AvailableBalance | \*int64  | 可用餘額   |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```go
+package main
+
+import (
+    "fmt"
+    "fubon"
+)
+
+func main() {
+    // 初始化 SDK 並登入
+    sdk := fubon.NewSDK()
+    
+    // ... 登入、連線等初始化步驟 ...
+    
+    // 查詢銀行餘額
+    bankRemain, err := sdk.Accounting.BankRemain(account)
+    
+    // 錯誤處理
+    if err != nil {
+        fmt.Printf("❌ Bank Remain Format Error: %v (Type: %T)\n", err, err)
+        return
+    }
+    
+    // 檢查是否成功
+    if !bankRemain.IsSuccess {
+        message := "No message"
+        if bankRemain.Message != nil {
+            message = *bankRemain.Message
+        }
+        fmt.Printf("Bank remain failed. Message: %s\n", message)
+        return
+    }
+    
+    // 輸出銀行餘額資訊
+    if bankRemain.Data != nil {
+        fmt.Println("✅ Bank Remain:")
+        fmt.Printf("BranchNo: %s\n", *bankRemain.Data.BranchNo)
+        fmt.Printf("Account: %s\n", *bankRemain.Data.Account)
+        fmt.Printf("Currency: %s\n", *bankRemain.Data.Currency)
+        fmt.Printf("Balance: %d\n", *bankRemain.Data.Balance)
+        fmt.Printf("AvailableBalance: %d\n", *bankRemain.Data.AvailableBalance)
+    } else {
+        fmt.Println("Bank remain success but no data returned.")
+    }
+}
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```go
+// BankRemain 回傳結構
+Result{
+    IsSuccess: true,
+    Message:   nil,
+    Data: &BankRemain{
+        BranchNo:         "6460",   // 分公司代號
+        Account:          "26",     // 帳號
+        Currency:         "TWD",    // 幣別
+        Balance:          666666,   // 餘額
+        AvailableBalance: 123456,   // 可用餘額
+    },
+}
+
+```

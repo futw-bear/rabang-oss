@@ -1,0 +1,281 @@
+# 參數對照表
+
+## 類別[​](#類別 "Direct link to 類別")
+
+Class
+
+### OrderObject[​](#orderobject "Direct link to OrderObject")
+
+| Parameter          | Type             | Meaning                                                                                                                         |
+| ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| buySell            | BSAction         | [買賣別](#bsaction) 可選用參數`Buy` 買 、 `Sell` 賣                                                                             |
+| symbol             | string           | 商品代號                                                                                                                        |
+| buySell2           | BSAction         | [買賣別](#bsaction) - 複式單                                                                                                    |
+| symbol2            | string           | 商品代號 - 複式單                                                                                                               |
+| price              | string           | 委託價格                                                                                                                        |
+| lot                | int              | 委託數量                                                                                                                        |
+| marketType         | FutOptMarketType | [盤別](#futoptmarkettype) 可選用參數`Future` 期貨日盤 、 `Option` 選擇權日盤、 `FutureNight` 期貨夜盤、`OptionNight` 選擇權夜盤 |
+| priceType          | FutOptPriceType  | [價格旗標](#futoptpricetype) 可選用參數為 `Limit`限價 、 `Market`市價 、 `RangeMarket` 範圍市價 、 `Reference`參考價            |
+| timeInForce        | timeInForce      | [委託條件](#timeinforce) 可選用參數為 `ROD`、`FOK`、`IOC`                                                                       |
+| orderType          | FutOptOrderType  | [委託類別](#futoptordertype) 可選用參數為 `New` 新倉、`Close`平倉、`Auto`自動、`FdayTrade`當沖                                  |
+| userDef (optional) | string           | 用戶自定義 (最長10個字元，不支援特殊字元)                                                                                       |
+
+caution
+
+priceType 爲 FutOptPriceType.Limit 時，需填入 price 欄位，其餘時候 price 欄位為空值或為null。
+
+### FutOptOrderResult[​](#futoptorderresult "Direct link to FutOptOrderResult")
+
+委託列表，透過 [GetOrderResult(accounts)](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/GetOrderResults.txt) 取得。
+
+| 參數            | 類別             | 說明                                                                                                                           |
+| --------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| functionType    | number           | 功能別 : `0` 新單 、 `10` 新單執行、`15` 改價、 `20` 改量、`30`刪單 、`90`失敗                                                 |
+| date            | string           | 交易日期                                                                                                                       |
+| seqNo           | string           | 委託單流水序號                                                                                                                 |
+| branchNo        | string           | 分公司代號                                                                                                                     |
+| account         | string           | 帳號                                                                                                                           |
+| orderNo         | string           | 委託書號                                                                                                                       |
+| assetType       | number           | 資產類別 : `1` 期貨 、`2` 選擇權                                                                                               |
+| market          | string           | 市場類型 : `TAIMEX` 期貨、選擇權                                                                                               |
+| marketType      | FutOptMarketType | [盤別種類](#futoptmarkettype) : `Future` 期貨日盤 、 `Option` 選擇權日盤 、 `FutureNight` 期貨夜盤 、 `OptionNight` 選擇權夜盤 |
+| unit            | number           | 單位數                                                                                                                         |
+| currency        | string           | 幣別                                                                                                                           |
+| symbol          | string           | 商品代號                                                                                                                       |
+| expiryDate      | string           | 到期日                                                                                                                         |
+| strikePrice     | number           | 履約價                                                                                                                         |
+| callPut         | string           | 買賣權 : `Call` 買權、 `Put` 賣權                                                                                              |
+| buySell         | BSAction         | [買賣別](#bsaction) : `Buy` 買 、 `Sell` 賣                                                                                    |
+| symbolLeg2      | string           | 商品代號 - 複式第二隻腳                                                                                                        |
+| expiryDateLeg2  | string           | 到期日 - 複式第二隻腳                                                                                                          |
+| strikePriceLeg2 | number           | 履約價 - 複式第二隻腳                                                                                                          |
+| callPutLeg2     | string           | 買賣權 - 複式第二隻腳 : `Call` 買權、 `Put` 賣權                                                                               |
+| buySellLeg2     | BSAction         | [買賣別](#bsaction) - 複式第二隻腳: `Buy` 買 、 `Sell` 賣                                                                      |
+| priceType       | FutOptPriceType  | [原始委託價格別](#futoptpricetype) : `Limit` 限價 、 `Market` 市價 、 `RangeMarket` 範圍市價、`Reference` 參考價               |
+| price           | number           | 價格                                                                                                                           |
+| lot             | number           | 原始委託股口數                                                                                                                 |
+| timeInForce     | TimeInforce      | [委託條件別](#timeinforce) : `ROD` ROD 、 `FOK` FOK 、 `IOC` IOC                                                               |
+| orderType       | FutOptOrderType  | [委託單類型](#futoptordertype) : `New` 新倉 、 `Close` 平倉 、 `Auto` 自動 、 `FdayTrade` 當沖                                 |
+| isPreOrder      | bool             | 是否為預約單                                                                                                                   |
+| status          | number           | 委託單狀態 : `0` 預約單 、 `4` 中台收到委託 、`9` 後台連線逾時 、`10` 委託成功 、 `30`刪單成功 、 `50` 完全成交 、 `90` 失敗   |
+| afterPriceType  | FutOptPriceType  | [有效委託價格別](#futoptpricetype) : `Limit` 限價 、 `Market` 市價 、`RangeMarket` 範圍市價、 `Reference` 參考價               |
+| afterPrice      | number           | 有效委託價格                                                                                                                   |
+| afterLot        | number           | 有效委託口數                                                                                                                   |
+| filledLot       | number           | 成交口數                                                                                                                       |
+| filledMoney     | number           | 成交價金                                                                                                                       |
+| beforeLot       | number           | 改單前有效口數                                                                                                                 |
+| beforePrice     | number           | 改單前有效價                                                                                                                   |
+| userDef         | string           | 自訂欄位                                                                                                                       |
+| lastTime        | string           | 最後異動時間                                                                                                                   |
+| errorMessage    | string           | 錯誤訊息                                                                                                                       |
+| detail          | list             | 委託歷程 (查詢orderResultDetail or orderHistory才有值)                                                                         |
+| >> functionType | number           | 功能別 : `10` 新單、`15` 改價、 `20` 改量、`30`刪單、`50` 成交 、`90`失敗                                                      |
+| >> modifiedTime | string           | 修改時間                                                                                                                       |
+| >> beforeLot    | number           | 原始委託口數                                                                                                                   |
+| >> afterLot     | number           | 有效委託口數                                                                                                                   |
+| >> beforePrice  | number           | 原始委託價                                                                                                                     |
+| >> filledMoney  | number           | 成交價金                                                                                                                       |
+| >> afterPrice   | number           | 有效委託價                                                                                                                     |
+| >> errorMessage | string           | 錯誤訊息                                                                                                                       |
+
+### BatchResult[​](#batchresult "Direct link to BatchResult")
+
+批次委託列表，透過 [BatchOrderLists(accounts)](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/trade/batchOrder/BatchOrderList.txt) 取得。
+
+| Parameter    | Type   | Meaning                                                                        |
+| ------------ | ------ | ------------------------------------------------------------------------------ |
+| functionType | number | 功能別 : `0` 新單 、 `10` 新單執行、`15` 改價、 `20` 改量、`30`刪單 、`90`失敗 |
+| date         | string | 交易日期                                                                       |
+| branchNo     | string | 分公司代號                                                                     |
+| account      | string | 帳號                                                                           |
+| batchSeqNo   | string | 批次單流水序號                                                                 |
+
+### FutoptModifyPrice[​](#futoptmodifyprice "Direct link to FutoptModifyPrice")
+
+改價物件
+
+| Parameter         | Type            | Meaning                                                                                        |
+| ----------------- | --------------- | ---------------------------------------------------------------------------------------------- |
+| FutOptOrderResult | Object          | [委託列表](#futoptorderresult)                                                                 |
+| price             | string          | 改單後的價格                                                                                   |
+| FutOptPriceType   | FutOptPriceType | 改單後的價格類型 : `Limit` 限價 、 `Market` 市價 、`RangeMarket` 範圍市價、 `Reference` 參考價 |
+
+### FutOptModifyLot[​](#futoptmodifylot "Direct link to FutOptModifyLot")
+
+改量物件
+
+| Parameter         | Type   | Meaning                        |
+| ----------------- | ------ | ------------------------------ |
+| FutOptOrderResult | Object | [委託列表](#futoptorderresult) |
+| lot               | number | 改單後的委託量                 |
+
+### FutOptFilledData[​](#futoptfilleddata "Direct link to FutOptFilledData")
+
+成交回報物件
+
+| 參數            | 類別            | 說明                                                                                           |
+| --------------- | --------------- | ---------------------------------------------------------------------------------------------- |
+| date            | string          | 日期                                                                                           |
+| branchNo        | string          | 分公司代號                                                                                     |
+| account         | string          | 帳號                                                                                           |
+| seqNo           | string          | 委託單流水序號 (只有主動回報才回傳此欄位)                                                      |
+| orderNo         | string          | 委託書號                                                                                       |
+| symbol          | string          | 商品代號                                                                                       |
+| expiryDate      | string          | 到期日                                                                                         |
+| strikePrice     | float           | 履約價                                                                                         |
+| callPut         | CallPut         | [買賣權](#callput) : `Call` 買權、 `Put` 賣權                                                  |
+| buySell         | BSAction        | \[買賣別] (#bsaction) : `Buy` 買 、 `Sell` 賣                                                  |
+| symbolLeg2      | string          | 商品代號 - 複式第二隻腳                                                                        |
+| expiryDateLeg2  | string          | 到期日 - 複式第二隻腳                                                                          |
+| strikePriceLeg2 | float           | 履約價 - 複式第二隻腳                                                                          |
+| callPutLeg2     | CallPut         | [買賣權](#callput) - 複式第二隻腳 : `Call` 買權、 `Put` 賣權                                   |
+| buySellLeg2     | BSAction        | [買賣別](#bsaction) - 複式第二隻腳: `Buy` 買 、 `Sell` 賣                                      |
+| orderType       | FutOptOrderType | [委託單類型](#futoptordertype) : `New` 新倉 、 `Close` 平倉 、 `Auto` 自動 、 `FdayTrade` 當沖 |
+| filledNo        | string          | 成交流水號                                                                                     |
+| filledAvgPrice  | float           | 成交均價                                                                                       |
+| filledLot       | int             | 成交股數                                                                                       |
+| filledPrice     | float           | 成交單價                                                                                       |
+| filledTime      | string          | 成交時間                                                                                       |
+| userDef         | string          | 用戶自定義 (只有主動回報才回傳此欄位)                                                          |
+
+### Account[​](#account "Direct link to Account")
+
+帳號資訊
+
+| Parameter   | Type   | Meaning                               |
+| ----------- | ------ | ------------------------------------- |
+| name        | string | 客戶姓名                              |
+| account     | string | 帳號                                  |
+| branchNo    | string | 分公司代號                            |
+| accountType | string | 帳戶類型 : `stock` 證券 `futopt` 期貨 |
+
+## Constants ( 欄位對應數值 )[​](#constants--欄位對應數值- "Direct link to Constants ( 欄位對應數值 )")
+
+### BSAction[​](#bsaction "Direct link to BSAction")
+
+買賣別 (buySell)
+
+| Name | Meaning |
+| ---- | ------- |
+| Buy  | 買      |
+| Sell | 賣      |
+
+### CallPut[​](#callput "Direct link to CallPut")
+
+買賣別 (buySell)
+
+| Name | Meaning |
+| ---- | ------- |
+| Call | Call    |
+| Put  | Put     |
+
+### FutOptMarketType[​](#futoptmarkettype "Direct link to FutOptMarketType")
+
+盤別
+
+| Name        | Meaning    |
+| ----------- | ---------- |
+| Future      | 期貨日盤   |
+| FutureNight | 期貨夜盤   |
+| Option      | 選擇權日盤 |
+| OptionNight | 選擇權夜盤 |
+
+### FutOptPriceType[​](#futoptpricetype "Direct link to FutOptPriceType")
+
+價格類型 (priceType)
+
+| Name        | Meaning  |
+| ----------- | -------- |
+| Limit       | 限價     |
+| Market      | 市價     |
+| RangeMarket | 範圍市價 |
+| Reference   | 參考價   |
+
+### TimeInForce[​](#timeinforce "Direct link to TimeInForce")
+
+委託條件 (TimeInForce)
+
+| Name | Meaning                               |
+| ---- | ------------------------------------- |
+| ROD  | 當日有效(Rest of Day)                 |
+| FOK  | 全部成交否則取消(Fill-or-Kill)        |
+| IOC  | 立即成交否則取消(Immediate-or-Cancel) |
+
+### FutOptOrderType[​](#futoptordertype "Direct link to FutOptOrderType")
+
+委託類別 (orderType)
+
+| Name      | Meaning |
+| --------- | ------- |
+| New       | 新倉    |
+| Close     | 平倉    |
+| Auto      | 自動    |
+| FdayTrade | 當沖    |
+
+### function\_type[​](#function_type "Direct link to function_type")
+
+功能類別
+
+| Name     | Value |
+| -------- | ----- |
+| 新單     | 0     |
+| 新單執行 | 10    |
+| 改價     | 15    |
+| 改量     | 20    |
+| 刪單     | 30    |
+| 失敗     | 90    |
+
+### market[​](#market "Direct link to market")
+
+市場
+
+| Name       | Value  |
+| ---------- | ------ |
+| 期貨交易所 | TAIMEX |
+
+### status[​](#status "Direct link to status")
+
+委託單狀態
+
+| Name         | Value                                                      |
+| ------------ | ---------------------------------------------------------- |
+| 預約單       | 0                                                          |
+| 中台收到委託 | 4 ( 請用GetOrderResult查詢狀態 )                           |
+| 後台連線逾時 | 9 ( 請稍後再使用GetOrderResult查詢狀態 or 聯絡您的營業員 ) |
+| 委託成功     | 10                                                         |
+| 刪單成功     | 30                                                         |
+| 完全成交     | 50                                                         |
+| 改價失敗     | 19                                                         |
+| 改量失敗     | 29                                                         |
+| 刪單失敗     | 39                                                         |
+| 失敗         | 90                                                         |
+
+## Month[​](#month "Direct link to Month")
+
+月份代號
+
+### 期貨[​](#期貨 "Direct link to 期貨")
+
+| 一月 | 二月 | 三月 | 四月 | 五月   | 六月   |
+| ---- | ---- | ---- | ---- | ------ | ------ |
+| A    | B    | C    | D    | E      | F      |
+| 七月 | 八月 | 九月 | 十月 | 十一月 | 十二月 |
+| G    | H    | I    | J    | K      | L      |
+
+### 選擇權[​](#選擇權 "Direct link to 選擇權")
+
+Call
+
+| 一月 | 二月 | 三月 | 四月 | 五月   | 六月   |
+| ---- | ---- | ---- | ---- | ------ | ------ |
+| A    | B    | C    | D    | E      | F      |
+| 七月 | 八月 | 九月 | 十月 | 十一月 | 十二月 |
+| G    | H    | I    | J    | K      | L      |
+
+Put
+
+| 一月 | 二月 | 三月 | 四月 | 五月   | 六月   |
+| ---- | ---- | ---- | ---- | ------ | ------ |
+| M    | N    | O    | P    | Q      | R      |
+| 七月 | 八月 | 九月 | 十月 | 十一月 | 十二月 |
+| S    | T    | U    | V    | W      | X      |

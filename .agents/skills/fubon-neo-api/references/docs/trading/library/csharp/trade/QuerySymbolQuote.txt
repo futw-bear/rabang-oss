@@ -1,0 +1,106 @@
+# 查詢商品漲跌幅報表（單筆）
+
+QuerySymbolQuote
+
+info
+
+2.2.5 版新增
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數       | 類別                                                                                                                            | 說明                                                                |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| account    | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#account)                                    | 帳號                                                                |
+| symbol     | String                                                                                                                          | 股票代碼                                                            |
+| marketType | [MarketType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#markettype) (Optional)(default = Common) | 市場別 ： 支援 `Common` 整股，`IntradayOdd` 盤中零股、`Fixing` 定盤 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別        | 說明                             |
+| --------- | ----------- | -------------------------------- |
+| isSuccess | bool        | 是否成功                         |
+| data      | SymbolQuote | 回傳查詢資訊                     |
+| message   | string      | 當isSuccess = False 回傳錯誤訊息 |
+
+### 配額資訊 SymbolQuote 欄位[​](#配額資訊-symbolquote-欄位 "Direct link to 配額資訊 SymbolQuote 欄位")
+
+Return type : Object
+
+| 參數             | 類別   | 說明                                                                                                                   |
+| ---------------- | ------ | ---------------------------------------------------------------------------------------------------------------------- |
+| market           | string | 市場別                                                                                                                 |
+| symbol           | string | 股票代碼                                                                                                               |
+| istibOrPsb       | bool   | 是否為創新版或戰略新板                                                                                                 |
+| marketType       | string | 市場類型                                                                                                               |
+| status           | int    | 狀態 (bitmask 加總): `0` 全禁 、 `1` 平盤下可融券賣出、 `2` 平盤下可借券賣出、 `4` 可先買後賣當沖 、 `8`可先賣後買當沖 |
+| referencePrice   | double | 參考價格                                                                                                               |
+| unit             | int    | 交易單位                                                                                                               |
+| updateTime       | string | 更新時間                                                                                                               |
+| limitupPrice     | double | 漲停價                                                                                                                 |
+| limitdownPrice   | double | 跌停價                                                                                                                 |
+| openPrice        | double | 開盤價                                                                                                                 |
+| highPrice        | double | 最高價                                                                                                                 |
+| lowPrice         | double | 最低價                                                                                                                 |
+| lastPrice        | double | 最新成交價                                                                                                             |
+| totalVolume      | int    | 總成交量                                                                                                               |
+| totalTransaction | int    | 總成交筆數 (預留欄位，暫未使用)                                                                                        |
+| totalValue       | int    | 總成交金額                                                                                                             |
+| lastSize         | int    | 最新成交量                                                                                                             |
+| lastTransaction  | int    | 最新成交筆數 (預留欄位，暫未使用)                                                                                      |
+| lastValue        | int    | 最新成交金額                                                                                                           |
+| bidPrice         | double | 買1價格                                                                                                                |
+| bidVolume        | int    | 買1數量                                                                                                                |
+| askPrice         | double | 賣1價格                                                                                                                |
+| askVolume        | int    | 賣1數量                                                                                                                |
+
+支援範圍
+
+上市、上櫃標的
+
+info
+
+Status 範例說明 : 若Status = 15 則為，1(平盤下可融券賣出)+2(平盤下可借券賣出)+4(可先買後賣當沖)+8(可先賣後買當沖) ，的分解項目； 若Status = 3 則為，1(平盤下可融券賣出)+2(平盤下可借券賣出)的分解項目。其餘加總以此類推。
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+var quote = sdk.Stock.QuerySymbolQuote(result.data[0],"2330");
+Console.WriteLine(quote.data)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+{
+    isSuccess = True,
+    message = ,
+    data =  SymbolQuote{ 
+        market = TAIEX,                    // string - 市場別 
+        symbol = 2330,                     // string - 股票代碼 
+        istibOrPsb = False,               // bool - 是否為創新板或戰略新板
+        marketType = Common,              // string - 市場類型 (現股)
+        status = 15,                      // int - 狀態 (bitmask 加總: 1+2+4+8 = 可融券賣出+可借券賣出+可先買後賣當沖+可先賣後買當沖)
+        referencePrice = 780,             // double - 參考價格 (前一交易日收盤價)
+        unit = 1000,                      // int - 交易單位 
+        updateTime = ,                    // string - 更新時間 
+        limitupPrice = 858,               // double - 漲停價
+        limitdownPrice = 702,             // double - 跌停價
+        openPrice = 1155,                 // double - 開盤價
+        highPrice = 1160,                 // double - 最高價
+        lowPrice = 1145,                  // double - 最低價
+        lastPrice = 1145,                 // double - 最新成交價
+        totalVolume = 20501,              // int - 總成交量 
+        totalTransaction = 0,             // int - 總成交筆數 (預留欄位，暫未使用)
+        totalValue = 23551095000,         // int - 總成交金額 
+        lastSize = 6673,                  // int - 最新成交量 
+        lastTransaction = 0,              // int - 最新成交筆數 (預留欄位，暫未使用)
+        lastValue = 7640585000,           // int - 最新成交金額 
+        bidPrice = 1145,                  // double - 買一價格 
+        bidVolume = 1549,                 // int - 買一數量 
+        askPrice = 1150,                  // double - 賣一價格 
+        askVolume = 4169                  // int - 賣一數量 
+    }
+} 
+
+```

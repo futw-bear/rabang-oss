@@ -1,0 +1,63 @@
+# 資券配額查詢
+
+marginQuota
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                         | 說明     |
+| ------- | -------------------------------------------------------------------------------------------- | -------- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#account) | 帳號     |
+| stockNo | string                                                                                       | 股票代碼 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | Object              | 回傳配額資訊                     |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 配額資訊 MarginShortQuota欄位[​](#配額資訊-marginshortquota欄位 "Direct link to 配額資訊 MarginShortQuota欄位")
+
+Return type : Object
+
+| 參數                   | 類別     | 說明         |
+| ---------------------- | -------- | ------------ |
+| stock\_no              | string   | 股票代號     |
+| date                   | string   | 日期         |
+| shortsellOrigQuota     | number ? | 原始融券餘額 |
+| shortsellTradableQuota | number ? | 可用融券餘額 |
+| marginOrigQuota        | number ? | 原始融資餘額 |
+| marginTradableQuota    | number ? | 可用融資餘額 |
+| marginRatio            | number ? | 融資成數     |
+| shortRatio             | number ? | 融券成數     |
+
+info
+
+額度相關說明 : 融資成數沒回傳表示停資；融券成數沒回傳表示停券，<br /><!-- -->回傳的額度說明 : 0 - 無額度 / 大於0 - 有額度 / 沒回傳 - 無限制 / 餘額皆為 0 - 停資 or 停券
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+sdk.stock.marginQuota(account, "2330")
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+{
+  isSuccess: true,
+  data: [
+    {
+      stockNo: '2330',
+      date: '2024/01/24',
+      shortsellOrigQuota: 894,
+      shortsellTradableQuota: 894,
+      marginRatio: 60,
+      shortRatio: 90
+    }
+  ]
+}
+
+```

@@ -1,0 +1,169 @@
+# Intraday Quote
+
+期權即時報價（依商品代碼查詢）
+
+```text
+intraday/quote/{symbol}
+
+```
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name       | Type   | Description                          |
+| ---------- | ------ | ------------------------------------ |
+| `symbol`\* | string | 期權代碼                             |
+| `session`  | string | 交易時段，可選 `afterhours` 盤後交易 |
+
+## Response[​](#response "Direct link to Response")
+
+| Name               | Type   | Description                  |
+| ------------------ | ------ | ---------------------------- |
+| `date`\*           | string | 日期                         |
+| `type`\*           | string | 期權類型                     |
+| `exchange`         | string | 交易所                       |
+| `symbol`           | string | 商品代號                     |
+| `name`             | string | 商品名稱                     |
+| `previousClose`    | number | 昨日收盤價                   |
+| `openPrice`        | number | 開盤價                       |
+| `openTime`         | number | 開盤價成交時間               |
+| `highPrice`        | number | 最高價                       |
+| `highTime`         | number | 最高價成交時間               |
+| `lowPrice`         | number | 最低價                       |
+| `lowTime`          | number | 最低價成交時間               |
+| `closePrice`       | number | 收盤價（最後成交價）         |
+| `closeTime`        | number | 收盤價（最後成交價）成交時間 |
+| `avgPrice`         | number | 當日成交均價                 |
+| `change`           | number | 最後成交價漲跌               |
+| `changePercnet`    | number | 最後成交價漲跌幅             |
+| `amplitude`        | number | 當日振幅                     |
+| `lastPrice`        | number | 最後一筆成交價（含試撮）     |
+| `lastSize`         | number | 最後一筆成交數量（含試撮）   |
+| `total`            | object | 統計時間                     |
+| >> `tradeVolume`   | number | 累計成交量                   |
+| >> `totalBidMatch` | number | 委買成筆                     |
+| >> `totalAskMatch` | number | 委賣成筆                     |
+| `lastTrade`        | object | 最後一筆成交資訊             |
+| >> `bid`           | number | 最後一筆成交買價             |
+| >> `ask`           | number | 最後一筆成交賣價             |
+| >> `price`         | number | 最後一筆成交價格             |
+| >> `size`          | number | 最後一筆成交數量             |
+| >> `time`          | number | 最後一筆成交時間             |
+| >> `serial`        | number | 最後一筆成交流水號           |
+| `serial`           | number | 流水號                       |
+| `lastUpdated`      | number | 最後異動時間                 |
+
+info
+
+'\*' 表示必揭示欄位。
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password" , "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+
+restfut = sdk.marketdata.rest_client.futopt  
+# restfut.intraday.quote(symbol='TXFA4')  # 2.2.3 及以前版本
+
+## 2.2.4 及以後版本 (使用 Exception 進行例外處理)
+from fubon_neo.fugle_marketdata.rest.base_rest import FugleAPIError
+
+try:  
+  restfut.intraday.quote(symbol='TXFA4')
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"}    
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+client.futopt.intraday.quote({ symbol: 'TXFA4' })
+  .then(data => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+using FugleMarketData.QueryModels.FuOpt;
+using FugleMarketData.QueryModels.FuOpt.Intraday;
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.FutureOption;
+
+var quote = await rest.Intraday.Quote("TXFA4");
+// var quote = await rest.Intraday.Quote("TXFA4", new(){Session=FugleMarketData.QueryModels.FuOpt.TradeSession.AfterHours});  // 盤後交易
+
+var quote_cont = quote.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(quote_cont);
+
+```
+
+Response Body：
+
+```json
+{
+    "date": "2023-12-12",
+    "type": "FUTURE",
+    "exchange": "TAIFEX",
+    "symbol": "TXFA4",
+    "name": "臺股期貨014",
+    "previousClose": 17416,
+    "openPrice": 17514,
+    "openTime": 1702341900070000,
+    "highPrice": 17540,
+    "highTime": 1702342491330000,
+    "lowPrice": 17427,
+    "lowTime": 1702355400574000,
+    "closePrice": 17460,
+    "closeTime": 1702359886936000,
+    "avgPrice": 17478.89,
+    "change": 44,
+    "changePercent": 0.25,
+    "amplitude": 0.65,
+    "lastPrice": 17460,
+    "lastSize": 1,
+    "total": {
+        "tradeVolume": 1626,
+        "totalBidMatch": 0,
+        "totalAskMatch": 0
+    },
+    "lastTrade": {
+        "bid": 17459,
+        "ask": 17460,
+        "price": 17460,
+        "size": 1,
+        "time": 1702359886936000,
+        "serial": "00165753"
+    },
+    "serial": 165753,
+    "lastUpdated": 1702359886936000
+}
+
+```

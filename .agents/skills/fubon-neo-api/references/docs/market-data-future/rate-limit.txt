@@ -1,0 +1,47 @@
+# 速率限制
+
+### 速率限制[​](#速率限制 "Direct link to 速率限制")
+
+本頁重點
+
+* 本頁整理富邦新一代 API 期貨行情服務的 Web API / WebSocket 速率限制。
+* 超過限制將回應 `429` 或訂閱錯誤訊息。
+* 若短時間內大量建立連線可能被判定為異常。
+
+| 項目      | 上限                 |
+| --------- | -------------------- |
+| 日內行情  | 300 / min            |
+| 行情快照  | 300 / min            |
+| 歷史行情  | 60 / min             |
+| WebSocket | 200 訂閱數；5 連線數 |
+
+富邦新一代 API 期貨行情服務提供 Web API 與 WebSocket，並設定了以下存取的限制
+
+* 日內行情 : 300 / min
+* WebSocket : 200 訂閱數；5連線數
+* 行情快照 : 300 / min
+* 歷史行情 : 60 / min
+
+如果您 API 請求超過了限制，將收到帶有狀態碼 `429` 的回應。需再等候1分鐘。
+
+```json
+{"statusCode":429,"message":"Rate limit exceeded"}  
+
+```
+
+或是您的WebSocket 訂閱數超過上限，將收到以下訊息:
+
+```json
+{
+  "event": "error",
+  "data": {
+    "code": 1001,
+    "message": "Maximum number of connections reached"
+  }
+}
+
+```
+
+caution
+
+若短時間內，Socket持續大量建立連線，系統會判斷您為惡意攻擊，將會阻擋您的連線請求（404連線錯誤）， 若遇到此種狀況，請聯絡 <pm.trading.sec@fubon.com>

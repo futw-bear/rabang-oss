@@ -1,0 +1,140 @@
+# 當沖多條件單
+
+multi\_conditions\_day\_trade
+
+停損利注意事項
+
+* 停損利設定僅為觸發送單，不保證必定回補成功，需視市場狀況自行調整
+* 請確認停損利**委託類別**設定需符合當日沖銷交易規則（例如信用交易使用資券互抵）
+
+當沖條件單查詢
+
+* 使用 guid 查詢當沖條件單請使&#x7528;***當沖條件單查詢***&#x529F;能
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數                     | 類別                                                                                                                                | 說明                                                                              |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| account                  | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#account)                                           | 帳號                                                                              |
+| start\_date              | string                                                                                                                              | 條件開始監控時間                                                                  |
+| end\_date                | string                                                                                                                              | 條件結束監控時間                                                                  |
+| stop\_sign               | [StopSign](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/EnumMatrix.txt#stopsign)                                 | 條件停止條件 :`FULL` 全部成交為止、`PARTIAL`部分成交為止、`UNTIL_END`效期結束為止 |
+| condition                | [Condition](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/EnumMatrix.txt#condition-object)                        | 觸發條件                                                                          |
+| ConditionOrder Object    | [ConditionOrder Object](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/EnumMatrix.txt#conditionorder-object)       | 委託內容                                                                          |
+| ConditionDayTrade Object | [ConditionDayTrade Object](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/EnumMatrix.txt#conditiondaytrade-object) | 當沖委託內容                                                                      |
+| TPSLObject               | [TpslWrapper](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/EnumMatrix.txt#tpslwrapper-object)                    | 停損停利條件                                                                      |
+| FixSession               | bool                                                                                                                                | 當沖回補                                                                          |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別                | 說明                             |
+| ----------- | ------------------- | -------------------------------- |
+| is\_success | bool                | 是否成功                         |
+| data        | Object              | 條件單回傳資訊                   |
+| message     | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionOrderResult 欄位[​](#委託資訊-conditionorderresult-欄位 "Direct link to 委託資訊 ConditionOrderResult 欄位")
+
+Return type : Object
+
+| 參數 | 類別   | 說明     |
+| ---- | ------ | -------- |
+| guid | string | 條件單號 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cpp
+// 設計條件內容
+Condition condition = Condition{
+    TradingType::REFERENCE,
+    "2881",
+    TriggerContent::MATCHED_PRICE,
+    "66",
+    Operator::LESS_THAN,
+};
+
+Condition condition2 = Condition{
+    TradingType::REFERENCE,
+    "2881",
+    TriggerContent::TOTAL_QUANTITY,
+    "1000",
+    Operator::GREATER_THAN,
+};
+
+std::vector<Condition> conditions;
+conditions.push_back(condition);
+conditions.push_back(condition2);
+
+ConditionOrder order = ConditionOrder{
+    BsAction::BUY,
+    "2330",
+    "1000",
+    1000,
+    ConditionMarketType::COMMON,
+    ConditionPriceType::LIMIT,
+    TimeInForce::ROD,
+    ConditionOrderType::STOCK,
+};
+
+ConditionDayTrade day_order = ConditionDayTrade{
+    "131500",  // 收盤前沖銷時間，可設定區間為 130100 ~ 132000
+    true,
+    "",
+    ConditionPriceType::MARKET
+};
+
+TpslOrder tp = TpslOrder{
+    TimeInForce::ROD,
+    ConditionPriceType::LIMIT,
+    ConditionOrderType::STOCK,
+    "85",
+    "85",
+};
+
+TpslOrder sl = TpslOrder{
+    TimeInForce::ROD,
+    ConditionPriceType::LIMIT,
+    ConditionOrderType::STOCK,
+    "60",
+    "60",
+};
+
+TPSLWrapper tpsl = TPSLWrapper{
+    StopSign::FULL,
+    tp,
+    sl,
+    "20250816",
+    true  // ** 設定 true 以啟用當日沖銷洗價
+};
+
+auto daytrade_condition_order = sdk->stock->multi_condition_day_trade(target_account, StopSign::FULL, "130000", conditions , order, day_order, tpsl, true);
+if (!daytrade_condition_order.is_success) {
+    std::cout << "get order result failed reason: "
+        << (daytrade_condition_order.message.has_value() ? daytrade_condition_order.message.value() : "No message")
+        << std::endl;
+}
+else {
+    if (daytrade_condition_order.data.has_value()) {
+        const auto& send = daytrade_condition_order.data.value();
+        std::cout << send << std::endl;
+    }
+    else {
+        std::cout << "Order result success but no data returned." << std::endl;
+    }
+}
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cpp
+{
+    isSuccess = True,
+    message = ,
+    data = ConditionOrderResult {
+            guid = 44150047-8977-40b1-953c-ce2XXXXXX
+        }
+}
+
+
+```

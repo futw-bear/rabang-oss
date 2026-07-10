@@ -1,0 +1,132 @@
+# 當沖多條件單
+
+multi\_condition\_day\_trade
+
+停損利注意事項
+
+* 停損利設定僅為觸發送單，不保證必定回補成功，需視市場狀況自行調整
+* 請確認停損利**委託類別**設定需符合當日沖銷交易規則（例如信用交易使用資券互抵）
+
+當沖條件單查詢
+
+* 使用 guid 查詢當沖條件單請使&#x7528;***當沖條件單查詢***&#x529F;能
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數                     | 類別                                                                                                                                   | 說明                                                                              |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| account                  | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/EnumMatrix.txt#account)                                           | 帳號                                                                              |
+| stop\_sign               | [StopSign](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/EnumMatrix.txt#stopsign)                                 | 條件停止條件 : `Full` 全部成交為止、`Partial`部分成交為止、`UntilEnd`效期結束為止 |
+| end\_time                | string                                                                                                                                 | 父單洗價結束時間                                                                  |
+| multicondition           | [Condition List](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/EnumMatrix.txt#condition-object)                   | 觸發條件                                                                          |
+| orderObject              | [ConditionOrder Object](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/EnumMatrix.txt#conditionorder-object)       | 委託內容                                                                          |
+| ConditionDayTrade Object | [ConditionDayTrade Object](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/EnumMatrix.txt#conditiondaytrade-object) | 當沖回補內容                                                                      |
+| TPSLObject               | [TPSLWrapper](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/python/EnumMatrix.txt#tpslwrapper-object)                    | 停損停利條件                                                                      |
+| fixSession               | bool                                                                                                                                   | 執行定盤回補                                                                      |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別              | 說明                             |
+| --------- | ----------------- | -------------------------------- |
+| isSuccess | bool              | 是否成功                         |
+| data      | Object            | 條件單回傳資訊                   |
+| message   | string (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionOrderResult 欄位[​](#委託資訊-conditionorderresult-欄位 "Direct link to 委託資訊 ConditionOrderResult 欄位")
+
+Return type : Object
+
+| 參數 | 類別   | 說明     |
+| ---- | ------ | -------- |
+| guid | string | 條件單號 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+#from fubon_neo.sdk import ConditionDayTrade
+
+# 設計條件內容
+condition = Condition(
+    market_type = TradingType.Reference,        
+    symbol = "2881",
+    trigger = TriggerContent.MatchedPrice,
+    trigger_value = "66",
+    comparison = Operator.LessThan
+)
+
+condition2 = Condition(
+    market_type = TradingType.Reference,        
+    symbol = "2881",
+    trigger = TriggerContent.TotalQuantity,
+    trigger_value = "8000",
+    comparison = Operator.LessThan
+)
+
+order = ConditionOrder(
+    buy_sell = BSAction.Buy,
+    symbol = "2881",
+    price =  "66",
+    quantity =  1000,
+    market_type = ConditionMarketType.Common,
+    price_type = ConditionPriceType.Limit,
+    time_in_force = TimeInForce.ROD,
+    order_type = ConditionOrderType.Stock
+)
+
+daytrade_obj = ConditionDayTrade(
+    day_trade_end_time = "131500",  # 收盤前沖銷時間，可設定區間為 130100 ~ 132000
+    auto_cancel= True,
+    price = "",
+    price_type=ConditionPriceType.Market
+)
+
+tp = TPSLOrder(
+    time_in_force=TimeInForce.ROD,
+    price_type=ConditionPriceType.Limit,
+    order_type=ConditionOrderType.Stock,
+    target_price="85",
+    price="85",
+)
+
+sl = TPSLOrder(
+    time_in_force=TimeInForce.ROD,
+    price_type=ConditionPriceType.Limit,
+    order_type=ConditionOrderType.Stock,
+    target_price="60",
+    price="60",
+)
+
+tpsl = TPSLWrapper(
+    stop_sign= StopSign.Full,
+    end_date="20240517", 
+    tp=tp,           
+    sl=sl,           
+    intraday=True  # ** 設定 True 以啟用當日沖銷洗價
+)
+
+
+sdk.stock.multi_condition_day_trade(account, StopSign.Full, "130000", [condition ,condition2], order, daytrade_obj, tpsl, True)
+
+# 不設定停損停利
+# sdk.stock.multi_condition_day_trade(account, StopSign.Full, "130000", [condition ,condition2], order, daytrade_obj, None, True)
+
+# 不設定定盤回補
+# sdk.stock.multi_condition_day_trade(account, StopSign.Full, "130000", [condition ,condition2], order, daytrade_obj, tpsl, False)
+
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+
+Result {
+    is_success: True,
+    message: None,
+    data : ConditionOrderResult {
+            guid : "44150047-8977-40b1-953c-ce2XXXXXX"
+        }
+}
+
+
+```

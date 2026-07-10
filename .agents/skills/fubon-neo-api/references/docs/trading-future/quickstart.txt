@@ -1,0 +1,127 @@
+# 快速開始
+
+請先參考[事前準備](https://www.fbs.com.tw/TradeAPI/docs/trading-future/prepare.txt)完成風險預告書申請與憑證下載。
+
+## 安裝與版本相容性[​](#安裝與版本相容性 "Direct link to 安裝與版本相容性")
+
+安裝步驟與最低版本需求請見[安裝與版本相容性](https://www.fbs.com.tw/TradeAPI/docs/install-compatibility.txt)，下載 SDK 請至[SDK 下載頁面](https://www.fbs.com.tw/TradeAPI/docs/download/download-sdk.txt)。
+
+###
+
+並將憑證放置您的資料夾結構應該像是：
+
+```text
+.
+└── XXXXXXXXXX.pfx
+
+```
+
+### [​](#-1 "Direct link to -1")
+
+* Python
+* Node.js
+* C#
+
+若您未曾使用 SDK 進行過登入，或更換了 SDK 執行環境，請在資料夾新增一個 `index.py` 檔案，貼上以下內容並執行：
+
+```python
+from fubon_neo.sdk import FubonSDK, FutOptOrder
+from fubon_neo.constant import TimeInForce, FutOptOrderType, FutOptPriceType, FutOptMarketType, CallPut, BSAction
+
+sdk = FubonSDK()
+   
+accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證位置", "您的憑證密碼") #若有歸戶，則會回傳多筆帳號資訊
+## accounts = sdk.login("您的身分證號", "您的登入密碼", "您的憑證路徑位置")  # 若憑證選用＂預設密碼＂, SDK v1.3.2與較新版本適用
+
+acc = accounts.data[0]
+
+```
+
+若您未曾使用 SDK 進行過登入，或更換了 SDK 執行環境，請在資料夾新增一個 `index.js` 檔案，貼上以下內容並執行：
+
+```js
+const { FubonSDK, TimeInForce, FutOptOrderType, FutOptPriceType, FutOptMarketType, CallPut, BSAction } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證路徑" ,"您的憑證密碼");
+// const accounts = sdk.login("您的身分證號", "您的登入密碼", "您的憑證路徑位置");  // 若憑證選用＂預設密碼＂, SDK v1.3.2與較新版本適用
+
+const acc = accounts.data[0];
+
+```
+
+若您未曾使用 SDK 進行過登入，或更換了 SDK 執行環境，請在資料夾新增一個 `index.cs` 檔案，貼上以下內容並執行：
+
+```cs
+using FubonNeo.Sdk;
+
+var sdk = new FubonSDK();
+var accounts = sdk.Login("您的身分證字號", "您的登入密碼", "您的憑證路徑", "您的憑證密碼"); // 若有歸戶，則會回傳多筆帳號資訊
+/*
+// 若憑證選用＂預設密碼＂, SDK v1.3.2　與較新版本適用
+var acc_obj = sdk.Login("您的身分證號", "您的登入密碼", "您的憑證路徑");
+*/
+
+var acc = accounts.data[0];
+
+```
+
+## 送出委託，買入股票[​](#送出委託買入股票 "Direct link to 送出委託，買入股票")
+
+再將以下範例程式碼補上， 將示範如何使用富邦新一代 API 送出一張以跌停價買入 富邦金(2881)的限價委託：
+
+* Python
+* Node.js
+* C#
+
+```py
+order = FutOptOrder(
+    buy_sell = BSAction.Sell,
+    symbol = "TXFD4",
+    price = "20800",
+    lot = 3,
+    market_type = FutOptMarketType.Future,
+    price_type = FutOptPriceType.Limit,
+    time_in_force = TimeInForce.ROD,
+    order_type = FutOptOrderType.Auto,
+    user_def = "Python" # optional field
+)
+sdk.futopt.place_order(acc, order)
+
+```
+
+```js
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "TXFD4",
+  price: "20800",
+  lot: 3,
+  marketType: FutOptMarketType.Future,
+  priceType: FutOptPriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: FutOptOrderType.Auto,
+  userDef: "fromJs"
+};
+
+sdk.futopt.placeOrder(acc,order);
+
+```
+
+```cs
+var order = new FutOptOrder(
+    BsAction.Buy,
+    "TXFD4",
+    null,      // 複式單第二隻腳 買賣別
+    null,      // 複式單第二隻腳 商品
+    "20800",
+    3,
+    FutOptMarketType.Future,
+    FutOptPriceType.Limit,
+    TimeInForce.Rod,
+    FutOptOrderType.Auto,
+    "FromCS"
+);
+sdk.FutOpt.PlaceOrder(acc, order);
+
+```

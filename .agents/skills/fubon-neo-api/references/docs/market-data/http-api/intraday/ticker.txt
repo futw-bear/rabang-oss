@@ -1,0 +1,184 @@
+# Intraday Ticker
+
+取得股票資訊 (依股票代碼查詢)
+
+```text
+intraday/ticker/{symbol}
+
+```
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name       | Type   | Description                  |
+| ---------- | ------ | ---------------------------- |
+| `symbol`\* | string | 股票代碼                     |
+| `type`     | string | 類型，可選 `oddlot` 盤中零股 |
+
+## Response[​](#response "Direct link to Response")
+
+| Name                          | Type    | Description                                                               |
+| ----------------------------- | ------- | ------------------------------------------------------------------------- |
+| `date`\*                      | string  | 日期                                                                      |
+| `type`\*                      | string  | Ticker 類型                                                               |
+| `exchange`\*                  | string  | 交易所                                                                    |
+| `market`                      | string  | 市場別                                                                    |
+| `symbol`\*                    | string  | 股票代碼                                                                  |
+| `name`\*                      | string  | 股票簡稱                                                                  |
+| `nameEn`                      | string  | 股票英文簡稱                                                              |
+| `industry`                    | string  | 產業別                                                                    |
+| `securityType`                | string  | 證券別，參閱 [證券別代碼](#%E8%AD%89%E5%88%B8%E5%88%A5%E4%BB%A3%E7%A2%BC) |
+| `referencePrice`              | number  | 參考價                                                                    |
+| `limitUpPrice`                | number  | 漲停價                                                                    |
+| `limitDownPrice`              | number  | 跌停價                                                                    |
+| `canDayTrade`                 | boolean | 可買賣現沖                                                                |
+| `canBuyDayTrade`              | boolean | 可先買現沖                                                                |
+| `canBelowFlatMarginShortSell` | boolean | 平盤下得融券賣出                                                          |
+| `canBelowFlatSBLShortSell`    | boolean | 平盤下得借券賣出                                                          |
+| `isAttention`                 | boolean | 注意股                                                                    |
+| `isDisposition`               | boolean | 處置股                                                                    |
+| `isUnusuallyRecommended`      | boolean | 投資理財節目異常推介個股                                                  |
+| `isSpecificAbnormally`        | boolean | 特殊異常個股                                                              |
+| `matchingInterval`            | number  | 撮合循環秒數                                                              |
+| `securityStatus`              | string  | 證券狀態，分別有 `NORMAL`, `TERMINATED`, `SUSPENDED` 狀態                 |
+| `boardLot`                    | number  | 交易單位                                                                  |
+| `tradingCurrency`             | string  | 交易幣別                                                                  |
+| `exercisePrice`               | number  | 履約價格（限權證）                                                        |
+| `exercisedVolume`             | number  | 前一交易日履約數量（限權證）                                              |
+| `cancelledVolume`             | number  | 前一交易日註銷數量（限權證）                                              |
+| `remainingVolume`             | number  | 發行餘額量（限權證）                                                      |
+| `exerciseRatio`               | number  | 行使比率（限權證）                                                        |
+| `knockInPrice`                | number  | 上限價格（限權證）                                                        |
+| `knockOutPrice`               | number  | 下限價格（限權證）                                                        |
+| `maturityDate`                | string  | 到期日（限權證）                                                          |
+| `previousClose`               | number  | 前一交易日收盤價                                                          |
+| `openTime`                    | string  | 開盤時間（限指數）                                                        |
+| `closeTime`                   | string  | 收盤時間（限指數）                                                        |
+
+info
+
+'\*' 表示必揭示欄位。
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password", "Your cert path","Your cert password")  
+
+sdk.init_realtime() # 建立行情連線
+reststock = sdk.marketdata.rest_client.stock  
+# reststock.intraday.ticker(symbol='2330')  # 2.2.3 及以前版本
+
+## 2.2.4 及以後版本 (使用 Exception 進行例外處理)
+from fubon_neo.fugle_marketdata.rest.base_rest import FugleAPIError
+
+try:  
+  reststock.intraday.ticker(symbol='2330')
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"} 
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+
+client.stock.intraday.ticker({ symbol: '2330' })
+  .then(data => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.Stock;
+
+var ticker = await rest.Intraday.Ticker("2330");
+var ticker_cont = ticker.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(ticker_cont);
+
+```
+
+Response Body：
+
+```json
+{
+  "date": "2023-05-29",
+  "type": "EQUITY",
+  "exchange": "TWSE",
+  "market": "TSE",
+  "symbol": "2330",
+  "name": "台積電",
+  "industry": "24",
+  "securityType": "01",
+  "previousClose": 566,
+  "referencePrice": 566,
+  "limitUpPrice": 622,
+  "limitDownPrice": 510,
+  "canDayTrade": true,
+  "canBuyDayTrade": true,
+  "canBelowFlatMarginShortSell": true,
+  "canBelowFlatSBLShortSell": true,
+  "isAttention": false,
+  "isDisposition": false,
+  "isUnusuallyRecommended": false,
+  "isSpecificAbnormally": false,
+  "matchingInterval": 0,
+  "securityStatus": "NORMAL",
+  "boardLot": 1000,
+  "tradingCurrency": "TWD"
+}
+
+```
+
+## 證券別代碼[​](#證券別代碼 "Direct link to 證券別代碼")
+
+| 代碼 | 證券別                                     | 代碼 | 證券別                 |
+| ---- | ------------------------------------------ | ---- | ---------------------- |
+| `01` | 一般股票                                   | `24` | ETF                    |
+| `02` | 轉換公司債                                 | `25` | ETF（外幣計價）        |
+| `03` | 交換公司債或交換金融債                     | `26` | 槓桿型ETF              |
+| `04` | 一般特別股                                 | `27` | 槓桿型 ETF（外幣計價） |
+| `05` | 可交換特別股                               | `28` | 反向型 ETF             |
+| `06` | 認股權憑證                                 | `29` | 反向型 ETF（外幣計價） |
+| `07` | 附認股權特別股                             | `30` | 期信託 ETF             |
+| `08` | 附認股權公司債                             | `31` | 期信託 ETF（外幣計價） |
+| `09` | 附認股權公司債履約或分拆後之公司債         | `32` | 債券 ETF               |
+| `10` | 國內標的認購權證                           | `33` | 債券 ETF（外幣計價）   |
+| `11` | 國內標的認售權證                           | `34` | 金融資產證券化受益證券 |
+| `12` | 外國標的認購權證                           | `35` | 不動產資產信託受益證券 |
+| `13` | 外國標的認售權證                           | `36` | 不動產投資信託受益證券 |
+| `14` | 國內標的下限型認購權證                     | `37` | ETN                    |
+| `15` | 國內標的上限型認售權證                     | `38` | 槓桿型 ETN             |
+| `16` | 國內標的可展延下限型認購權證               | `39` | 反向型 ETN             |
+| `17` | 國內標的可展延上限型認售權證               | `40` | 債券型 ETN             |
+| `18` | 受益憑證(封閉式基金)                       | `41` | 期權策略型 ETN         |
+| `19` | 存託憑證                                   | `42` | 中央登錄公債           |
+| `20` | 存託憑證可轉換公司債                       | `43` | 外國債券               |
+| `21` | 存託憑證附認股權公司債                     | `44` | 黃金現貨               |
+| `22` | 存託憑證附認股權公司債履約或分拆後之公司債 | `00` | 未知或保留代碼         |
+| `23` | 存託憑證認股權憑證                         |      |                        |

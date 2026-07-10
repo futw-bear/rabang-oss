@@ -1,0 +1,128 @@
+# Candles
+
+接收訂閱股票最新分鐘Ｋ
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name             | Type    | Description                                                     |
+| ---------------- | ------- | --------------------------------------------------------------- |
+| `channel`\*      | string  | 訂閱頻道：`trades`, `candles`, `books`, `aggregates`, `indices` |
+| `symbol`\*       | string  | 股票代碼                                                        |
+| `intradayOddLot` | boolean | `intradayOddLot` true: 盤中零股, false: 股票, default: false    |
+
+## Response[​](#response "Direct link to Response")
+
+| Name          | Type   | Description                                                                |
+| ------------- | ------ | -------------------------------------------------------------------------- |
+| `date`\*      | string | 日期                                                                       |
+| `type`\*      | string | Ticker 類型                                                                |
+| `exchange`\*  | string | 交易所                                                                     |
+| `market`      | string | 市場別                                                                     |
+| `symbol`\*    | string | 股票代號                                                                   |
+| `timeframe`\* | number | Ｋ線週期                                                                   |
+| `open`\*      | number | Ｋ線開盤價                                                                 |
+| `high`\*      | number | Ｋ線最高價                                                                 |
+| `low`\*       | number | Ｋ線最低價                                                                 |
+| `close`\*     | number | Ｋ線收盤價                                                                 |
+| `volume`\*    | number | Ｋ線成交量（整股：成交張數；興櫃股票及盤中零股：成交股數；指數：成交金額） |
+| `average`\*   | number | 成交均價                                                                   |
+
+## Example[​](#example "Direct link to Example")
+
+### Subscribe channel[​](#subscribe-channel "Direct link to Subscribe channel")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order, Mode
+
+def handle_message(message):
+    print(f'market data message: {message}')
+
+sdk = FubonSDK()
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime(Mode.Normal) # 建立行情連線
+
+stock = sdk.marketdata.websocket_client.stock
+stock.on('message', handle_message)
+stock.connect()
+stock.subscribe({ 
+    'channel': 'candles', 
+    'symbol': '2330'
+})
+
+
+```
+
+```js
+const { FubonSDK, Mode } = require('fubon-neo');
+
+const sdk = new FubonSDK(Mode.Normal);
+
+const accounts = sdk.login("Your ID", "Your password", "Your cert path","Your cert password");
+
+sdk.initRealtime(Mode.Normal); // 建立行情連線
+
+const stock = sdk.marketdata.webSocketClient.stock;
+
+stock.connect().then(() => {
+  stock.subscribe({ channel: "candles", symbol: "0050" });
+});
+
+stock.on("message", (message) => {
+  const data = JSON.parse(message);
+  console.log(data);
+});
+
+```
+
+```cs
+using FubonNeo.Sdk;
+using FugleMarketData.WebsocketModels;
+
+var sdk = new FubonSDK();
+
+var result = sdk.Login("Your ID", "Your password", "Your cert path", "Your cert password");
+
+sdk.InitRealtime();  // 建立行情連線
+
+var stock = sdk.MarketData.WebSocketClient.Stock;
+
+stock.OnMessage += (msg) => Console.WriteLine($"receive: { msg }");
+
+await stock.Connect();
+
+await stock.Subscribe(StockChannel.Candles, "2330");
+
+```
+
+訂閱多檔商品
+
+同時訂閱多檔商品方式，請參考 [訂閱頻道](https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/getting-started.txt#%E8%A8%82%E9%96%B1%E9%A0%BB%E9%81%93)
+
+### Receive data[​](#receive-data "Direct link to Receive data")
+
+```json
+{
+  "event": "data",
+  "data": {
+    "symbol": "2330",
+    "type": "EQUITY",
+    "exchange": "TWSE",
+    "market": "TSE",
+    "date": "2023-05-29T13:30:00.000+08:00",
+    "open": 568,
+    "high": 568,
+    "low": 568,
+    "close": 568,
+    "volume": 4778,
+    "average": 568.77
+  },
+  "id": "<CHANNEL_ID>",
+  "channel": "candles"
+}
+
+```

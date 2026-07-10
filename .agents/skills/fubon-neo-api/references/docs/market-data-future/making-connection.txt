@@ -1,0 +1,135 @@
+# 建立連線
+
+### 建立行情連線[​](#建立行情連線 "Direct link to 建立行情連線")
+
+以下範例程式碼示範如何同時建立 5 條行情 WebSocket 連線。
+
+info
+
+一般僅 WebSocket 需要同時啟用多條連線，若使用 Web API 則建議使用單一連線方便管理。 Web API 速率限制為所有連線共用；WebSocket 每條連線各可訂閱 200 檔標的。
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK
+
+sdk = FubonSDK()
+accounts = sdk.login("Your ID", "Your password" ,"Your cert path" ,"Your cert password")  # 需登入後，才能取得行情權限
+
+websockets = []  # 不同連線 WebSocket 介面列表
+
+for _ in range(5):  # 建立 5 條連線
+  sdk.init_realtime() # 啟動一條行情連線
+  #ws = sdk.marketdata.websocket_client.stock  # WebSocket 介面 (證券)
+  ws = sdk.marketdata.websocket_client.futopt  # WebSocket 介面 (期貨)
+
+  # 將介面置入可用列表中
+  websockets.append(ws)
+
+# 設定 WebSocket Callback 並開啟連結
+for ws in websockets:
+  ## Callback functions 需另外定義 ##
+  ws.on('message', handle_message)  # 註冊行情資料 callback
+  ws.on("connect", handle_connect)  # 註冊連線事件 callback
+  ws.on("disconnect", handle_disconnect)  # 註冊斷線事件 callback
+  ws.on("error", handle_error)  # 註冊錯誤事件 callback
+  
+  ws.connect()  # 啟用連結
+
+# 斷開連線
+# for ws in websockets:
+#   we.disconnect()
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+// 需先登入才能取得行情權限
+const sdk = new FubonSDK();
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+const websockets = [];  // 不同連線 WebSocket 介面列表
+
+// 建立 5 條行情連線
+for (let i = 0; i < 5; i++) {
+  // 啟動一條行情連線
+  sdk.initRealtime();
+
+  // 取得 WebSocket 介面 
+  //const ws = sdk.marketdata.webSocketClient.stock;  // (證券)
+  const ws = sdk.marketdata.webSocketClient.futopt;  // (期貨)
+
+  // 將介面置入可用列表中
+  websockets.push(ws);
+}
+
+// 設定 WebSocket Callback 並開啟連結
+for (const ws of websockets) {
+  /* -- Callback functions 需另外定義 -- */
+  ws.on('message', handle_message);       // 註冊行情資料 callback
+  ws.on('connect', handle_connect);       // 註冊連線事件 callback
+  ws.on('disconnect', handle_disconnect); // 註冊斷線事件 callback
+  ws.on('error', handle_error);           // 註冊錯誤事件 callback
+
+  // 啟用連結
+  (async () => {
+    await ws.connect();
+  })()
+}
+
+// 斷開連線
+//for (const ws of websockets) {
+//  (async () => {
+//    await ws.disconnect();
+//  })()
+//}
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+
+// 需先登入才能取得行情權限
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+// 不同連線 WebSocket 介面列表
+//var websockets = new List<FugleMarketData.WebsocketClient.FugleWebsocketStockClient>();  // (證券)
+var websockets = new List<FugleMarketData.WebsocketClient.FugleWebsocketFutOptClient>();  // (期貨)
+
+// 建立 5 條行情連線
+for (int i = 0; i < 5; i++)
+{
+  sdk.InitRealtime(); // 建立行情連線
+
+  // 取得 WebSocket 介面 
+  //var ws = sdk.MarketData.WebSocketClient.Stock;  // (證券)
+  var ws = sdk.MarketData.WebSocketClient.FutureOption;  // (期貨)
+
+  // 將介面置入可用列表中
+  websockets.Add(ws);
+}
+
+// 設定 WebSocket Callback 並開啟連結
+foreach (var ws in websockets)
+{
+  ws.OnMessage = (msg) => Console.WriteLine($"OnMessage receive: {msg}");  // 註冊行情資料 callback
+  ws.OnError = (msg) => Console.WriteLine($"OnError receive: {msg}");  // 註冊錯誤事件 callback
+  ws.OnConnected = (msg) => Console.WriteLine($"OnConnected receive: {msg}");  // 註冊連線事件 callback
+  ws.OnDisconnected = (msg) => Console.WriteLine($"OnDisconnected receive: {msg}");  // 註冊斷線事件 callback
+
+  // 啟用連結
+  await ws.Connect();
+}
+
+// 斷開連線
+// foreach (var ws in websockets)
+// {
+//   await ws.Disconnect();
+// }
+
+```

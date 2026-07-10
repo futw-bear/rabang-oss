@@ -1,0 +1,648 @@
+# 主動回報
+
+***
+
+<!-- -->
+
+主動回報範例
+
+詳細回傳內容，可參考[主動回報範例](https://www.fbs.com.tw/TradeAPI/docs/trading/guide/advance/callback/callback_example_standard.txt)；物件說明可參照[SDK Reference 參數對照表](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#orderresult)
+
+## 訂閱委託回報[​](#訂閱委託回報 "Direct link to 訂閱委託回報")
+
+* Python
+* Node.js
+* C#
+* C++
+* Go
+
+```py
+# A callback to receive order data
+def on_order(code, content):
+    print("==Order==")
+    print(code)
+    print(content)
+    # print(content.seq_no)  # 印出委託單流水號
+    print("========")
+
+sdk.set_on_order(on_order) 
+
+```
+
+info
+
+回傳物件說明，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/EnumMatrix.txt#orderresult)
+
+```js
+//Callback to receive order data
+sdk.setOnOrder(function(code, content) 
+    { console.log("====order===\n",code, content)});
+
+```
+
+info
+
+回傳物件說明，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#orderresult)
+
+```cs
+public void OnOrder(string code, OrderResult data)
+{
+    if(data != null)
+    {
+        response = data.ToString();
+        Console.WriteLine("On Order" + response);
+    }
+
+}
+
+```
+
+或使用下方方法
+
+```cs
+sdk.OnOrder += (code, ordeResult) =>
+{
+    Console.WriteLine(code + ordeResult.ToString());
+}
+
+```
+
+info
+
+回傳物件說明，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#orderresult)
+
+```cpp
+void on_order(std::optional<std::string> err, const OrderResult& data) override {
+    if (err.has_value()) {
+        std::cerr << "Error in on_order: " << err.value() << ", status: " << data.status.value() << std::endl;
+        return;
+    }
+
+    if (data.order_no.has_value()) { // 或者更簡潔的 if (data.order_no)
+        std::cout << "on order: order_no - " << data.order_no.value() << ". status - " << data.status.value() << std::endl;
+    }
+    else {
+        std::cout << "on order: order_no is not available. status - " << data.status.value() << std::endl;
+    }
+};
+
+```
+
+info
+
+回傳物件說明，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#orderresult)
+
+```go
+sdk.OnOrder = func(err *string, data fubon.OrderResult) {
+	s, _ := json.MarshalIndent(data, "", "  ")
+	fmt.Println("On Order: ", string(s))
+	if err != nil {
+		fmt.Printf("   Error: %s\n", *err)
+	}
+}
+
+```
+
+info
+
+詳細回傳內容，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#orderresult)
+
+## 訂閱改價/改量/刪單回報[​](#訂閱改價改量刪單回報 "Direct link to 訂閱改價/改量/刪單回報")
+
+* Python
+* Node.js
+* C#
+* C++
+* Go
+
+```py
+def on_order_changed(code, content):
+    print("=Modified==")
+    print(code)
+    print(content)
+    # print(content.seq_no)  # 印出委託單流水號
+    print("========")
+    
+    
+sdk.set_on_order_changed(on_order_changed) 
+
+```
+
+info
+
+回傳物件說明，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/EnumMatrix.txt#orderresult)
+
+```js
+//Callback to receive Modified data
+sdk.setOnOrderChanged(function(code, content) 
+    { console.log("===Modified===\n", code, content)});
+
+```
+
+info
+
+回傳物件說明，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#orderresult)
+
+```cs
+public void OnOrderChanged(string code, OrderResult data)
+{
+    if(data != null)
+    {
+        response = data.ToString();
+
+        Console.WriteLine(code);
+        Console.WriteLine("Modified" + response);
+    }   
+
+}
+
+```
+
+或使用下方方法
+
+```cs
+sdk.OnOrderChanged += (code, ordeResult) =>
+{
+    Console.WriteLine(code + ordeResult.ToString());
+}
+
+```
+
+info
+
+詳細回傳內容，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#orderresult)
+
+```cpp
+void on_order_changed(std::optional<std::string> err, const OrderResult& data) override {
+    if (data.error_message.has_value()) {
+        std::cout << "on_order_changed: " << data.order_no.value() << ", status: " << data.status.value() << ", message: " << data.error_message.value() << std::endl;
+    }
+    else {
+        std::cout << "on_order_changed: " << data.order_no.value() << ", status: " << data.status.value() << std::endl;
+    }
+};
+
+```
+
+info
+
+回傳物件說明，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#orderresult)
+
+```go
+sdk.OnOrderChanged = func(err *string, data fubon.OrderResult) {
+	s, _ := json.MarshalIndent(data, "", " ")
+	fmt.Println("On Change ", string(s))
+	if err != nil {
+		fmt.Printf("   Error: %s\n", *err)
+	}
+}
+
+```
+
+info
+
+詳細回傳內容，可參照[OrderResult Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#orderresult)
+
+## 訂閱成交回報[​](#訂閱成交回報 "Direct link to 訂閱成交回報")
+
+* Python
+* Node.js
+* C#
+* C++
+* Go
+
+```py
+def on_filled(code, content):
+    print("==Filled==")
+    print(code)
+    print(content)
+    # print(content.filled_no)  # 印出成交流水號
+    print("========")
+    
+sdk.set_on_filled(on_filled)
+
+```
+
+info
+
+回傳物件說明，可參照[FilledData Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#filleddata)
+
+```js
+sdk.setOnFilled(function(code, content) 
+    { console.log("===Filled===\n",code, content)})
+
+```
+
+info
+
+回傳物件說明，可參照[FilledData Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#filleddata)
+
+```cs
+public void OnFilled(string code, FilledData data)
+{
+    if(data != null)
+    {
+        response = data.ToString();
+
+        Console.WriteLine(code);
+        Console.WriteLine("Filled" + response);
+    }
+
+}
+
+```
+
+或使用下方方法
+
+```cs
+sdk.OnFilled += (code, filledData) =>
+{
+    Console.WriteLine(code + filledData.ToString());
+}
+
+```
+
+info
+
+回傳物件說明，可參照[FilledData Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#filleddata)
+
+```cpp
+void on_filled(std::optional<std::string> err, const FilledData& data) override {
+    if (err.has_value()) { 
+        std::cerr << "Error in on_order: " << err.value() << std::endl;
+        return; 
+    }
+
+    if (data.order_no.has_value()) { 
+        std::cout << "on order: " << data.order_no.value() << std::endl;
+    }
+    else {
+        std::cout << "on order: order_no is not available." << std::endl;
+    }
+};
+
+```
+
+info
+
+詳細回傳內容，可參照[FilledData Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#filleddata)
+
+```go
+sdk.OnFilled = func(err *string, data fubon.FilledData) {
+	s, _ := json.MarshalIndent(data, "", " ")
+	fmt.Println("On Filled ", string(s))
+	if err != nil {
+		fmt.Printf("   Error: %s\n", *err)
+	}
+}
+
+```
+
+info
+
+詳細回傳內容，可參照[FilledData Object](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#filleddata)
+
+## 訂閱事件通知[​](#訂閱事件通知 "Direct link to 訂閱事件通知")
+
+* Python
+* Node.js
+* C#
+* C++
+* Go
+
+```py
+def on_event(code, content):
+    print("===event=====")
+    print(code)
+    print(content)
+    print("========")
+    
+sdk.set_on_event(on_event) 
+
+```
+
+```js
+sdk.setOnEvent(function(code, content) 
+    { console.log("===Event===\n",code, content)})
+
+```
+
+```cs
+public void OnEvent(String code, String data)
+{
+    response = data.ToString();
+    Console.WriteLine(code);
+    Console.WriteLine("Event" + response);
+}
+
+```
+
+或使用下方方法
+
+```cs
+sdk.OnEvent += (code, msg) =>
+{
+    Console.WriteLine(code + msg );
+};
+
+```
+
+```cpp
+void on_event(const std::string& code, const std::string& data) override {
+    std::cout << code << " " << data << std::endl;
+}
+
+```
+
+```go
+sdk.OnEvent = func(data string, eventType string) {
+    fmt.Printf("📡 OnEvent - Type: %s, Data: %s\n", eventType, data)
+    if eventType == "disconnect" {
+        fmt.Println("⚠️  Connection lost!")
+    }
+}
+
+```
+
+事件包含以下情況回傳
+
+| 回傳代碼 | 意義                                               |
+| -------- | -------------------------------------------------- |
+| 100      | 連線建立成功                                       |
+| 200      | 登入成功                                           |
+| 201      | 登入警示 , Ex : 90天未更換密碼                     |
+| 300      | 斷線                                               |
+| 301      | 未收到連線pong回傳                                 |
+| 302      | 用戶執行登出 , 並斷線                              |
+| 304      | API Key 異動 (Revoked), 已強制登出 (2.2.7版本新增) |
+| 500      | 錯誤                                               |
+
+## 訂閱範例[​](#訂閱範例 "Direct link to 訂閱範例")
+
+使用者可訂閱不同的callback，來接收系統主動發送的委託及成交通知。
+
+* Python
+* Node.js
+* C#
+* C++
+* Go
+
+```py
+# A callback to receive order data
+def on_order(code, content):
+    print("==Order==")
+    print(code)
+    print(content)
+    print("========")
+    
+sdk.set_on_order(on_order) 
+
+# A callback to receive Modified data
+def on_order_changed(code, content):
+    print("=Modified==")
+    print(code)
+    print(content)
+    print("========")
+    
+sdk.set_on_order_changed(on_order_changed) 
+
+# A callback to receive Filled data
+def on_filled(code, content):
+    print("==Filled==")
+    print(code)
+    print(content)
+    print("========")
+    
+sdk.set_on_filled(on_filled)
+
+# A callback to receive Event data
+def on_event(code, content):
+    print("===event=====")
+    print(code)
+    print(content)
+    print("========")
+    
+sdk.set_on_event(on_event) 
+
+```
+
+```js
+//Callback to receive order data
+sdk.setOnOrder(function(code, content) 
+    { console.log("====order===\n",code, content)});
+
+//Callback to receive Modified data
+sdk.setOnOrderChanged(function(code, content) 
+    { console.log("===Modified===\n", code, content)});
+
+//Callback to receive Filled data
+sdk.setOnFilled(function(code, content) 
+    { console.log("===Filled===\n",code, content)})
+
+//Callback to receive Event data
+sdk.setOnEvent(function(code, content) 
+    { console.log("===Event===\n",code, content)})
+
+```
+
+```cs
+public class MyCallback : Callback
+{
+    public string code ="";
+    public string response = "";
+
+    //Callback to receive order data
+    public void OnOrder(string code, OrderResult data)
+    {
+        if(data != null)
+        {
+            response = data.ToString();
+            Console.WriteLine("On Order" + response);
+        }
+
+    }
+
+    //Callback to receive Modified data
+    public void OnOrderChanged(string code, OrderResult data)
+    {
+        if(data != null)
+        {
+            response = data.ToString();
+
+            Console.WriteLine(code);
+            Console.WriteLine("Modified" + response);
+        }
+
+    }
+
+    //Callback to receive Filled data
+    public void OnFilled(string code, FilledData data)
+    {
+        if(data != null)
+        {
+            response = data.ToString();
+
+            Console.WriteLine(code);
+            Console.WriteLine("Filled" + response);
+        }
+
+    }
+
+    //Callback to receive Event data
+    public void OnEvent(String code, String data)
+    {
+        response = data.ToString();
+        Console.WriteLine(code);
+        Console.WriteLine("Event" + response);
+    }
+}
+
+var callback = new MyCallback();
+sdk.RegisterCallback(callback);
+
+```
+
+或使用下方方法分別訂閱
+
+```cs
+sdk.OnEvent += (code, msg) =>
+{
+    Console.WriteLine(code + msg );
+};
+
+
+sdk.OnOrder += (code, ordeResult) =>
+{
+    Console.WriteLine(code + ordeResult.ToString());
+}
+
+sdk.OnOrderChanged += (code, ordeResult) =>
+{
+    Console.WriteLine(code + ordeResult.ToString());
+}
+
+sdk.OnFilled += (code, filledData) =>
+{
+    Console.WriteLine(code + filledData.ToString());
+}
+
+```
+
+```cpp
+struct CustomCallback : public fubon::Callback {
+    void on_event(const std::string& code, const std::string& data) override {
+        std::cout << code << " " << data << std::endl;
+    }
+
+    void on_order(std::optional<std::string> err, const OrderResult& data) override {
+        if (err.has_value()) {
+            std::cerr << "Error in on_order: " << err.value() << ", status: " << data.status.value() << std::endl;
+            return;
+        }
+
+        if (data.order_no.has_value()) { // 或者更簡潔的 if (data.order_no)
+            std::cout << "on order: order_no - " << data.order_no.value() << ". status - " << data.status.value() << std::endl;
+        }
+        else {
+            std::cout << "on order: order_no is not available. status - " << data.status.value() << std::endl;
+        }
+    };
+
+    void on_order_changed(std::optional<std::string> err, const OrderResult& data) override {
+        if (data.error_message.has_value()) {
+            std::cout << "on_order_changed: " << data.order_no.value() << ", status: " << data.status.value() << ", message: " << data.error_message.value() << std::endl;
+        }
+        else {
+            std::cout << "on_order_changed: " << data.order_no.value() << ", status: " << data.status.value() << std::endl;
+        }
+    };
+
+    void on_filled(std::optional<std::string> err, const FilledData& data) override {
+        std::cout << data.order_no << " " << std::endl;
+    };
+
+    void on_futopt_order(std::optional<std::string> err, const FutOptOrderResult& data) override {
+        return;
+        //if (err.has_value()) {
+        //    std::cerr << "Error in on_order: " << err.value() << std::endl;
+        //    return;
+        //}
+
+        //if (data.order_no.has_value()) { // 或者更簡潔的 if (data.order_no)
+        //    std::cout << "on order: " << data.order_no.value() << std::endl;
+        //}
+        //else {
+        //    std::cout << "on order: order_no is not available." << std::endl;
+        //}
+    };
+
+    void on_futopt_order_changed(std::optional<std::string> err, const FutOptOrderResult& data) override {
+        /*std::cout << data.order_no.value() << " " << std::endl;*/
+        return;
+    };
+
+    void on_futopt_filled(std::optional<std::string> err, const FutOptFilledData& data) override {
+        //std::cout << data.order_no << " " << std::endl;
+        return;
+    };
+};
+
+
+int main()
+{
+    auto callback = std::make_shared<CustomCallback>();
+    auto sdk = new FubonSDK();
+    sdk->register_callback(callback);
+
+    /// 以下略 ...
+    /// ...
+    
+    return 0;
+}
+
+```
+
+```go
+import (
+	"encoding/json"
+	"fmt"
+	"fubon"
+	"strings"
+)
+
+func main(){
+
+	sdk.OnOrder = func(err *string, data fubon.OrderResult) {
+		s, _ := json.MarshalIndent(data, "", "  ")
+		fmt.Println("On Order: ", string(s))
+		if err != nil {
+			fmt.Printf("   Error: %s\n", *err)
+		}
+	}
+
+	sdk.OnOrderChanged = func(err *string, data fubon.OrderResult) {
+		s, _ := json.MarshalIndent(data, "", " ")
+		fmt.Println("On Change ", string(s))
+		if err != nil {
+			fmt.Printf("   Error: %s\n", *err)
+		}
+	}
+
+	sdk.OnFilled = func(err *string, data fubon.FilledData) {
+		s, _ := json.MarshalIndent(data, "", " ")
+		fmt.Println("On Filled ", string(s))
+		if err != nil {
+			fmt.Printf("   Error: %s\n", *err)
+		}
+	}
+
+	sdk.OnEvent = func(data string, eventType string) {
+		fmt.Printf("📡 OnEvent - Type: %s, Data: %s\n", eventType, data)
+		if eventType == "disconnect" {
+			fmt.Println("⚠️  Connection lost!")
+		}
+	}
+
+}
+
+```

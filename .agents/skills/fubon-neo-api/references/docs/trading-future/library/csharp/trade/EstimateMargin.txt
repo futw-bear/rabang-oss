@@ -1,0 +1,65 @@
+# 商品保證金查詢
+
+QueryEstimateMargin
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數        | 類別                                                                                                        | 說明     |
+| ----------- | ----------------------------------------------------------------------------------------------------------- | -------- |
+| account     | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#account)         | 帳號     |
+| orderObject | [OrderObject](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#orderobject) | 委託內容 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別           | 說明                             |
+| --------- | -------------- | -------------------------------- |
+| isSuccess | bool           | 是否成功                         |
+| data      | EstimateMargin | 回傳保證金資訊                   |
+| message   | string         | 當isSuccess = False 回傳錯誤訊息 |
+
+### EstimateMargin 欄位[​](#estimatemargin-欄位 "Direct link to EstimateMargin 欄位")
+
+Return type : Object
+
+| 參數           | 類別   | 說明       |
+| -------------- | ------ | ---------- |
+| date           | string | 查詢日期   |
+| currency       | string | 幣別       |
+| estimateMargin | double | 預估保證金 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+order = FutOptOrder(
+    BsAction.Buy,
+    "TXFE4",
+    "20890",
+    1,
+    FutOptMarketType.Future,
+    FutOptPriceType.Limit,
+    TimeInForce.Rod,
+    FutOptOrderType.Auto,
+    "FromCS" // optional field
+)
+
+
+
+var estimate = sdk.Futopt.QueryEstimateMargin(account, order);
+Console.WriteLine(estimate.data);
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+{
+    isSuccess = True,
+    message = ,
+    data =  EstimateMargin{ 
+                date = 2024/04/10,        // 日期 (string)
+                currency = TWD,           // 幣別 (string)
+                estimateMargin = 179000   // 預估保證金 (double)
+            }
+} 
+
+```

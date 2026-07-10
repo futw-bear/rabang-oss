@@ -1,0 +1,68 @@
+# Python主動回報例外處理
+
+使用 Python 主動回報時，因為主動回報機制於獨自的 thread 中運行，因此若主動回報 callback function 內自己寫的程式碼執行產生錯誤，不會自動丟回錯誤訊息，可能造成程式 DEBUG 上的障礙。
+
+這個時候可以在 callback function 上面加入以下 decorator，當其中程式碼發生錯誤時，錯誤將如往常一樣顯示在 console 內：
+
+```python
+import os
+import sys
+import traceback
+import functools
+
+def handle_exceptions(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except Exception as exp:
+            # Extract the full traceback
+            tb_lines = traceback.format_exc().splitlines()
+
+            # Find the index of the line related to the original function
+            func_line_index = next((i for i, line in enumerate(tb_lines) if func.__name__ in line), -1)
+
+            # Highlight the specific part in the traceback where the exception occurred
+            relevant_tb = "\n".join(tb_lines[func_line_index:])  # Include traceback from the function name
+
+            error_text = f"{func.__name__} exception: {exp}\nTraceback (most recent call last):\n{relevant_tb}"
+            print(error_text, file=sys.stderr)
+
+            # 若要程式完全跳出，可加入下行 (P.S. jupyter 環境不適用)
+            # os._exit(-1)
+
+    return wrapper
+
+def on_event(code, content):
+    print("===event=====")
+    print(code)
+    print(content)
+    print("========")
+
+@handle_exceptions
+def on_order(code, content):
+    print("==Order==")
+    print(code)
+    print(content)
+    print("========")
+
+    # Add some code that would cause exceptions
+    test = {}
+    print(test["key"])  # 這行會產生錯誤
+
+
+```
+
+以上範例程式碼中，我們故意在 on\_order 中放入一行 `print(test["key"])`，因為 `"key"` 沒有在字典 `test` 裡面，所以會產生錯誤。
+
+這時因為我們有加入 `@handle_exceptions` decorator，所以收到新單主動回報後， console 會印出：
+
+```python
+on_order exception: 'key'
+Traceback (most recent call last):
+  File "xxx.py", line 47, in on_order
+    print(test["key"])
+          ~~~~^^^^^^^
+KeyError: 'key'
+
+```

@@ -1,0 +1,103 @@
+# 取得批次委託列表
+
+BatchOrderLists
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                     | 說明 |
+| ------- | ---------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別             | 說明                              |
+| --------- | ---------------- | --------------------------------- |
+| IsSuccess | bool             | 是否成功                          |
+| Data      | \*\[]BatchResult | 回傳批次單資訊列表                |
+| Message   | \*string         | 當 IsSuccess = false 回傳錯誤訊息 |
+
+### 批次單 BatchResult 欄位[​](#批次單-batchresult-欄位 "Direct link to 批次單 BatchResult 欄位")
+
+Return type : Object
+
+| 參數         | 類別     | 說明                                                                             |
+| ------------ | -------- | -------------------------------------------------------------------------------- |
+| FunctionType | \*int64  | 功能別 : `0` 新單、 `10` 新單執行、 `15` 改價、 `20` 改量、`30` 刪單 、`90` 失敗 |
+| Date         | \*string | 交易日期                                                                         |
+| BranchNo     | \*string | 分公司代號                                                                       |
+| Account      | \*string | 帳號                                                                             |
+| BatchSeqNo   | \*string | 批次單流水序號                                                                   |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```go
+package main
+
+import (
+    "fmt"
+    "fubon"
+)
+
+func main() {
+    // 初始化 SDK 並登入
+    sdk := fubon.NewSDK()
+    
+    // ... 登入、連線等初始化步驟 ...
+    
+    // 查詢批次委託列表
+    batchList, err := sdk.Stock.BatchOrderLists(account)
+    
+    // 錯誤處理
+    if err != nil {
+        fmt.Printf("❌ Get Batch List Format/Parse Error: %v (Type: %T)\n", err, err)
+        return
+    }
+    
+    // 檢查是否成功
+    if !batchList.IsSuccess {
+        message := "No message"
+        if batchList.Message != nil {
+            message = *batchList.Message
+        }
+        fmt.Printf("Get batch list failed. Message: %s\n", message)
+        return
+    }
+    
+    // 輸出批次列表
+    if batchList.Data != nil && len(*batchList.Data) > 0 {
+        fmt.Printf("✅ Found %d batch orders\n", len(*batchList.Data))
+        
+        for i, batch := range *batchList.Data {
+            fmt.Printf("\n--- Batch %d ---\n", i+1)
+            fmt.Printf("Date: %s\n", *batch.Date)
+            fmt.Printf("BatchSeqNo: %s\n", *batch.BatchSeqNo)
+            fmt.Printf("FunctionType: %d\n", *batch.FunctionType)
+            fmt.Printf("Account: %s\n", *batch.Account)
+        }
+    } else {
+        fmt.Println("Get batch list success but no data returned.")
+    }
+}
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```go
+// BatchOrderLists 回傳結構
+Result{
+    IsSuccess: true,
+    Message:   nil,
+    Data: &[]BatchResult{
+        {
+            FunctionType: 0,                                  // 功能種類 (新單)
+            Date:         "2023/10/04",                       // 交易日期
+            BranchNo:     "6460",                             // 分公司代號
+            Account:      "26",                               // 帳號
+            BatchSeqNo:   "11EE626533D072228000000C29304663", // 批次單流水序號
+        },
+        // ... 更多批次單
+    },
+}
+
+```

@@ -1,0 +1,233 @@
+****
+
+# SDK 下載
+
+本頁重點
+
+* 提供富邦新一代 API（Fubon Neo API）各語言 SDK 下載。
+* 最新版本為 **v2.2.8**，並提供[版本遷移資訊](#%E7%89%88%E6%9C%AC%E9%81%B7%E7%A7%BB%E8%B3%87%E8%A8%8A)。
+* API Key 登入支援 >= v2.2.7，網頁憑證匯出登入支援 >= v2.2.8。
+* 安裝步驟與相容性總覽請見[安裝與版本相容性](https://www.fbs.com.tw/TradeAPI/docs/install-compatibility.txt)。
+
+| 項目         | 說明                                                                       |
+| ------------ | -------------------------------------------------------------------------- |
+| 最新版本     | v2.2.8                                                                     |
+| 支援語言     | Python / C# / JavaScript (Node.js) / C++、Go（僅支援證券交易帳務及條件單） |
+| 支援平台     | 依語言提供 Windows / macOS / Linux 版本                                    |
+| API Key 登入 | >= v2.2.7                                                                  |
+| 憑證匯出登入 | >= v2.2.8                                                                  |
+
+相關資訊
+
+1. 新一代 API 提供測試環境，詳情請見 [快速上手](https://www.fbs.com.tw/TradeAPI/docs/welcome.txt#%E6%B8%AC%E8%A9%A6%E7%92%B0%E5%A2%83) 頁面
+   <br />
+2. [網頁憑證匯出](https://www.fbs.com.tw/TradeAPI/docs/key.txt)可用於API 登入 (版本要求 >= v2.2.8)
+
+API Key 登入 >= v2.2.7
+
+* [API Key 說明](https://www.fbs.com.tw/TradeAPI/docs/trading/api-key-apply.txt)
+  <br />
+* [API Key 申請](https://www.fbs.com.tw/TradeAPI/docs/key.txt)
+
+版本注意事項 **>=2.2.4**
+
+1. 新增證券委託單 user\_def 欄位輸入規則檢核提醒
+   <br />
+   a. 僅可使用 ***大小寫英文字母及0\~9數字***，最多 10 個字元 (***規則更新 >=2.2.8***)
+   <br />
+   b. 若字元合規但長度超過 10 字元，將自動縮減至 10 字元並帶入下單；交易 event callback 發送提醒訊息
+   <br />
+   c. 若字元不合規，則自動將 user\_def 帶入空值；交易 event callback 發送提醒訊息
+   <br />
+
+（***註：*** user\_def 欄位輸入不符合規則**仍會送單**，但欄位值將被自動調整，調整方式請參考上述點 b 及 c ）
+
+2. Python 行情 Web API 例外情況改用 ***Exception*** 方式回報。詳情請見行情 Web API 中之 Python 程式範例。
+
+版本注意事項 **>=2.2.0**
+
+1. 以下條件單功能目前不支援**期貨夜盤**： a. 分時分量 b. 移動鎖利 c. 時間觸發條件
+
+2. 證券條件單停損停利子單設定物件（TPSLOrder）新增參數 `trigger`，可設定觸發價格參照為 成交價、最佳買價、最價賣價， 若無特別設定則預設值為 成交價，詳請參閱條件單 \[參數對照表]
+
+（***註：*** C# 使用預設值須將此參數填入 ***null***，Python 及 JS 可忽略此參數）<br />（***註 2：*** **期貨條件單** 物件（FutOptTpslOrder）亦新增此欄位，尚無具體功能，C# 請填入 ***null***，Python 及 JS 可忽略此欄位 ）
+
+## 檔案載點[​](#檔案載點 "Direct link to 檔案載點")
+
+### Python[​](#python "Direct link to Python")
+
+支援 3.8、3.9、3.10、3.11、3.12 與 3.13 版本，v2.0.1 後不支援 Python 3.7（目前不支援 3.14）
+
+**SDK:**
+
+* Windows 64 位元 [下載](https://www.fbs.com.tw/TradeAPI_SDK/fubon_binary/fubon_neo-2.2.8-cp37-abi3-win_amd64.zip)
+
+* MacOs
+
+  <!-- -->
+
+  * Arm 64 位元 [下載](https://www.fbs.com.tw/TradeAPI_SDK/fubon_binary/fubon_neo-2.2.8-cp37-abi3-macosx_11_0_arm64.zip)
+  * X86 64 位元 [下載](https://www.fbs.com.tw/TradeAPI_SDK/fubon_binary/fubon_neo-2.2.8-cp37-abi3-macosx_10_12_x86_64.zip)
+
+* Linux 64 位元 [下載](https://www.fbs.com.tw/TradeAPI_SDK/fubon_binary/fubon_neo-2.2.8-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.zip)
+
+info
+
+**範例程式碼：** [Python 範例程式碼](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/python_sample_code.zip) (.ipynb, Jupyter 互動開發格式, 需搭配 SDK 使用)
+
+### JavaScript[​](#javascript "Direct link to JavaScript")
+
+支援 Node.js 16 以上版本
+
+**SDK:**
+
+* Fubon-Neo.tgz [下載](https://www.fbs.com.tw/TradeAPI_SDK/fubon_binary/fubon-neo-2.2.8.nodejs.zip)
+
+info
+
+**範例程式碼：** [JS 範例程式碼](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/js_sample_code.zip) (.ipynb, Jupyter 互動開發格式, 需搭配 SDK 使用)
+
+### C#[​](#c "Direct link to C#")
+
+使用 .NET Standard 2.0 開發，建議使用 .netcoreapp 3.1 以上，或 .NETFramework 4.7.2 以上版本
+
+**SDK:**
+
+* nupkg(64 位元) [下載](https://www.fbs.com.tw/TradeAPI_SDK/fubon_binary/FubonNeo.2.2.8.nupkg.zip)
+
+info
+
+**範例程式碼：** [C# 下單範例程式碼](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/fubondotnetsdkgui.zip) (Visual Studio 專案範例 (WPF), 需搭配 SDK 使用)<br />**範例程式碼：** [C# 行情及帳務範例程式碼](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/marketdata_n_accounting.zip) (Visual Studio 專案範例 (Windows Forms), 需搭配 SDK 使用)
+
+### C++[​](#c-1 "Direct link to C++")
+
+支援 C++ 20 及以上版本
+
+* [SDK及範例程式碼下載](https://www.fbs.com.tw/TradeAPI_SDK/fubon_binary/FubonNeo.2.2.8_CppSDKPackage.zip)
+
+### Golang[​](#golang "Direct link to Golang")
+
+* [SDK及範例程式碼下載](https://www.fbs.com.tw/TradeAPI_SDK/fubon_binary/fubon-neo-2.2.8.golang.zip)
+
+## 連線測試[​](#連線測試 "Direct link to 連線測試")
+
+**連線測試小幫手：** [程式下載](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/API_Sign_Test.zip) (Windows平台使用)
+
+## 版本遷移資訊[​](#版本遷移資訊 "Direct link to 版本遷移資訊")
+
+### 2.2.8[​](#228 "Direct link to 2.2.8")
+
+* 證券
+
+  <!-- -->
+
+  1. 行情新增**股務事件**資料API
+  2. [歷史行情 Candles](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/historical/candles.txt)新增**還原股價**選項
+
+* 新增 [LLM 輔助開發](https://www.fbs.com.tw/TradeAPI/docs/welcome/build-with-llm.txt) 頁面
+
+版本注意事項 **>=2.2.8**
+
+1. 新增證券委託單 user\_def 欄位輸入規則檢核提醒<br />a. 僅可使用 ***大小寫英文字母及0\~9數字***，最多 10 個字元 (***規則更新 >=2.2.8***)<br />
+
+2. API Key 權限變更強制斷線機制，調整為僅限於受變更影響之 key<br />(例：使用key1、key2同時登入上線，刪除 key1 => key1 session 強制斷線； key2 session 不受影響)<br />
+
+3. [網頁憑證匯出](https://www.fbs.com.tw/TradeAPI/docs/key.txt)可用於 API 登入
+
+### 2.2.7[​](#227 "Direct link to 2.2.7")
+
+* 新增 使用 APY-KEY 登入及憑證匯出功能
+
+info
+
+* [API Key 說明](https://www.fbs.com.tw/TradeAPI/docs/trading/api-key-apply.txt)
+  <br />
+* [API Key 申請](https://www.fbs.com.tw/TradeAPI/docs/key.txt)
+
+### 2.2.6[​](#226 "Direct link to 2.2.6")
+
+* SDK 新增 Golang 版本 (證券交易及帳務)
+* 證券 行情 Web API 新增技術指標
+
+### 2.2.5[​](#225 "Direct link to 2.2.5")
+
+* 證券 商品漲跌幅報表查詢功能（上市、櫃）
+* 證券 現冲券配額查詢新增警示股註記欄位
+* 連線管理元件升級
+
+### 2.2.4[​](#224 "Direct link to 2.2.4")
+
+* 證券 當沖條件單上線
+* 證券 支援先進先出帳務查詢
+* 證券 委託單 user\_def 欄位新增輸入規範檢核提醒
+* SDK 新增 C++ 版本 (證券交易、帳務及條件單功能)
+
+版本注意事項 **>=2.2.4**
+
+1. 新增證券委託單 user\_def 欄位輸入規則檢核提醒
+   <br />
+   a. 僅可使用 ***ASCII 33-126*** 範圍中字元，最多 10 個字元
+   <br />
+   b. 若字元合規但長度超過 10 字元，將自動縮減至 10 字元並帶入下單；交易 event callback 發送提醒訊息
+   <br />
+   c. 若字元不合規，則自動將 user\_def 帶入空值；交易 event callback 發送提醒訊息
+   <br />
+
+（***註：*** user\_def 欄位輸入不符合規則**仍會送單**，但欄位值將被自動調整，調整方式請參考上述點 b 及 c ）
+
+2. Python 行情 Web API 例外情況改用 ***Exception*** 方式回報。詳情請見行情 Web API 中之 Python 範例程式。
+
+### 2.2.3[​](#223 "Direct link to 2.2.3")
+
+* 例外處理 ( exception handling ) 元件優化
+
+### 2.2.2[​](#222 "Direct link to 2.2.2")
+
+* 下單模組速&#x5EA6;***再*** 優化升級
+
+### 2.2.1[​](#221 "Direct link to 2.2.1")
+
+* 新增連線參數設定 ( [說明](https://www.fbs.com.tw/TradeAPI/docs/trading/guide/advance/ping_pong.txt) )
+
+### 2.2.0[​](#220 "Direct link to 2.2.0")
+
+* 證券 **條件單**停損停利觸發價格條件設定
+* 期貨/選擇權 新增**條件單**夜盤功能選項（FutureNight/OptionNight）
+
+版本注意事項 >=2.2.0
+
+1. 以下條件單功能目前不支援**期貨夜盤**： a. 分時分量 b. 移動鎖利 c. 時間觸發條件
+
+2. 證券條件單停損停利子單設定物件（TPSLOrder）新增參數 `trigger`，可設定觸發價格參照為 成交價、最佳買價、最價賣價， 若無特別設定則預設值為 成交價，詳請參閱條件單 \[參數對照表]
+
+（***註：*** C# 使用預設值須將此參數填入 ***null***，Python 及 JS 可忽略此參數）<br />（***註 2：*** **期貨條件單** 物件（FutOptTpslOrder）亦新增此欄位，尚無具體功能，C# 請填入 ***null***，Python 及 JS 可忽略此欄位 ）
+
+### 2.1.1[​](#211 "Direct link to 2.1.1")
+
+* 證券 長日期歷史委託單及成交紀錄查詢（單次查詢最大30日區間）
+* 期貨/選擇權 新增移動鎖利及分時分量條件單功能
+
+### 2.1.0[​](#210 "Direct link to 2.1.0")
+
+* 期貨/選擇權 條件單功能上線
+* (證券) 委託單歷程查詢新增 狀態 (status) 及 錯誤訊息 (err\_msg) 欄位
+
+### 2.0.1[​](#201 "Direct link to 2.0.1")
+
+* 期貨/選擇權 交易及帳務功能
+* Python SDK 支援 Python 3.12 (**停止支援 Python 3.7**)
+
+### 1.3.2[​](#132 "Direct link to 1.3.2")
+
+* 下單模組速度優化升級
+
+### 1.3.1[​](#131 "Direct link to 1.3.1")
+
+* 證券條件單
+* 期貨/選擇權 行情
+* (C#) 交易 callback function 使用方式變更 (詳請見 交易文件 -> SDK Reference -> [版本升級指南](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/upgrade-guide.txt))
+
+### 1.0.4[​](#104 "Direct link to 1.0.4")
+
+* OrderResult 物件新增 details 欄位
+* 即時行情新增 Normal Mode（詳請見 行情文件 -> WebSocket -> [模式切換](https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/upgrade-guide.txt)）

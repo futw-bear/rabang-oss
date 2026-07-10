@@ -1,0 +1,268 @@
+# 帳務
+
+***
+
+我們可以透過混和部位查詢及權益數來確部位等資訊。
+
+info
+
+查詢發送的次數為每秒5次，若超出上限，請稍後再試試！
+
+## 部位查詢[​](#部位查詢 "Direct link to 部位查詢")
+
+* Python
+* Node.js
+* C#
+
+```python
+h_position = sdk.futopt_accounting.query_hybrid_position(accounts.data[0])
+print(h_position)
+
+```
+
+```py
+Result {
+    is_success: True,
+    message: None,
+    data : [HybridPosition {
+                date : "2024/04/08",                     # 部位建立日期 (str)
+                branch_no : "15901",                      # 分公司代號 (str)
+                account : "1234567",                      # 帳號 (str)
+                is_spread : False,                        # 是否為複式部位 (bool)
+                position_kind : 1,                        # 部位種類  (int)
+                symbol : "FITX",                          # 商品代號 (str)
+                expiry_date : 202404,                     # 履約日 (string)
+                strike_price : None,                      # 履約價 (int or None)
+                call_put : None,                          # 權利別 (int or None)
+                buy_sell : Buy,                             # 買賣別  (BSAction)
+                price : 20325.3333,                       # 成交價 (float)
+                orig_lots : 3,                            # 原始口數 (int)
+                tradable_lot : 3,                         # 可交易口數 (int)
+                order_type : New,                           # 委託別 (FutOptOrderType)
+                currency : "TWD",                         # 幣別 (str)
+                market_price : "20351",                   # 即時價 (str)
+                initial_margin : 0.0,                     # 原始保證金 (float)
+                maintenance_margin : 0.0,                 # 維持保證金 (float)
+                clearing_margin : 0.0,                    # 結算保證金 (float)
+                initial_margin_all_single : 0.0,          # 原始保證金 (float)
+                opt_value : 0.0,                          # 選擇權市值 (float)
+                opt_long_value : 0.0,                     # 選擇權買進市值 (float)
+                opt_short_value : 0.0,                    # 選擇權賣出市值 (float)
+                profit_or_loss : 0.0,                     # 部位損益 (float)
+                premium : 0.0,                            # 權利金 (float)
+                spreads : None,                           # 複式部位 (List[SpreadPosition])
+            }
+            ...
+    ]
+}
+
+```
+
+```js
+const h_position = sdk.futoptAccounting.queryHybridPosition(accounts.data[0])
+console.log(h_position)
+
+```
+
+```js
+{
+  isSuccess: true,
+  data:[
+         {
+          date : "2024/04/08",                      // 部位建立日期 (string)
+          branchNo : "15901",                       // 分公司代號 (string)
+          account : "1234567",                      // 帳號 (string)
+          isSpread : false,                         // 是否為複式部位 (boolean)
+          positionKind : 1,                         // 部位種類 (number)
+          symbol : "FITX",                          // 商品代號 (string)
+          expiryDate : '202404',                    // 履約日 (string)
+          buySell : Buy,                            // 買賣別 (number)
+          price : 20325.3333,                       // 成交價 (number)
+          origLots : 3,                             // 原始口數 (number)
+          tradableLot : 3,                          // 可交易口數 (number)
+          orderType : New,                          // 委託別 (FutOptOrderType)
+          currency : "TWD",                         // 幣別 (string)
+          marketPrice : "20351",                    // 即時價 (string)
+          initialMargin : 0.0,                      // 原始保證金 (number)
+          maintenanceMargin : 0.0,                  // 維持保證金 (number)
+          clearingMargin : 0.0,                     // 結算保證金 (number)
+          initialMarginAllSingle : 0.0,             // 原始保證金 (number)
+          optValue : 0.0,                           // 選擇權市值 (number)
+          optLongValue : 0.0,                       // 選擇權買進市值 (number)
+          optShortValue : 0.0,                      // 選擇權賣出市值 (number)
+          profitOrLoss : 0.0,                       // 部位損益 (number)
+          premium : 0.0                             // 權利金 (number)
+      },
+  ]
+}
+
+
+```
+
+```cs
+var h_position = sdk.FutOptAccounting.QueryHybridPosition(accounts.data[0]);
+foreach (var detail in h_position.data)
+{
+  Console.WriteLine(detail);
+}
+
+```
+
+```cs
+{
+    {
+              date = 2024/04/08,                       // 部位建立日期 (string)
+              branchNo = 15901,                         // 分公司代號 (string)
+              account = 1234567,                        // 帳號 (string)
+              isSpread = false,                         // 是否為複式部位 (boolean)
+              positionKind = 1,                         // 部位種類 : `1` 期貨、`2` 選擇權 (int)
+              symbol = FITX,                            // 商品代號 (string)
+              expiryDate = 202404,                      // 履約日 (string)
+              strikePrice = None,                       // 履約價 (double)
+              callPut = None,                           // 權利別 (CallPut)
+              buySell = Buy,                            // 買賣別 (BsAction)
+              price = 20325.3333,                       // 成交價 (double)
+              origLots = 3,                             // 原始口數 (int)
+              tradableLot = 3,                          // 可交易口數 (int)
+              orderType = New,                          // 委託別 (FutOptOrderType)
+              currency = TWD,                           // 幣別 (string)
+              marketPrice = 20351,                      // 即時價 (string)
+              initialMargin = 0.0,                      // 原始保證金 (double)
+              maintenanceMargin = 0.0,                  // 維持保證金 (double)
+              clearingMargin = 0.0,                     // 結算保證金 (double)
+              initialMarginAllSingle = 0.0,             // 原始保證金 (double)
+              optValue = 0.0,                           // 選擇權市值 (double)
+              optLongValue = 0.0,                       // 選擇權買進市值 (double)
+              optShortValue = 0.0,                      // 選擇權賣出市值 (double)
+              profitOrLoss = 0.0,                       // 部位損益 (double)
+              premium = 0.0,                            // 權利金 (double)
+              spreads = None,                           // 複式部位 (SpreadPosition[])
+      },
+      ...
+}
+
+```
+
+* 以下範例回傳僅擷取data內容
+
+## 權益數查詢[​](#權益數查詢 "Direct link to 權益數查詢")
+
+可以查詢帳務權益數，確認我們帳戶權益的狀況。
+
+* Python
+* Node.js
+* C#
+
+```python
+equity = sdk.futopt_accounting.query_margin_equity(accounts.data[0])
+print(equity.data)
+
+```
+
+```js
+const equity = sdk.futoptAccounting.queryMarginEquity(accounts.data[0])
+console.log(equity.data)
+
+```
+
+```cs
+var equity = sdk.FutOptAccounting.QueryMarginEquity(accounts.data[0]);
+Console.WriteLine(equity.data);
+
+```
+
+* Python
+* Node.js
+* C#
+
+```py
+Equity({
+          date: "2024/04/08",                   # 查詢日期 (string)
+          branch_no: "15901",                   # 分公司代號 (string)
+          account: "1234567",                   # 帳號 (string)
+          currency: "NTD",                      # 幣別 (string)
+          yesterday_balance: 22435152.4,        # 昨日餘額 (float)
+          today_balance: 22434910.4,            # 今日餘額 (float)
+          initial_margin: 1114946.0,            # 原始保證金 (float)
+          maintenance_margin: 939214.0,         # 維持保證金 (float)
+          clearing_margin: 915760.0,            # 結算保證金 (float)
+          today_equity: 22694910.4,             # 本日權益 (float)
+          ...
+          withhold: 126402.0,                   # 委託預扣款 (float)
+          available_margin: 21453562.4,         # 可動用保證金 (float)
+          risk_index: 0.0,                      # 風險指標 (float)
+          disgorgement: 0.0,                    # 追繳金額 (float)
+          opt_pnl: -248600.0,                   # 未沖銷選擇權浮動損益 (float)
+          opt_value: -193100.0,                 # 選擇權市值 (float)
+          opt_long_value: 311900.0,             # 未沖銷選擇權買方市值 (float)
+          opt_short_value: 505000.0,            # 未沖銷選擇權賣方市值 (float)
+          fut_realized_pnl: 0.0,                # 期貨平倉損益 (float)
+          fut_unrealized_pnl: 60700.0,          # 期貨期貨未平倉損益 (float)
+          yesterday_equity: 22634452.4,         # 昨日權益 (float)
+          buy_lot: 22,                          # 買進口數 (int)
+          sell_lot: 7                           # 賣出口數 (int)
+      })
+
+```
+
+```js
+ {
+        date: '2024/04/08',                    // 查詢日期 (string)
+        branchNo: '15901',                      // 分公司代號 (string)
+        account: '1234567',                     // 帳號 (string)
+        currency: 'NTD',                        // 幣別 (string)
+        yesterdayBalance: 22435152.4,          // 昨日餘額 (number)
+        todayBalance: 22434910.4,              // 今日餘額 (number)
+        initialMargin: 1114946.0,              // 原始保證金 (number)
+        maintenanceMargin: 939214.0,           // 維持保證金 (number)
+        clearingMargin: 915760.0,              // 結算保證金 (number)
+        initialMarginAllSingle: 0.0,           // 原始保證金 (number)
+        todayEquity: 22694910.4,               // 本日權益 (number)
+        ...
+        withhold: 126402.0,                    // 委託預扣款 (number)
+        availableMargin: 21453562.4,           // 可動用保證金 (number)
+        riskIndex: 0.0,                        // 風險指標 (number)
+        disgorgement: 0.0,                     // 追繳金額 (number)
+        optPnl: -248600.0,                     // 未沖銷選擇權浮動損益 (number)
+        optValue: -193100.0,                   // 選擇權市值 (number)
+        optLongValue: 311900.0,                // 未沖銷選擇權買方市值 (number)
+        optShortValue: 505000.0,               // 未沖銷選擇權賣方市值 (number)
+        futRealizedPnl: 0.0,                   // 期貨平倉損益 (number)
+        futUnrealizedPnl: 60700.0,             // 期貨未平倉損益 (number)
+        yesterdayEquity: 22634452.4,           // 昨日權益 (number)
+        buyLot: 22,                            // 買進口數 (number)
+        sellLot: 7,                            // 賣出口數 (number)
+      }
+
+```
+
+```cs
+{
+        date = 2024/04/08,                     // 查詢日期 (string)
+        branchNo = 15901,                       // 分公司代號 (string)
+        account = 1234567,                      // 帳號 (string)
+        currency = NTD,                         // 幣別 (string)
+        yesterdayBalance = 22435152.4,           // 昨日餘額 (double)
+        todayBalance = 22434910.4,               // 今日餘額 (double)
+        initialMargin = 1114946.0,               // 原始保證金 (double)
+        maintenanceMargin = 939214.0,            // 維持保證金 (double)
+        clearingMargin = 915760.0,               // 結算保證金 (double)
+        initialMarginAllSingle = 0.0,            // 原始保證金 (double)
+        todayEquity = 22694910.4,                // 本日權益 (double)
+        ...
+        withhold = 126402.0,                     // 委託預扣款 (double)
+        availableMargin = 21453562.4,            // 可動用保證金 (double)
+        riskIndex = 0.0,                         // 風險指標 (double)
+        disgorgement = 0.0,                      // 追繳金額 (double)
+        optPnl = -248600.0,                      // 未沖銷選擇權浮動損益 (double)
+        optValue = -193100.0,                    // 選擇權市值 (double)
+        optLongValue = 311900.0,                 // 未沖銷選擇權買方市值 (double)
+        optShortValue = 505000.0,                // 未沖銷選擇權賣方市值 (double)
+        futRealizedPnl = 0.0,                    // 期貨平倉損益 (double)
+        futUnrealizedPnl = 60700.0,              // 期貨未平倉損益 (double)
+        yesterdayEquity = 22634452.4,            // 昨日權益 (double)
+        buyLot = 22,                             // 買進口數 (int)
+        sellLot = 7,                             // 賣出口數 (int)
+}
+
+```

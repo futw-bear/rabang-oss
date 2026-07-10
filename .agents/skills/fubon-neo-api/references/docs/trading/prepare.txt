@@ -1,0 +1,181 @@
+# 事前準備
+
+本頁重點
+
+* 使用富邦新一代 API（Fubon Neo API）前，需完成開戶、憑證與 API 使用聲明。
+* 安裝方式與版本相容性請見[安裝與版本相容性](https://www.fbs.com.tw/TradeAPI/docs/install-compatibility.txt)。
+* 下一步可前往[快速開始](https://www.fbs.com.tw/TradeAPI/docs/trading/quickstart.txt)或[SDK 下載](https://www.fbs.com.tw/TradeAPI/docs/download/download-sdk.txt)。
+
+| 項目     | 說明                                            |
+| -------- | ----------------------------------------------- |
+| 產品     | 富邦新一代 API（Fubon Neo API）                 |
+| 必要條件 | 富邦證券帳戶、數位憑證、API 使用聲明 + 連線測試 |
+| 主要平台 | Windows（憑證工具與連線測試程式）               |
+| 登入方式 | 憑證登入                                        |
+| 下一步   | 安裝與版本相容性 / 快速開始                     |
+
+caution
+
+在開始富邦新一代 API 前，您必須完成以下步驟
+
+1. 準備好您的富邦證券帳戶 (若您還未擁有富邦證券帳戶，請點連結【[線上開戶](https://www.fubon.com/securities/open-now/)】)
+2. 申請憑證
+3. API 風險使用聲明書簽署【[線上簽署SOP](https://www.fbs.com.tw/wcm/new_web/operate_manual/operate_manual_01/API-SignSOP_guide.pdf)】+ API 連線測試【[連線測試小幫手](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/API_Sign_Test.zip)】 (Windows)
+
+## 準備好富邦證券帳戶[​](#準備好富邦證券帳戶 "Direct link to 準備好富邦證券帳戶")
+
+若您已有您的富邦證券帳戶請跳過此步驟，未擁有富邦證券帳戶請[立即開戶](https://www.fubon.com/securities/open-now/)
+
+![富邦證券帳號](/TradeAPI/assets/images/prepare_account-792b5d9a17005ebde0e7d7050b37bb5c.png)
+
+## 申請憑證[​](#��申請憑證 "Direct link to 申請憑證")
+
+至[憑證申請、展期](https://www.fbs.com.tw/Certificate/Management/)點選立即執行下載富邦證券憑證e總管(TCEM.exe)申請憑證
+
+![Certificate apply](/TradeAPI/assets/images/ca_navigator-8ddb522e5c70f747eb5a534d53864247.png)
+
+登入完成並且認證後，輸入手機或電子信箱收取OTP驗證
+
+![OTP](/TradeAPI/assets/images/ca_cover-3de617d54b6dfac697be7cae07ea3260.png)
+
+完成申請，憑證將存放於 C:\CAFubon\\(您的身分證字號)，並以您的身份證字號為檔名
+
+![CertLocation](/TradeAPI/assets/images/ca_repo-829d506640c176e4a8fc1b84c13b2908.png)
+
+## API 使用風險暨聲明書簽署及測試[​](#api-使用風險暨聲明書簽署及測試 "Direct link to API 使用風險暨聲明書簽署及測試")
+
+#### 線上簽署[​](#線上簽署 "Direct link to 線上簽署")
+
+依照下方說明連結分別進行API 聲明書簽署、API 連線測試 [線上簽署SOP說明書](https://www.fbs.com.tw/wcm/new_web/operate_manual/operate_manual_01/API-SignSOP_guide.pdf)
+
+[![線上簽署](/TradeAPI/assets/images/signSOP-6ed1317bfe2fb019c87930735dfc0f7d.png)](https://www.fbs.com.tw/wcm/new_web/operate_manual/operate_manual_01/API-SignSOP_guide.pdf)
+
+#### 連線測試[​](#連線測試 "Direct link to 連線測試")
+
+下載使用連線測試程式 (for Windows), 或直接使用新一代 API 進行連線登入 [連線測試小幫手](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/API_Sign_Test.zip)
+
+[![連線測試小幫手](/TradeAPI/assets/images/connection_test-e62eafe09e327f83f55844591ea812af.png)](https://www.fbs.com.tw/TradeAPI_SDK/sample_code/API_Sign_Test.zip)
+
+## 安裝與版本相容性[​](#安裝與版本相容性 "Direct link to 安裝與版本相容性")
+
+請先閱讀[安裝與版本相容性](https://www.fbs.com.tw/TradeAPI/docs/install-compatibility.txt)以確認各語言最低版本與安裝方式，並至[SDK 下載](https://www.fbs.com.tw/TradeAPI/docs/download/download-sdk.txt)取得安裝檔。
+
+## 開始拓展程式交易之旅[​](#開始拓展程式交易之旅 "Direct link to 開始拓展程式交易之旅")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+from fubon_neo.constant import TimeInForce, OrderType, PriceType, MarketType, BSAction
+
+# 載入設定檔與登入
+sdk = FubonSDK()
+
+accounts = sdk.login("您的身分證號", "您的登入密碼", "您的憑證路徑位置", "您的憑證密碼")
+## accounts = sdk.login("您的身分證號", "您的登入密碼", "您的憑證路徑位置")  # 若憑證選用＂預設密碼＂, SDK v1.3.2與較新版本適用
+
+acc  = accounts.data[0]
+
+# 建立委託物件
+order = Order(
+  buy_sell = BSAction.Buy,
+  symbol = "2881",
+  quantity   = 2000,
+  price = "66",
+  market_type = MarketType.Common,
+  price_type  = PriceType.Limit,
+  time_in_force = TimeInForce.ROD,
+  order_type = OrderType.Stock,
+  user_def = "FromPy" # optional field
+)
+
+# 下單
+order_res = sdk.stock.place_order(acc, order)
+print(order_res)
+
+```
+
+恭喜您<!-- -->🎊<!-- -->，完成下單，即可看到系統回覆的結果
+
+```python
+Result {  is_success: True,   message: None,  data : OrderResult{ date: "2023/10/13", seq_no: "00000000015", branch_no: "6460", account: "26", order_no: "bA626", asset_type: 0, market: "TAIEX", market_type: Common, stock_no: "2881", buy_sell: Buy, price_type: Limit, price: 66.0, quantity: 2000, time_in_force: ROD, order_type: Stock, is_pre_order: false, status: 10, after_price_type: Limit, after_price: 66.0, unit: 1000, after_qty: 2000, filled_qty: 0, filled_money: 0, before_qty: 0, before_price: 66.0, user_def: "FromPy", last_time: "16:48:09.247", error_message: None} }
+
+```
+
+```js
+const { FubonSDK, BSAction, TimeInForce, OrderType, PriceType, MarketType } = require('fubon-neo');
+
+// 載入設定檔與登入
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("您的身分證號", "您的登入密碼", "您的憑證路徑", "您的憑證密碼");
+// const accounts = sdk.login("您的身分證號", "您的登入密碼", "您的憑證路徑位置");  // 若憑證選用＂預設密碼＂, SDK v1.3.2與較新版本適用
+
+const acc = accounts.data[0];
+
+// 建立委託物件
+const order = {
+buySell: BSAction.Buy,
+symbol: 2881,
+price: "66",
+quantity: 2000,
+marketType: MarketType.Common,
+priceType: PriceType.Limit,
+timeInForce: TimeInForce.ROD,
+orderType: OrderType.Stock,
+userDef: "fromJs"
+};
+
+// 下單
+sdk.stock.placeOrder(acc,order);
+
+```
+
+恭喜您<!-- -->🎊<!-- --> ，完成下單，即可看到系統回覆的結果
+
+```js
+{ isSuccess: true,  data:{ date : '2023/10/13', seqNo : '00000000016', branchNo : '6460', account : '26', orderNo : 'bA627', assetType : 0, market : 'TAIEX', marketType : 'Common', stockNo : '2881', buySell : 'Buy', priceType : 'Limit', price : 66, quantity : 2000, timeInForce : 'ROD', orderType : 'Stock', isPreOrder : false, status : 10, afterPriceType : 'Limit', afterPrice : 66, unit : 1000, afterQty : 2000, filledQty : 0, filledMoney : 0, beforeQty : 0, beforePrice : 66, userDef : 'FromJS', lastTime : '17:19:06.048' } }
+
+```
+
+```cs
+using FubonNeo.Sdk;
+
+//載入設定檔與登入
+var sdk = new FubonSDK();
+
+var acc_obj = sdk.Login("您的身分證號", "您的登入密碼", "您的憑證路徑" ,"您的憑證密碼");
+/*
+// 若憑證選用＂預設密碼＂, SDK v1.3.2　與較新版本適用
+var acc_obj = sdk.Login("您的身分證號", "您的登入密碼", "您的憑證路徑");
+*/
+
+var acc = acc_obj.data[0];
+
+//建立委託物件
+var order = new Order(
+  BsAction.Buy,
+  "2881",
+  "66",
+  2000,
+  MarketType.Common,
+  PriceType.Limit,
+  TimeInForce.ROD,
+  OrderType.DayTrade,
+  "FromCS"
+);
+
+// 下單
+var order_res = sdk.Stock.PlaceOrder(acc, order);
+Console.WriteLine(order_res);
+
+```
+
+恭喜您<!-- -->🎊<!-- -->，完成下單，即可看到系統回覆的結果
+
+```cs
+{ isSuccess = True, message = , data = { date = 2023/10/13, seqNo = 00000000016, branchNo = 6460, account = 26, orderNo = bA627, assetType = 0, market = TAIEX, marketType = Common, stockNo = 2881, buySell = Buy, priceType = Limit , price = 66, quantity = 2000, timeInForce = ROD, orderType = DayTrade, isPreOrder = False, status = 10, afterPriceType = Limit, afterPrice = 66, unit = 1000, afterQty = 2000, filledQty = 0, filledMoney = 0, beforeQty = 0, beforePrice = 66, userDef = FromC#, lastTime = 17:19:06.048, errorMessage =  } }
+
+```

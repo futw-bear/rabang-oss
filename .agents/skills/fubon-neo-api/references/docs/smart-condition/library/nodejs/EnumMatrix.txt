@@ -1,0 +1,262 @@
+# 參數對照表
+
+## 類別[​](#類別 "Direct link to 類別")
+
+Class
+
+### Condition Object[​](#condition-object "Direct link to Condition Object")
+
+| Parameter    | Type           | Meaning                                                                                                                                 |
+| ------------ | -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| marketType   | TradingType    | [監控類型](#tradingtype) 可選用參數 : `Reference` 自動參考委託物件、`Scheduled` 時間                                                    |
+| symbol       | string         | 股票代號                                                                                                                                |
+| trigger      | TriggerContent | [觸發條件](#triggercontent) 可選用參數 : `BidPrice` 買進價、`AskPrice` 賣出價、`MatchedPrice` 成交價、`TotalQuantity` 總量、`Time` 時間 |
+| triggerValue | string         | 監控條件數值 (若為時間則填入HHMMSS)                                                                                                     |
+| comparison   | Operator       | [比對值](#operator) 可選用參數`GreaterThanOrEqual` 大於等於、`LessThanOrEqual`小於等於 、 `GreaterThan` 大於 、 `LessThan` 小於         |
+
+info
+
+1. 選擇 `Reference`時， trigger 可搭配 `BidPrice` 、`AskPrice` 、`MatchedPrice` 、`TotalQuantity` 、 `Time`，若 trigger 使用 Time，則時間條件達成，且時間範圍內商品有交易產生才觸發
+2. 選擇`Scheduled` 時，symbol需填入空值""，trigger需帶入`Time`，則會使用系統時間判斷，當時間條件達成即觸發
+
+### ConditionOrder Object[​](#conditionorder-object "Direct link to ConditionOrder Object")
+
+| Parameter   | Type                | Meaning                                                                                                                                                                                          |
+| ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| buySell     | BSAction            | [買賣別](#bsaction)                                                                                                                                                                              |
+| symbol      | string              | 股票代號                                                                                                                                                                                         |
+| price       | string              | 委託價格                                                                                                                                                                                         |
+| quantity    | int                 | 委託數量                                                                                                                                                                                         |
+| marketType  | ConditionMarketType | [盤別](#conditionmarkettype) 可選用參數`Common` 整股、`Fixing`定盤、`IntradayOdd` 盤中零股、`Odd` 盤後零股                                                                                       |
+| priceType   | ConditionPriceType  | [價格別](#conditionpricetype) : 可選參數 :`BidPrice` 買進價、 `AskPrice` 賣出價、`MatchedPrice`成交價、`Limit` 限價、`LimitUp` 漲停、`LimitDown` 跌停、`Market` 市價、`Reference` 參考價(平盤價) |
+| timeInForce | TimeInForce         | [委託條件](#timeinforce) 可選用參數為 `ROD`、`FOK`、`IOC`                                                                                                                                        |
+| orderType   | ConditionOrderType  | [委託類別](#conditionordertype) : 可選參數 :`Stock`現貨、`Margin`融資、`Short`融券                                                                                                               |
+
+### TPSLOrder Object[​](#tpslorder-object "Direct link to TPSLOrder Object")
+
+| Parameter          | Type               | Meaning                                                                                                                                                                                          |
+| ------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| timeInForce        | TimeInforce        | [委託條件](#timeinforce) : 可選參數 :`ROD`、`IOC`、`FOK`                                                                                                                                         |
+| priceType          | ConditionPriceType | [價格別](#conditionpricetype) : 可選參數 :`BidPrice` 買進價、 `AskPrice` 賣出價、`MatchedPrice`成交價、`Limit` 限價、`LimitUp` 漲停、`LimitDown` 跌停、`Market` 市價、`Reference` 參考價(平盤價) |
+| orderType          | ConditionOrderType | [委託類別](#conditionordertype) : 可選參數 :`Stock`現貨、`Margin`融資、`Short`融券                                                                                                               |
+| targetPrice        | string             | 停損/停利觸發價                                                                                                                                                                                  |
+| price              | string             | 停損/停利委託價                                                                                                                                                                                  |
+| trigger (optional) | TriggerContent     | 停損/停利[觸發條件](#triggercontent) （詳見表末說明）                                                                                                                                            |
+
+info
+
+`priceType` 若為`limit`時，`price`需填入價格；其餘price填入空字串 **或** 不使用price欄位 (>= ver. 2.2.4)
+
+停損/停利觸發條件
+
+2.2.0 以後版本新增（***2.1.1及以前版本無此欄位***），可設定停損/停利觸發價格別為 1. 成交價（MatchedPrice）；2. 最佳買價（BidPrice）；3. 最佳賣價（AskPrice）
+
+若未設定則預設使用 成交價（MatchedPrice）
+
+### TPSLWrapper Object[​](#tpslwrapper-object "Direct link to TPSLWrapper Object")
+
+| Parameter | Type                                    | Meaning                                                                                           |
+| --------- | --------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| stopSign  | StopSign                                | [停止條件](#stopsign) : 可選用 `Full` 全部成交為止、`Partial`部分成交為止、`UntilEnd`效期結束為止 |
+| tp        | TPSLOrder Object (Optional)             | 停利條件內容                                                                                      |
+| sl        | TPSLOrder Object (Optional)             | 停損條件內容                                                                                      |
+| endDate   | string (Optional : 空值同母單StartDate) | 條件停止日期                                                                                      |
+| intraday  | bool (Optional)                         | 全部成交後日內當沖                                                                                |
+
+日內當沖
+
+使用當沖條件單時，`intraday` 需設定為 `true`
+
+### TrailOrder[​](#trailorder "Direct link to TrailOrder")
+
+| Parameter   | Type               | Meaning                                                                                                                                                                               |
+| ----------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| symbol      | string             | 股票代號                                                                                                                                                                              |
+| price       | string             | 基準價 (Note. 只可輸入至多小數點後兩位，若超出將造成系統洗價失敗)                                                                                                                     |
+| direction   | Direction          | [方向](#direction) : 可選用 `Up` 上漲、`Down` 下跌                                                                                                                                    |
+| percentage  | int                | 上漲 / 下跌 % 數                                                                                                                                                                      |
+| buysell     | BSAction           | 買賣別 : 可選用 `Buy` 買進 、`Sell` 賣出                                                                                                                                              |
+| quantity    | int                | 委託股數                                                                                                                                                                              |
+| PriceType   | ConditionPriceType | [價格類別](#conditionpricetype) : 可選用 `BidPrice` 買進價、`AskPrice` 賣出價、`MatchedPrice` 成交價、`Market` 市價、`LimitUp` 漲停價、`LimitDown` 跌停價、`Reference` 參考價(平盤價) |
+| diff        | int                | 買賣價格檔數 (根據 priceType 加減檔數) ，正值為向上加檔數、負值為向下加檔數                                                                                                           |
+| timeInForce | TimeInForce        | [委託條件](#timeinforce) 可選用參數為 `ROD`、`FOK`、`IOC`                                                                                                                             |
+| orderType   | ConditionOrderType | [委託類別](#conditionordertype) 可選用參數為 `Stock`現股、`Margin`融資、`Short`融券                                                                                                   |
+
+### SplitDescription[​](#splitdescription "Direct link to SplitDescription")
+
+| Parameter      | Type              | Meaning                                                                                                                                                                                                                                                                                                                                                                                                      |
+| -------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| method         | SliceType         | [Slice Condition](#slicetype) : 可選用 :<br />`Type1` 從 `startTime` 開始，每隔幾秒送一筆，總共`totalQuantity`，每筆送 `singleQuantity`<br />`Type2` 從 `startTime` 開始到 `endTime` 結束，每隔 `interval` 秒送一筆，總共 `totalQuantity`，剩餘張數加總至最後一筆<br />`Type3` 從 `startTime` 開始到 `endTime` 結束，每隔 `interval` 秒送一筆，總共 `totalQuantity`，剩餘張數從最後一筆往前分配.<br /><br /> |
+| interval       | int               | 下單間隔時間 (秒)                                                                                                                                                                                                                                                                                                                                                                                            |
+| singleQuantity | int               | 單筆下單量 (股數)                                                                                                                                                                                                                                                                                                                                                                                            |
+| totalQuantity  | int (Optional)    | 總共下單量 (股數)                                                                                                                                                                                                                                                                                                                                                                                            |
+| startTime      | string            | 開始時間                                                                                                                                                                                                                                                                                                                                                                                                     |
+| endTime        | string (Optional) | 結束時間                                                                                                                                                                                                                                                                                                                                                                                                     |
+
+caution
+
+請注意，總共下單量需大於單筆下單量。
+
+### ConditionOrderResult[​](#conditionorderresult "Direct link to ConditionOrderResult")
+
+| Parameter | Type   | Meaning  |
+| --------- | ------ | -------- |
+| guid      | string | 條件單號 |
+
+### ConditionDayTrade Object[​](#conditiondaytrade-object "Direct link to ConditionDayTrade Object")
+
+| Parameter       | Type                                      | Meaning                                            |
+| --------------- | ----------------------------------------- | -------------------------------------------------- |
+| dayTradeEndTime | string                                    | 收盤前沖銷時間，格式 "HHMMSS" (例 "131500")        |
+| autoCancel      | bool                                      | 洗價結束後是否刪除已觸發委託                       |
+| price           | string                                    | 委託價格 (若無指定價格，例如市價單，請填空字串 "") |
+| priceType       | [ConditionPriceType](#conditionpricetype) | 下單價格類型                                       |
+
+關於收盤前沖銷時間
+
+可設定區間為 130100 \~ 132000
+
+## Constants ( 欄位對應數值 )[​](#constants--欄位對應數值- "Direct link to Constants ( 欄位對應數值 )")
+
+### BsAction[​](#bsaction "Direct link to BsAction")
+
+買賣別
+
+| Name | Meaning |
+| ---- | ------- |
+| Buy  | 買      |
+| Sell | 賣      |
+
+### ConditionMarketType[​](#conditionmarkettype "Direct link to ConditionMarketType")
+
+盤別
+
+| Name        | Meaning  |
+| ----------- | -------- |
+| Common      | 一般盤   |
+| Fixing      | 定盤     |
+| IntradayOdd | 盤中零股 |
+| Odd         | 盤後零股 |
+
+### TradingType[​](#tradingtype "Direct link to TradingType")
+
+監控類型
+
+| Name      | Meaning          |
+| --------- | ---------------- |
+| Reference | 自動參考委託物件 |
+| Scheduled | 時間             |
+
+### TriggerContent[​](#triggercontent "Direct link to TriggerContent")
+
+觸發條件
+
+| Name          | Meaning |
+| ------------- | ------- |
+| BidPrice      | 買進價  |
+| AskPrice      | 賣出價  |
+| MatchedPrice  | 成交價  |
+| TotalQuantity | 總量    |
+| Time          | 時間    |
+
+### Operator[​](#operator "Direct link to Operator")
+
+| Name               | Meaning  |
+| ------------------ | -------- |
+| GreaterThanOrEqual | 大於等於 |
+| LessThanOrEqual    | 小於等於 |
+| GreaterThan        | 大於     |
+| LessThan           | 小於     |
+
+### StopSign[​](#stopsign "Direct link to StopSign")
+
+| Name     | Meaning      |
+| -------- | ------------ |
+| Full     | 全部成交為止 |
+| Partial  | 部分成交為止 |
+| UntilEnd | 效期結束為止 |
+
+### TimeInForce[​](#timeinforce "Direct link to TimeInForce")
+
+委託條件 (TimeInForce)
+
+| Name | Meaning                               |
+| ---- | ------------------------------------- |
+| ROD  | 當日有效(Rest of Day)                 |
+| FOK  | 全部成交否則取消(Fill-or-Kill)        |
+| IOC  | 立即成交否則取消(Immediate-or-Cancel) |
+
+### ConditionPriceType[​](#conditionpricetype "Direct link to ConditionPriceType")
+
+價格類型 (ConditionPriceType)
+
+| Name         | Meaning        |
+| ------------ | -------------- |
+| Limit        | 限價           |
+| BidPrice     | 買進價         |
+| AskPrice     | 賣出價         |
+| Market       | 市價           |
+| MatchedPrice | 成交價         |
+| LimitUp      | 漲停價         |
+| LimitDown    | 跌停價         |
+| Reference    | 參考價(平盤價) |
+
+### ConditionOrderType[​](#conditionordertype "Direct link to ConditionOrderType")
+
+委託類型 (orderType)
+
+| Name   | Meaning |
+| ------ | ------- |
+| Stock  | 現貨    |
+| Margin | 融資    |
+| Short  | 融券    |
+
+### Direction[​](#direction "Direct link to Direction")
+
+移動鎖利上漲/下跌追蹤 (direction)
+
+| Name | Meaning |
+| ---- | ------- |
+| Up   | 上漲    |
+| Down | 下跌    |
+
+### SliceType[​](#slicetype "Direct link to SliceType")
+
+分單型態 (SliceType)
+
+| Name  | Meaning                                                          |
+| ----- | ---------------------------------------------------------------- |
+| Type1 | 從開始時間，每隔幾秒送一筆，總共送N筆，每筆送M張                 |
+| Type2 | 從開始到結束，每隔X秒送一筆，總共N張，剩餘張數加總至最後一筆     |
+| Type3 | 從開始到結束，每隔X秒送一筆，總共N張，剩餘張數從最後一筆往前分配 |
+
+### ConditionStatus[​](#conditionstatus "Direct link to ConditionStatus")
+
+條件單狀態 (ConditionStatus)
+
+| Name   | Meaning      |
+| ------ | ------------ |
+| Type1  | 今日相關查詢 |
+| Type2  | 尚有效單     |
+| Type3  | 條件比對中   |
+| Type4  | 委託處理中   |
+| Type5  | 委託成功     |
+| Type6  | 已通知       |
+| Type7  | 委託失敗     |
+| Type8  | 已有成交     |
+| Type9  | 刪除成功     |
+| Type10 | 異常         |
+| Type11 | 失效         |
+
+### HistoryStatus[​](#historystatus "Direct link to HistoryStatus")
+
+歷史條件單狀態 (HistoryStatus)
+
+| Name  | Meaning                          |
+| ----- | -------------------------------- |
+| Type1 | 所有條件單 ( 不包含已刪除、失效) |
+| Type2 | 選擇期間內全部成交單             |
+| Type3 | 選擇期間內部分成交單             |
+| Type4 | 選擇期間刪除單                   |
+| Type5 | 選擇期間失效單                   |
+| Type6 | 選擇期間內已觸發記錄             |

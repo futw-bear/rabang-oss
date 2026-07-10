@@ -1,0 +1,92 @@
+# 移動鎖利條件單
+
+trail\_profit
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數        | 類別                                                                                                    | 說明                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| account     | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#account)               | 帳號                                                                             |
+| start\_date | string                                                                                                  | 條件開始監控時間                                                                 |
+| end\_date   | string                                                                                                  | 條件結束監控時間                                                                 |
+| stop\_sign  | [StopSign](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/EnumMatrix.txt#stopsign)     | 條件停止條件 :`Full` 全部成交為止、`Partial`部分成交為止、`UntilEnd`效期結束為止 |
+| TrailOrder  | [TrailOrder](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/cpp/EnumMatrix.txt#trailorder) | 分單條件                                                                         |
+
+caution
+
+TrailOrder 內之 基準價 (price) 只可輸入至多小數點後兩位，若超出將造成系統洗價失敗
+
+info
+
+當前股票價格價觸及觸發價時（以基準價計算之漲跌 % 數） 即下單
+
+**例：** 若初始基準價設 100, 向下 5% 下單停損/利，初始觸發價為 95，若價格無上漲超過 100（即基準價無調整）， 則市場價為 95 時將觸發條件下單
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別                | 說明                             |
+| ----------- | ------------------- | -------------------------------- |
+| is\_success | bool                | 是否成功                         |
+| data        | Object              | 條件單回傳資訊                   |
+| message     | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionOrderResult 欄位[​](#委託資訊-conditionorderresult-欄位 "Direct link to 委託資訊 ConditionOrderResult 欄位")
+
+Return type : Object
+
+| 參數 | 類別   | 說明     |
+| ---- | ------ | -------- |
+| guid | string | 條件單號 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cpp
+// 設計條件內容
+TrailOrder trail = TrailOrder{
+    "2330",
+    "1000",
+    Direction::UP,
+    5,
+    BsAction::BUY,
+    2000,
+    ConditionPriceType::MATCHED_PRICE,
+    5,
+    TimeInForce::ROD,
+    ConditionOrderType::STOCK
+};
+
+
+auto trail_order = sdk->stock->trail_profit(target_account, "20250606","20250606", StopSign::FULL, trail);
+
+if (!trail_order.is_success) {
+    std::cout << "send trail_order result failed reason: "
+        << (trail_order.message.has_value() ? trail_order.message.value() : "No message")
+        << std::endl;
+}
+else {
+    if (trail_order.data.has_value()) {
+        const auto& send = trail_order.data.value();
+        std::cout << send << std::endl;
+    }
+    else {
+        std::cout << "send trail_order success but no data returned." << std::endl;
+    }
+}
+
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cpp
+
+{
+    isSuccess = true,
+    message = ,
+    data = ConditionOrderResult {
+            guid = 44150047-8977-40b1-953c-ce2XXXXXX,
+        }
+}
+
+
+```

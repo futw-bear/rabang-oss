@@ -1,0 +1,156 @@
+# 非阻塞下單
+
+首先，我們先理解阻塞與非阻塞的概念， 阻塞（Block）和非阻塞（Unblock）是用來描述事件、操作或通信方式的兩種不同方式，以下是它們的基本概念和區別：
+
+### 阻塞（Block）：[​](#阻塞block "Direct link to 阻塞（Block）：")
+
+阻塞操作是指事件或操作按照預定的順序進行，並且一個操作完成後，才會回覆結果。
+
+![sync](/TradeAPI/assets/images/normal-24db51cb3aa3d4c74d40c79d4ab38ac8.png)
+
+### 非阻塞（Unblock）：[​](#非阻塞unblock "Direct link to 非阻塞（Unblock）：")
+
+非阻塞操作是指事件或操作不必按照固定的順序進行，可以並行執行，且一個操作不需要等待另一個操作的完成。 當您發出Request後就直接回覆，即為非阻塞。
+
+![async](/TradeAPI/assets/images/async-f1632167c6d8f31259864d28445e3ffc.png)
+
+### 使用阻塞機制下單[​](#使用阻塞機制下單 "Direct link to 使用阻塞機制下單")
+
+委託後，回覆的Order Response即會帶回完整的資料內容。
+
+* Python
+* Node.js
+* C#
+
+```py
+#建立委託單內容
+order = FutOptOrder(
+    buy_sell = BSAction.Buy,
+    symbol = "TXFD4",
+    price = "20000",
+    lot = 1,
+    market_type = FutOptMarketType.Future,
+    price_type = FutOptPriceType.Limit,
+    time_in_force = TimeInForce.ROD,
+    order_type = FutOptOrderType.Auto,
+    user_def = "FromPy" # optional field
+) 
+
+sdk.futopt.place_order(accounts.data[0], order)  #下單委託
+
+#或採用
+#sdk.futopt.place_order(accounts.data[0], order, False)
+
+```
+
+```js
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "TXFD4",
+  price: "20100",
+  lot: 1,
+  marketType: FutOptMarketType.Future,
+  priceType: FutOptPriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: FutureOrderType.Auto,
+  userDef: "fromJs"
+};
+
+sdk.futopt.placeOrder(accounts.data[0], order); 
+
+// 或採用
+//sdk.futopt.placeOrder(accounts.data[0], order, false);
+
+```
+
+```cs
+var order = new FutOptOrder(
+    BsAction.Buy,
+    "TXFD4",
+    null,
+    null,
+    "20000",
+    1,
+    FutOptMarketType.Future,
+    FutOptPriceType.Limit,
+    TimeInForce.Rod,
+    FutureOrderType.Auto,
+    null
+);
+
+sdk.FutOpt.PlaceOrder(accounts.data[0] ,order); // 使用阻塞委託下單
+// 或採用
+//sdk.futopt.placeOrder(accounts.data[0], order, false);
+
+```
+
+### 使用非阻塞機制下單[​](#使用非阻塞機制下單 "Direct link to 使用非阻塞機制下單")
+
+委託後，回覆的Order Response可能會少帶出委託書號···等資訊。
+
+* Python
+* Node.js
+* C#
+
+```py
+#建立委託單內容
+order = FutOptOrder(
+    buy_sell = BSAction.Buy,
+    symbol = "TXFD4",
+    price = "20000",
+    lot = 1,
+    market_type = FutOptMarketType.Future,
+    price_type = FutOptPriceType.Limit,
+    time_in_force = TimeInForce.ROD,
+    order_type = FutOptOrderType.Auto,
+    user_def = "FromPy" # optional field
+) 
+
+sdk.futopt.place_order(accounts.data[0], order, True)  #下單委託
+
+```
+
+```js
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "TXFD4",
+  price: "20100",
+  lot: 1,
+  marketType: FutOptMarketType.Future,
+  priceType: FutOptPriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: FutureOrderType.Auto,
+  userDef: "fromJs"
+};
+
+sdk.futopt.placeOrder(accounts.data[0], order, true);
+
+```
+
+```cs
+var order = new FutOptOrder(
+    BsAction.Buy,
+    "TXFD4",
+    null,     // 複式單第二隻腳買賣別
+    null,     // 複式單第二隻腳商品
+    "20000", 
+    1,
+    FutOptMarketType.Future,
+    FutOptPriceType.Limit,
+    TimeInForce.Rod,
+    FutureOrderType.Auto,
+    null
+);
+
+sdk.FutOpt.PlaceOrder(accounts.data[0] ,order, true); // 使用非阻塞委託下單
+
+
+
+```
+
+以下為支援非阻塞委託的函數
+
+* PlaceOrder - 下單委託
+* ModifyPrice - 修改委託價格
+* ModifyLot - 修改委託口數
+* CancelOrder - 取消委託

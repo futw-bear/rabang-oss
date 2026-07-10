@@ -1,0 +1,62 @@
+# 取得批次委託列表
+
+batch\_order\_lists
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                                | 說明 |
+| ------- | --------------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別   | 說明                               |
+| ----------- | ------ | ---------------------------------- |
+| is\_success | bool   | 是否成功                           |
+| data        | List   | 回傳批次單資訊                     |
+| message     | string | 當is\_success = false 回傳錯誤訊息 |
+
+### 批次單 BatchResult 欄位[​](#批次單-batchresult-欄位 "Direct link to 批次單 BatchResult 欄位")
+
+Return type : Object
+
+| 參數           | 類別   | 說明                                                                           |
+| -------------- | ------ | ------------------------------------------------------------------------------ |
+| function\_type | int    | 功能別 : `0` 新單 、`10` 新單執行、 `15` 改價、 `20` 改量、`30`刪單 、`90`失敗 |
+| date           | string | 交易日期                                                                       |
+| branch\_no     | string | 分公司代號                                                                     |
+| account        | string | 帳號                                                                           |
+| batch\_seq\_no | string | 批次單流水序號                                                                 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+sdk.futopt.batch_order_lists(account)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+Result {
+    is_success: True,
+    message: None,
+    data : [BatchResult{
+                function_type: 0,    # 功能種類 (int)
+                date: "2023/10/16",  # 交易日期 (string)
+                branch_no: "15901",  # 分公司代號 (string)
+                account: "1234567",      # 帳號 (string)
+                batch_seq_no: "11EE6BC3B85670DE8000000C29304663" # 批次單流水序號 (string)
+            },
+            BatchResult{
+                    function_type: 15,   # 功能種類 (int)
+                    date: "2023/10/16",  # 交易日期 (string)
+                    branch_no: "15901",  # 分公司代號 (string)
+                    account: "1234567",      # 帳號 (string)
+                    batch_seq_no: "11EE6BC3E189F02A8000000C29304663" # 批次單流水序號 (string)
+            },
+            ...
+    ]
+} 
+
+```

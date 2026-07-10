@@ -1,0 +1,136 @@
+# 建立委託單
+
+PlaceOrder
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                     | 說明           |
+| ------- | ---------------------------------------------------------------------------------------- | -------------- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#account) | 帳號           |
+| order   | [Order](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#order)     | 委託內容       |
+| unblock | \*bool (optional) (default = false)                                                      | 是否採用非阻塞 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別          | 說明                              |
+| --------- | ------------- | --------------------------------- |
+| IsSuccess | bool          | 是否成功                          |
+| Data      | \*OrderResult | 回傳委託資訊                      |
+| Message   | \*string      | 當 IsSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 OrderResult 欄位[​](#委託資訊-orderresult-欄位 "Direct link to 委託資訊 OrderResult 欄位")
+
+Return type : Object
+
+| 參數           | 類別          | 說明                                                                                                                                                                                 |
+| -------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| FunctionType   | \*int64       | 功能別 : `0` 新單 、 `10` 新單執行 、 `15` 改價 、 `20` 改量 、 `30` 刪單 、 `90` 失敗                                                                                               |
+| Date           | \*string      | 交易日期                                                                                                                                                                             |
+| SeqNo          | \*string      | 委託單流水序號                                                                                                                                                                       |
+| BranchNo       | \*string      | 分公司代號                                                                                                                                                                           |
+| Account        | \*string      | 帳號                                                                                                                                                                                 |
+| OrderNo        | \*string      | 委託書號                                                                                                                                                                             |
+| AssetType      | \*int64       | 資產類別 : `0` 證券                                                                                                                                                                  |
+| Market         | \*string      | 市場類型 : `TAIEX` 上市股票 、 `TAISDAQ` 上櫃股票 、 `TAIEMG` 興櫃股票                                                                                                               |
+| MarketType     | MarketType    | 盤別種類 : `MarketTypeCommon` 整股 、 `MarketTypeFixing` 定盤 、 `MarketTypeIntradayOdd` 盤中零股 、 `MarketTypeOdd` 盤後零股 、 `MarketTypeEmg` 興櫃 、 `MarketTypeEmgOdd` 興櫃零股 |
+| StockNo        | \*string      | 股票代號                                                                                                                                                                             |
+| BuySell        | \*BsAction    | 買賣別 : `BsActionBuy` 買 、 `BsActionSell` 賣                                                                                                                                       |
+| PriceType      | \*PriceType   | 有效委託價格別 : `PriceTypeLimit` 限價 、 `PriceTypeLimitUp` 漲停 、 `PriceTypeLimitDown` 跌停 、 `PriceTypeMarket` 市價 、 `PriceTypeReference` 參考價                              |
+| Price          | \*string      | 價格                                                                                                                                                                                 |
+| Quantity       | \*int64       | 原始委託股數                                                                                                                                                                         |
+| TimeInForce    | \*TimeInForce | 委託條件別 : `TimeInForceRod` ROD 、 `TimeInForceFok` FOK 、 `TimeInForceIoc` IOC                                                                                                    |
+| OrderType      | \*OrderType   | 委託單類型 : `OrderTypeStock` 現股 、 `OrderTypeMargin` 融資 、 `OrderTypeShort` 融券 、 `OrderTypeDayTrade` 現股當沖 、 `OrderTypeSbl` 借券                                         |
+| IsPreOrder     | \*bool        | 是否為預約單                                                                                                                                                                         |
+| Status         | \*int64       | 委託單狀態 : `0` 預約單 、 `4` 系統將委託送往後台 、 `9` 連線逾時 、`10` 委託成功 、 `30` 未成交刪單成功 、 `40` 部分成交,剩餘取消 、 `50` 完全成交 、 `90` 失敗                     |
+| AfterPriceType | \*PriceType   | 有效委託價格別 : `PriceTypeLimit` 限價 、 `PriceTypeLimitUp` 漲停 、 `PriceTypeLimitDown` 跌停 、 `PriceTypeMarket` 市價 、 `PriceTypeReference` 參考價                              |
+| AfterPrice     | \*string      | 有效委託價格                                                                                                                                                                         |
+| Unit           | \*int64       | 單位數                                                                                                                                                                               |
+| AfterQty       | \*int64       | 有效委託股數（包含已成交部分）                                                                                                                                                       |
+| FilledQty      | \*int64       | 成交股數                                                                                                                                                                             |
+| FilledMoney    | \*int64       | 成交價金                                                                                                                                                                             |
+| BeforeQty      | \*int64       | 改單前有效量                                                                                                                                                                         |
+| BeforePrice    | \*string      | 改單前有效價                                                                                                                                                                         |
+| UserDef        | \*string      | 自訂欄位                                                                                                                                                                             |
+| LastTime       | \*string      | 最後異動時間                                                                                                                                                                         |
+| Details        | \*string      | 委託歷程 (查詢 OrderResultDetail 或 OrderHistory 才有值)                                                                                                                             |
+| ErrorMessage   | \*string      | 錯誤訊息                                                                                                                                                                             |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```go
+package main
+
+import (
+    "fmt"
+    "fubon"
+)
+
+func main() {
+    // 初始化 SDK
+    sdk := fubon.NewSDK()
+    
+	orderPrice := "66.1"
+	order := fubon.Order{
+		BuySell:     fubon.BsActionBuy,
+		Symbol:      "2881",
+		Price:       &orderPrice,
+		Quantity:    1000,
+		MarketType:  fubon.MarketTypeCommon,
+		PriceType:   fubon.PriceTypeLimit,
+		TimeInForce: fubon.TimeInForceRod,
+		OrderType:   fubon.OrderTypeStock,
+	}
+
+	unblock := false
+	result, err := sdk.Stock.PlaceOrder(account, order, &unblock)
+	if err != nil {
+		fmt.Printf("❌ Place Order Format/Parse Error: %v (Type: %T)\n", err, err)
+	} else {
+		fmt.Printf("✓ Order Placed", *result.IsSuccess)
+	}
+}
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```go
+// OrderResult 結構
+Result{
+    IsSuccess: true,
+    Message:   nil,
+    Data: &OrderResult{
+        FunctionType:   0,                    // 功能別
+        Date:           "2023/10/13",         // 交易日期
+        SeqNo:          "00000000007",        // 委託單流水序號
+        BranchNo:       "6460",               // 分公司代號
+        Account:        "26",                 // 帳號
+        OrderNo:        "bA619",              // 委託書號
+        AssetType:      0,                    // 資產類型
+        Market:         "TAIEX",              // 市場類型
+        MarketType:     MarketTypeCommon,     // 盤別種類
+        StockNo:        "2888",               // 股票代號
+        BuySell:        BsActionBuy,          // 買賣別
+        PriceType:      PriceTypeLimit,       // 原始委託價格別
+        Price:          "9.1",                // 價格
+        Quantity:       3000,                 // 原始委託股數
+        TimeInForce:    TimeInForceRod,       // 委託條件別
+        OrderType:      OrderTypeStock,       // 委託單類型
+        IsPreOrder:     false,                // 是否為預約單
+        Status:         10,                   // 委託單狀態
+        AfterPriceType: PriceTypeLimit,       // 有效委託價格別
+        AfterPrice:     "9.1",                // 有效委託價格
+        Unit:           1000,                 // 單位數
+        AfterQty:       3000,                 // 有效委託股數
+        FilledQty:      0,                    // 成交股數
+        FilledMoney:    0,                    // 成交價金
+        BeforeQty:      0,                    // 改單前有效量
+        BeforePrice:    "9.1",                // 改單前有效價
+        UserDef:        "",                   // 自訂欄位
+        LastTime:       "12:10:12.546",       // 最後異動時間
+        Details:        nil,                  // 委託歷程
+        ErrorMessage:   "",                   // 錯誤訊息
+    },
+}
+
+```

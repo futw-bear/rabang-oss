@@ -1,0 +1,111 @@
+# 版本升級指南
+
+本文件將引導您將現有的Fubon Neo API v1.0.4 版本升級至的 v1.3.1 以後版本。
+
+## 主要差異[​](#主要差異 "Direct link to 主要差異")
+
+### C# 主動回報訂閱[​](#c-主動回報訂閱 "Direct link to C# 主動回報訂閱")
+
+原先v1.0.4訂閱方法
+
+```cs
+public class MyCallback : Callback
+{
+    public string code ="";
+    public string response = "";
+
+    //Callback to receive order data
+    public void OnOrder(string code, OrderResult data)
+    {
+        if(data != null)
+        {
+          response = data.ToString();
+          Console.WriteLine("On Order" + response);
+        }
+
+    }
+
+    //Callback to receive Modified data
+    public void OnOrderChanged(string code, OrderResult data)
+    {
+        if(data != null)
+        {
+          response = data.ToString();
+          Console.WriteLine(code);
+          Console.WriteLine("Modified" + response);
+        }
+    }
+
+    //Callback to receive Filled data
+    public void OnFilled(string code, FilledData data)
+    {
+        if(data != null)
+        {
+          response = data.ToString();
+
+          Console.WriteLine(code);
+          Console.WriteLine("Filled" + response);
+        }
+
+    }
+
+    //Callback to receive Event data
+    public void OnEvent(String code, String data)
+    {
+        response = data.ToString();
+        Console.WriteLine(code);
+        Console.WriteLine("Event" + response);
+    }
+}
+
+var callback = new MyCallback();
+sdk.RegisterCallback(callback);
+
+```
+
+## 新的訂閱方法[​](#新的訂閱方法 "Direct link to 新的訂閱方法")
+
+此次改版使用新的訂閱方法，透過以下方式訂閱， 新的方法，可依照想訂閱的類別再進行訂閱即可，不需每個方法都實作
+
+```cs
+
+        sdk.OnEvent += (code, msg) =>
+        {
+            Console.WriteLine(code + msg );
+        };
+
+        // 證券
+
+        sdk.OnOrder += (code, ordeResult) =>
+        {
+          Console.WriteLine(code + ordeResult.ToString());
+        };
+
+        sdk.OnOrderChanged += (code, ordeResult) =>
+        {
+          Console.WriteLine(code + ordeResult.ToString());
+        };
+
+        sdk.OnFilled += (code, filledData) =>
+        {
+          Console.WriteLine(code + filledData.ToString());
+        };
+
+        // 期貨
+
+        sdk.OnFutoptOrder += (code, FutOptOrderResult) =>
+        {
+          Console.WriteLine(code + FutOptOrderResult.ToString());
+        };
+
+        sdk.OnFutoptOrderChanged += (code, FutOptOrderResult) =>
+        {
+          Console.WriteLine(code + FutOptOrderResult.ToString());
+        };
+
+        sdk.OnFutoptFilled += (code, FutOptFilledData) =>
+        {
+          Console.WriteLine(code + FutOptFilledData.ToString());
+        };
+
+```
