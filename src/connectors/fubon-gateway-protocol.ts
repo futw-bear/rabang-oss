@@ -9,6 +9,7 @@ interface BaseFubonCredentials {
   personalId: string;
   certPath: string;
   certPassword: string;
+  testEnvironment?: boolean;
 }
 
 export interface FubonPasswordCredentials extends BaseFubonCredentials {

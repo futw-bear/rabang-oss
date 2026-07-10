@@ -10,6 +10,8 @@ import {
 let sdk: FubonSDK | undefined;
 let accounts: Account[] = [];
 
+const TEST_ENVIRONMENT_URL = "wss://neoapitest.fbs.com.tw/TASP/XCPXWS";
+
 process.on("message", (message: unknown) => {
   if (!isFubonGatewayRequest(message)) {
     return;
@@ -42,7 +44,9 @@ function handleRequest(request: AnyFubonGatewayRequest): void {
 
 function login(credentials: FubonCredentials): { accounts: Account[] } {
   logout();
-  sdk = new FubonSDK();
+  sdk = credentials.testEnvironment
+    ? new FubonSDK(30, 2, TEST_ENVIRONMENT_URL)
+    : new FubonSDK();
 
   const result =
     credentials.method === "password"

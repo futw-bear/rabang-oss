@@ -15,6 +15,7 @@ describe("loadFubonCredentials", () => {
       password: "password",
       certPath: "/cert.pfx",
       certPassword: "personal-id",
+      testEnvironment: false,
     });
   });
 
@@ -32,6 +33,7 @@ describe("loadFubonCredentials", () => {
       apiKey: "api-key",
       certPath: "/cert.pfx",
       certPassword: "cert-password",
+      testEnvironment: false,
     });
   });
 
@@ -44,6 +46,53 @@ describe("loadFubonCredentials", () => {
         FUBON_CERT_PATH: "/cert.pfx",
       }),
     ).toThrow("Set either FUBON_PASSWORD or FUBON_API_KEY, but not both");
+  });
+
+  test("enables the test environment only when FUBON_TESTENV is 1", () => {
+    const baseEnvironment = {
+      FUBON_PERSONAL_ID: "personal-id",
+      FUBON_PASSWORD: "password",
+      FUBON_CERT_PATH: "/cert.pfx",
+    };
+
+    expect(
+      loadFubonCredentials({ ...baseEnvironment, FUBON_TESTENV: "1" })
+        .testEnvironment,
+    ).toBe(true);
+    expect(
+      loadFubonCredentials({ ...baseEnvironment, FUBON_TESTENV: "true" })
+        .testEnvironment,
+    ).toBe(false);
+  });
+
+  test("uses the bundled test credentials when no login values are supplied", () => {
+    const credentials = loadFubonCredentials({ FUBON_TESTENV: "1" });
+
+    expect(credentials.method).toBe("password");
+
+    if (credentials.method !== "password") {
+      throw new Error("Expected password credentials");
+    }
+
+    expect(credentials.testEnvironment).toBe(true);
+    expect(credentials.personalId).toBeTruthy();
+    expect(credentials.password).toBeTruthy();
+    expect(credentials.certPath).toEndWith(".pfx");
+    expect(credentials.certPassword).toBeTruthy();
+  });
+
+  test("ignores all externally supplied Fubon credentials in the test environment", () => {
+    const bundledCredentials = loadFubonCredentials({ FUBON_TESTENV: "1" });
+    const suppliedCredentials = loadFubonCredentials({
+      FUBON_TESTENV: "1",
+      FUBON_PERSONAL_ID: "override-id",
+      FUBON_API_KEY: "override-api-key",
+      FUBON_PASSWORD: "override-password",
+      FUBON_CERT_PATH: "/override.pfx",
+      FUBON_CERT_PASSWORD: "override-cert-password",
+    });
+
+    expect(suppliedCredentials).toEqual(bundledCredentials);
   });
 });
 
