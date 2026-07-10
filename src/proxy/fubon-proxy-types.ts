@@ -16,6 +16,13 @@ export interface FubonProxyInvocation {
   arguments: unknown[];
 }
 
+export type MarketDataWebSocketMode = "speed" | "normal";
+
+export interface MarketDataWebSocketMessage {
+  id: string;
+  message: string;
+}
+
 export interface FubonProxyInvoker {
   readonly status: "attempting" | "connected";
   invokeProxy(invocation: FubonProxyInvocation): Promise<unknown>;

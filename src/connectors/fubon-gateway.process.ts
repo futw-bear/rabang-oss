@@ -1,4 +1,4 @@
-import { FubonSDK, type Account } from "fubon-neo";
+import { FubonSDK, Mode, type Account } from "fubon-neo";
 import {
   isFubonGatewayRequest,
   type AnyFubonGatewayRequest,
@@ -7,9 +7,11 @@ import {
   type FubonGatewayResponse,
 } from "./fubon-gateway-protocol.ts";
 import type { FubonProxyTarget } from "../proxy/fubon-proxy-types.ts";
+import type { MarketDataWebSocketMode } from "../proxy/fubon-proxy-types.ts";
 
 let sdk: FubonSDK | undefined;
 let accounts: Account[] = [];
+const marketDataWebSockets = new Map<string, MarketDataWebSocketSession>();
 
 const TEST_ENVIRONMENT_URL = "wss://neoapitest.fbs.com.tw/TASP/XCPXWS";
 
@@ -45,6 +47,21 @@ async function handleRequest(request: AnyFubonGatewayRequest): Promise<void> {
             request.payload.arguments,
           ),
         );
+        return;
+      case "openMarketDataWebSocket":
+        await openMarketDataWebSocket(request.payload.id, request.payload.mode);
+        sendSuccess(request.id, {});
+        return;
+      case "sendMarketDataWebSocket":
+        await sendMarketDataWebSocket(
+          request.payload.id,
+          request.payload.message,
+        );
+        sendSuccess(request.id, {});
+        return;
+      case "closeMarketDataWebSocket":
+        closeMarketDataWebSocket(request.payload.id);
+        sendSuccess(request.id, {});
         return;
     }
   } catch (error) {
@@ -154,6 +171,8 @@ function readProperty(value: unknown, property: string): unknown {
 }
 
 function logout(): boolean {
+  closeAllMarketDataWebSockets();
+
   if (!sdk) {
     accounts = [];
     return true;
@@ -164,6 +183,154 @@ function logout(): boolean {
   sdk = undefined;
   accounts = [];
   return success;
+}
+
+interface MarketDataWebSocketClient {
+  connect(): Promise<unknown>;
+  disconnect(): void;
+  on(event: "message", listener: (message: unknown) => void): void;
+  off(event: "message", listener: (message: unknown) => void): void;
+  subscribe(params: { channel: string; [key: string]: unknown }): void;
+  unsubscribe(params: { id?: string; ids?: string[] }): void;
+  ping(params: { state?: unknown }): void;
+  subscriptions(): void;
+}
+
+interface MarketDataWebSocketSession {
+  client: MarketDataWebSocketClient;
+  listener: (message: unknown) => void;
+  ready: Promise<unknown>;
+}
+
+async function openMarketDataWebSocket(
+  id: string,
+  mode: MarketDataWebSocketMode,
+): Promise<void> {
+  ensureConnected();
+
+  if (!sdk) {
+    throw new Error("Fubon SDK is not connected");
+  }
+
+  if (marketDataWebSockets.size >= 5) {
+    throw new Error("Fubon market data WebSocket connection limit reached");
+  }
+
+  sdk.initRealtime(mode === "speed" ? Mode.Speed : Mode.Normal);
+  const client = sdk.marketdata.webSocketClient.stock as MarketDataWebSocketClient;
+  const listener = (message: unknown) => {
+    const event: FubonGatewayEvent = {
+      type: "event",
+      event: "marketDataWebSocket",
+      data: { id, message: String(message) },
+    };
+    process.send?.(event);
+  };
+  client.on("message", listener);
+
+  const session: MarketDataWebSocketSession = {
+    client,
+    listener,
+    ready: client.connect(),
+  };
+  marketDataWebSockets.set(id, session);
+
+  try {
+    await session.ready;
+  } catch (error) {
+    closeMarketDataWebSocket(id);
+    throw error;
+  }
+}
+
+async function sendMarketDataWebSocket(
+  id: string,
+  rawMessage: string,
+): Promise<void> {
+  const session = marketDataWebSockets.get(id);
+  if (!session) {
+    throw new Error("Fubon market data WebSocket is not connected");
+  }
+
+  await session.ready;
+  const message = parseMarketDataWebSocketCommand(rawMessage);
+
+  switch (message.event) {
+    case "subscribe":
+      session.client.subscribe(message.data);
+      return;
+    case "unsubscribe":
+      session.client.unsubscribe(message.data);
+      return;
+    case "ping":
+      session.client.ping(message.data);
+      return;
+    case "subscriptions":
+      session.client.subscriptions();
+      return;
+  }
+}
+
+function parseMarketDataWebSocketCommand(rawMessage: string):
+  | { event: "subscribe"; data: { channel: string; [key: string]: unknown } }
+  | { event: "unsubscribe"; data: { id?: string; ids?: string[] } }
+  | { event: "ping"; data: { state?: unknown } }
+  | { event: "subscriptions" } {
+  let message: unknown;
+
+  try {
+    message = JSON.parse(rawMessage);
+  } catch {
+    throw new Error("Market data WebSocket message must be valid JSON");
+  }
+
+  if (typeof message !== "object" || message === null) {
+    throw new Error("Market data WebSocket message must be an object");
+  }
+
+  const command = message as { event?: unknown; data?: unknown };
+  if (command.event === "subscriptions") {
+    return { event: "subscriptions" };
+  }
+
+  if (typeof command.data !== "object" || command.data === null) {
+    throw new Error("Market data WebSocket command data must be an object");
+  }
+
+  if (
+    command.event !== "subscribe" &&
+    command.event !== "unsubscribe" &&
+    command.event !== "ping"
+  ) {
+    throw new Error("Unsupported market data WebSocket event");
+  }
+
+  const data = command.data as { channel?: unknown };
+  if (command.event === "subscribe" && typeof data.channel !== "string") {
+    throw new Error("Market data subscription requires a channel");
+  }
+
+  return command as
+    | { event: "subscribe"; data: { channel: string; [key: string]: unknown } }
+    | { event: "unsubscribe"; data: { id?: string; ids?: string[] } }
+    | { event: "ping"; data: { state?: unknown } };
+}
+
+function closeMarketDataWebSocket(id: string): void {
+  const session = marketDataWebSockets.get(id);
+  if (!session) {
+    return;
+  }
+
+  marketDataWebSockets.delete(id);
+  session.client.off("message", session.listener);
+  session.client.disconnect();
+}
+
+function closeAllMarketDataWebSockets(): void {
+  for (const id of marketDataWebSockets.keys()) {
+    closeMarketDataWebSocket(id);
+  }
 }
 
 function ensureConnected(): void {
