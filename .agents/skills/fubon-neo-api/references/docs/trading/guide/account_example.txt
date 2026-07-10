@@ -1,0 +1,342 @@
+# 帳務
+
+***
+
+我們可以透過成交及庫存查詢來確認損益等資訊。
+
+info
+
+查詢發送的次數為每秒5次，若超出上限，請稍後再試試！
+
+## 庫存查詢[​](#庫存查詢 "Direct link to 庫存查詢")
+
+* Python
+* Node.js
+* C#
+
+```python
+inventories = sdk.accounting.inventories(accounts.data[0])
+print(inventories)
+
+```
+
+```py
+Result {
+    is_success: true,
+    message: None,
+    data : [
+        Inventory{
+          date: "2023/09/20",    # 查詢庫存日期 (string)
+          account: "26",         # 帳號 (string)
+          branch_no: "6460",     # 分公司代號 (string)
+          stock_no: "1101",      # 股票代號 (string)
+          order_type: Stock,     # 委託類別 (OrderType)
+          lastday_qty: 2000,     # 昨日整股餘額 (int)
+          buy_qty: 0,            # 整股委買股數 (int)
+          buy_filled_qty: 0,     # 整股買進成交股數 (int)
+          buy_value: 0,     # 整股買進成交價金 (int)
+          today_qty: 2000,  # 整股餘額 (int)
+          tradable_qty: 2000, #可委託整股庫存數 (int)
+          sell_qty: 0,     # 整股委賣股數 (int)
+          sell_filled_qty: 0, # 整股賣出成交股數 (int)
+          sell_value: 0,  # 整股賣出成交價金 (int)
+          odd: InventoryOdd{ # 零股
+            lastday_qty: 0, # 昨日零股餘額 (int)
+            buy_qty: 0,     # 零股委買股數 (int)
+            buy_filled_qty: 0, # 零股買進成交股數 (int)
+            buy_value: 0,   # 零股買進成交價金 (int)
+            today_qty: 0,   # 零股餘額 (int)
+            tradable_qty: 0, # 可委託零股餘額 (int)
+            sell_qty: 0,    # 零股委賣股數 (int)
+            sell_filled_qty: 0, # 零股賣出成交股數 (int)
+            sell_value: 0    # 零股賣出成交價金 (int)
+        }}, 
+        ...
+      ]
+}
+
+```
+
+```js
+const inventory = sdk.accounting.inventories(accounts.data[0])
+console.log(inventory)
+
+```
+
+```js
+{
+  isSuccess: true,
+  data:[
+    {
+      date: '2023/10/13',
+      account: '26',
+      branchNo: '6460',
+      stockNo: '1101',
+      orderType: Stock,
+      lastdayQty: 2000,
+      buyQty: 0,
+      buyFilledQty: 0,
+      buyValue: 0,
+      todayQty: 2000,
+      tradableQty: 2000,
+      sellQty: 0,
+      sellFilledQty: 0,
+      sellValue: 0,
+      odd: {
+        lastdayQty: 0,
+        buyQty: 0,
+        buyFilledQty: 0,
+        buyValue: 0,
+        todayQty: 0,
+        tradableQty: 0,
+        sellQty: 0,
+        sellFilledQty: 0,
+        sellValue: 0
+      }
+    },
+    ...
+  ]
+}
+
+```
+
+```cs
+var inventories = sdk.Accounting.Inventoies(accounts.data[0]);
+foreach (var inventory in inventories.data)
+{
+  Console.WriteLine(inventory);
+}
+
+```
+
+```cs
+{
+    date = 2023/09/21,    // 查詢庫存日期 (string)
+    account = 26,         // 帳號 (string)
+    branchNo = 6460,      // 分公司代號 (string)
+    stockNo = 1101,       // 股票代號 (string)
+    orderType = Stock,    // 委託類別 (OrderType))
+    lastdayQty = 2000,    // 昨日整股餘額 (int)
+    buyQty = 0,           // 整股委買股數 (int)
+    buyFilledQty = 0,     // 整股買進成交股數 (int)
+    buyValue = 0,         // 整股買進成交價金 (int)
+    todayQty = 2000,      // 整股餘額 (int)
+    tradableQty = 2000,   // 可委託整股庫存數 (int)
+    sellQty = 0,          // 整股委賣股數 (int)
+    sellFilledQty = 0,    // 整股賣出成交股數 (int)
+    sellValue = 0,        // 整股賣出成交價金 (int)
+     odd = InventoryOdd {  // 零股
+        lastdayQty = 0,    // 昨日零股餘額 (int)
+        buyQty = 0,        // 零股委買股數 (int)
+        buyFilledQty = 0,  // 零股買進成交股數 (int)
+        buyValue = 0,      // 零股買進成交價金 (int)
+        todayQty = 0,      // 零股餘額 (int)
+        tradableQty = 0,   // 可委託零股餘額 (int)
+        sellQty = 0,       // 零股委賣股數 (int)
+        sellFilledQty = 0, // 零股賣出成交股數 (int)
+        sellValue = 0      // 零股賣出成交價金 (int)
+     }
+}
+
+```
+
+* 以下範例回傳僅擷取data內容
+
+## 未實現損益查詢[​](#未實現損益查詢 "Direct link to 未實現損益查詢")
+
+* Python
+* Node.js
+* C#
+
+```python
+unrealized_pnl = sdk.accounting.unrealized_gains_and_loses(accounts.data[0])
+print(unrealized_pnl.data)
+
+```
+
+```py
+[UnrealizedData({
+    date: "2023/05/23", # 查詢當天日期 (string)
+    account: "482",     # 帳號 (string)
+    branch_no: "6460",  # 分公司代號 (string)
+    stock_no: "2442",   # 股票代號 (string)
+    buy_sell: Buy,      # 買賣別 (BSAction)
+    order_type: Margin, # 委託類別 (OrderType)
+    cost_price: 19.95,  # 成本價 (int)
+    tradable_qty: 6000, # 可委託庫存數 (int)
+    unrealized_profit: 0, # 未實現獲利 (int)
+    unrealized_loss: 10002 # 未實現損失 (int)
+}),
+  ...
+]
+
+```
+
+```js
+const unrealizedPNL = sdk.accounting.unrealizedGainsAndLoses(accounts.data[0])
+console.log(unrealizedPNL.data)
+
+```
+
+```js
+[
+  {
+    date: '2021/08/09',
+    account: '26',
+    branchNo: '6460',
+    stockNo: '2303',
+    buySell: Buy,
+    orderType: Margin,
+    costPrice: 50,
+    tradableQty: 1000,
+    todayQty: 1000,
+    unrealizedProfit: 47000,
+    unrealizedLoss: 0
+  },
+  ...
+]
+
+```
+
+```cs
+var unrealizedPNL =  sdk.Accounting.UnrealizedGainsAndLoses(accounts.data[0]);
+foreach (var unrealized in unrealizedPNL.data)
+{
+  Console.WriteLine(unrealized);
+}
+
+```
+
+```cs
+{ 
+    date = 2021/08/09,   // 查詢當天日期 (string)
+    account = 26,        // 帳號 (string)
+    branchNo = 6460,     // 分公司代號 (string)
+    stockNo = 2303,      // 股票代號 (string)
+    buySell = Buy,       // 買賣別 (BsAction)
+    orderType = Margin,  // 委託類別 (OrderType)
+    costPrice = 50,      // 成本價 (double)
+    tradableQty = 1000,   // 可委託庫存數 (int)
+    unrealizedProfit = 45600,  // 未實現獲利 (int)
+    unrealizedLoss = 0         // 未實現損失 (int)
+}
+
+```
+
+## 交割資訊[​](#交割資訊 "Direct link to 交割資訊")
+
+可以查詢交割資訊，確認我們今日或近三日的應收付金額。
+
+* Python
+* Node.js
+* C#
+
+```python
+settlement = sdk.accounting.query_settlement(accounts.data[0],"0d")
+print(settlement.data)
+
+```
+
+```js
+const settlement = sdk.accounting.querySettlement(accounts.data[0],"0d")
+console.log(settlement.data)
+
+```
+
+```cs
+var settlement = sdk.Accounting.QuerySettlement(accounts.data[0],"0d");
+Console.WriteLine(settlement.data);
+Console.WriteLine(settlement.data.settle);
+
+```
+
+以下查詢的結果代表9/12時應付1,429,513元交割款：
+
+* Python
+* Node.js
+* C#
+
+```py
+SettlementData{
+  account: AccountRes{    # 帳號資訊
+    branch_no: "6460",    # 帳號 (string)
+    account: "26"         # 分公司代號 (string)
+  },
+  details: [  # 交割資訊
+    {
+      date: "2023/09/08", # 查詢日期 (string)
+      settlement_date: "2023/09/12", # 交割日期 (string)
+      buy_value: 735500,                  # 買進金額 (int)
+      buy_fee: 313,                       # 買進手續費 (int)
+      buy_settlement: -1429513,           # 買進應收付款 (int)
+      buy_tax: 0,                         # 買進交易稅 (int)
+      sell_value: 770500,                 # 賣出金額 (int)
+      sell_fee: 320,                      # 賣出手續費 (int)
+      sell_settlement: 0,                 # 賣出應收付款 (int)
+      sell_tax: 2309,                     # 賣出交易稅 (int)
+      total_bs_value: 1506000,            # 合計買賣金額 (int)
+      total_fee: 633,                     # 合計手續費 (int)
+      total_tax: 2309,                    # 合計交易稅 (int)
+      total_settlement_amount: -1429513,  # 合計交割金額 (int)
+      currency: "TWD",                    # 幣別 (string)
+    }
+  ]
+}
+
+```
+
+```js
+{
+   account: { // 帳號資訊
+    branch_no: '6460',    // 帳號 (string)
+    account: '26'         // 分公司代號 (string)
+  },
+  details: [  // 交割資訊
+    {
+      date: '2023/09/08',            // 查詢日期 (string)
+      settlement_date: '2023/09/12', // 交割日期 (string)
+      buyValue: 735500,              // 買進金額 (number)
+      buyFee: 313,                   // 買進手續費 (int)
+      buySettlement: -1429513,       // 買進應收付款 (int)
+      buyTax: 0,                     // 買進交易稅 (int)
+      sellValue: 770500,             // 賣出金額 (int)
+      sellFee: 320,                  // 賣出手續費 (int)
+      sellSettlement: 0,             // 賣出應收付款 (int)
+      sellTax: 2309,                 // 賣出交易稅 (int)
+      totalBsValue: 1506000,         // 合計買賣金額 (int)
+      totalFee: 633,                   // 合計手續費 (int)
+      totalSettlementAmount: -1429513, // 合計交割金額 (int)
+      totalTax: 2309,                  // 合計交易稅 (int)
+      currency: "TWD"                  // 幣別 (string)
+    }
+  ]
+}
+
+```
+
+```cs
+{ 
+    account = AccountRes {  // 帳號資訊
+      account = 26,         // 帳號 (string)
+      branchNo = 6460       // 分公司代號 (string)
+      }, 
+    details = [                // 交割資訊
+          date = 2023/09/08,             // 查詢日期 (string)
+          settlementDate = 2023/09/12,  // 交割日期 (string)
+          buyValue = 735500,           // 買進金額             (int)
+          buyFee = 313,                // 買進費用             (int)
+          buySettlement = -1429513,    // 買進應收付款         (int)
+          buyTax = 0,                  // 買進交易稅           (int)
+          sellValue = 770500,          // 賣出金額             (int)
+          sellFee = 320,               // 賣出費用             (int)
+          sellSettlement = 0,          // 賣出應收付款         (int)
+          sellTax = 2309,              // 賣出交易稅           (int)
+          totalBsValue = 1506000,      // 合計買賣金額         (int)
+          totalFee = 633,              // 合計手續費           (int)
+          totalSettlementAmount = -1429513, // 合計交割款金額  (int)
+          totalTax = 2309,                  // 合計交易稅      (int)
+          currency = TWD                    // 幣別           (string)
+    ]
+}
+
+```

@@ -1,0 +1,283 @@
+# 參數對照表
+
+## 類別[​](#類別 "Direct link to 類別")
+
+Class
+
+### OrderObject[​](#orderobject "Direct link to OrderObject")
+
+| Parameter          | Type        | Meaning                                                                                                                                  |
+| ------------------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| buySell            | BSAction    | [買賣別](#bsaction) 可選用參數 `Buy` 買 、 `Sell` 賣                                                                                     |
+| symbol             | string      | 股票代號                                                                                                                                 |
+| price              | string      | 委託價格 （若非使用 `Limit` 限價，此欄代入 ***null***）                                                                                  |
+| quantity           | int         | 委託數量                                                                                                                                 |
+| marketType         | MarketType  | [盤別](#markettype) 可選用參數 `Common` 整股、 `Fixing` 定盤、 `IntradayOdd` 盤中零股、 `Odd` 盤後零股、 `Emg` 興櫃 、 `EmgOdd` 興櫃零股 |
+| priceType          | PriceType   | [價格旗標](#pricetype) 可選用參數為 `Limit` 限價、 `LimitUp` 漲停、 `LimitDown` 跌停、 `Market` 市價、 `Reference` 參考價                |
+| timeInForce        | timeInForce | [委託條件](#timeinforce) 可選用參數為 `ROD` 、 `FOK` 、 `IOC`                                                                            |
+| orderType          | OrderType   | [委託類別](#ordertype) 可選用參數為 `Stock` 現股、 `Margin` 融資、 `Short` 融券、 `DayTrade` 現沖先賣、 `SBL` 借券                       |
+| userDef (optional) | string      | 用戶自定義 (最長10個字元，不支援特殊字元及中文、不適用興櫃)                                                                              |
+
+caution
+
+不同 marketType 對應的 quantity 之單位及範圍不同，請參考[盤別](#markettype)說明。
+
+caution
+
+當 marketType 爲 MarketType.Common, MarketType.Odd, MarketType.IntradayOdd 其中之一，且 priceType 爲 PriceType.Limit 時，需填入 price 欄位，其餘時候可不設定 price 欄位或設為 null。
+
+現股當沖
+
+「現沖先賣」賣出時, orderType = DayTrade , buySell 需為 Sell , marketType 需為 Common<br />(其餘現沖進出場操作, orderType = Stock)
+
+### OrderResult[​](#orderresult "Direct link to OrderResult")
+
+委託列表，透過 [GetOrderResult(accounts)](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/GetOrderResults.txt) 取得。
+
+| Parameter       | Type        | Meaning                                                                                                                  |
+| --------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------ |
+| functionType    | number      | 功能別 : `0` 新單 、 `10` 新單執行 、 `15` 改價 、 `20` 改量 、 `30` 刪單 、 `90` 失敗                                   |
+| date            | string      | 交易日期                                                                                                                 |
+| seqNo           | string      | 委託單流水序號                                                                                                           |
+| branchNo        | string      | 分公司代號                                                                                                               |
+| account         | string      | 帳號                                                                                                                     |
+| orderNo         | string      | 委託書號                                                                                                                 |
+| assetType       | number      | 資產類別 : `0` 證券                                                                                                      |
+| market          | string      | 市場類型 : `TAIEX` 上市股票 、 `TAISDAQ` 上櫃股票 、 `TAIEMG` 興櫃股票                                                   |
+| marketType      | MarketType  | 盤別種類 : `Common` 整股 、 `Fixing` 定盤 、 `IntradayOdd` 盤中零股 、 `Odd` 盤後零股 、 `Emg` 興櫃 、 `EmgOdd` 興櫃零股 |
+| stockNo         | string      | 股票代號                                                                                                                 |
+| buySell         | BSAction    | 買賣別 : `Buy` 買 、 `Sell` 賣                                                                                           |
+| priceType       | PriceType   | 原始委託價格別 : `Limit` 限價 、 `LimitUp` 漲停 、 `LimitDown` 跌停 、 `Market` 市價 、 `Reference` 參考價               |
+| price           | number      | 價格                                                                                                                     |
+| quantity        | number      | 原始委託股數                                                                                                             |
+| timeInForce     | TimeInForce | 委託條件別 : `ROD` ROD 、 `FOK` FOK 、 `IOC` IOC                                                                         |
+| orderType       | OrderType   | 委託單類型 : `Stock` 現股 、 `Margin` 融資 、 `Short` 融券 、 `DayTrade` 現沖先賣 、 `SBL`借券                           |
+| isPreOrder      | bool        | 是否為預約單                                                                                                             |
+| status          | number      | 委託單狀態，詳細列表請參考 [STATUS](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#status)    |
+| afterPriceType  | PriceType   | 有效委託價格別 : `Limit` 限價 、 `LimitUp` 漲停 、 `LimitDown` 跌停 、 `Market` 市價 、 `Reference` 參考價               |
+| afterPrice      | number      | 有效委託價格                                                                                                             |
+| unit            | number      | 單位數                                                                                                                   |
+| afterQty        | number      | 有效委託股數（包含已成交部分）                                                                                           |
+| filledQty       | number      | 成交股數                                                                                                                 |
+| filledMoney     | number      | 成交價金                                                                                                                 |
+| beforeQty       | number      | 改單前有效量                                                                                                             |
+| beforePrice     | number      | 改單前有效價                                                                                                             |
+| lastTime        | string      | 最後異動時間（格式請見表末說明）                                                                                         |
+| errorMessage    | string      | 錯誤訊息                                                                                                                 |
+| details         | list        | 委託歷程 (查詢order\_result\_detail or order\_history才有值)                                                             |
+| >> functionType | number      | 功能別 : `0` 新單 、 `10` 新單執行 、 `15` 改價 、 `20` 改量 、 `30` 刪單 、 `50` 完全成交 、 `90`失敗                   |
+| >> modifiedTime | string      | 修改時間（格式請見表末說明）                                                                                             |
+| >> beforeQty    | number      | 原始委託股數                                                                                                             |
+| >> afterQty     | number      | 有效委託股數（包含已成交部分）                                                                                           |
+| >> beforePrice  | number      | 原始委託價                                                                                                               |
+| >> afterPrice   | number      | 有效委託價                                                                                                               |
+| >> filledMoney  | number      | 成交價金                                                                                                                 |
+| >> status       | number      | 委託單狀態                                                                                                               |
+| >> errMsg       | string      | 錯誤訊息                                                                                                                 |
+
+時間格式說明
+
+lastTime 及 modifiedTime 時間格式： **HH:MM<!-- -->:SS<!-- -->.fff** 或 **HH:MM<!-- -->:SS** （即當 .fff = .000 時省略此部分）
+
+### BatchResult[​](#batchresult "Direct link to BatchResult")
+
+批次委託列表，透過 [BatchOrderLists(account)](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/trade/batchOrder/BatchOrderList.txt) 取得。
+
+| Parameter    | Type   | Meaning                                                                        |
+| ------------ | ------ | ------------------------------------------------------------------------------ |
+| functionType | number | 功能別 : `0` 新單、 `10` 新單執行、 `15` 改價、 `20` 改量、`30`刪單 、`90`失敗 |
+| date         | string | 交易日期                                                                       |
+| branchNo     | string | 分公司代號                                                                     |
+| account      | string | 帳號                                                                           |
+| batchSeqNo   | string | 批次單流水序號                                                                 |
+
+### ModifyPriceObj[​](#modifypriceobj "Direct link to ModifyPriceObj")
+
+改價物件
+
+| Parameter   | Type      | Meaning                                                                                                |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------------ |
+| OrderResult | Object    | [委託列表](#orderresult)                                                                               |
+| price       | string    | 改單後的價格                                                                                           |
+| PriceType   | PriceType | 改單後的價格類型 : `Limit`限價 、`LimitUp`漲停 、 `LimitDown`跌停 、 `Market`市價 、 `Reference`參考價 |
+
+關於價格旗標
+
+輕量風控版**已**開放使用價格旗標 (PriceType)
+
+### ModifyQuantityObj[​](#modifyquantityobj "Direct link to ModifyQuantityObj")
+
+改量物件
+
+| Parameter   | Type   | Meaning                  |
+| ----------- | ------ | ------------------------ |
+| OrderResult | Object | [委託列表](#orderresult) |
+| quantity    | number | 改單後的委託量           |
+
+### FilledData[​](#filleddata "Direct link to FilledData")
+
+成交回報物件
+
+| 參數               | 類別      | 說明                                                                                           |
+| ------------------ | --------- | ---------------------------------------------------------------------------------------------- |
+| date               | string    | 日期                                                                                           |
+| branchNo           | string    | 分公司代號                                                                                     |
+| account            | string    | 帳號                                                                                           |
+| seqNo              | string    | 委託單流水序號 (只有主動回報才回傳此欄位)                                                      |
+| orderNo            | string    | 委託書號                                                                                       |
+| stockNo            | string    | 股票代號                                                                                       |
+| buySell            | BSAction  | 買賣別 : `Buy` 買 、 `Sell` 賣                                                                 |
+| orderType          | OrderType | 委託單類型 : `Stock` 現股 、 `Margin` 融資 、 `Short` 融券 、 `DayTrade` 現沖先賣 、 `SBL`借券 |
+| filled\_no         | string    | 成交流水號                                                                                     |
+| filled\_avg\_price | number    | 成交均價                                                                                       |
+| filled\_qty        | number    | 成交股數                                                                                       |
+| filled\_price      | number    | 成交單價                                                                                       |
+| filled\_time       | string    | 成交時間                                                                                       |
+| userDef            | string ?  | 用戶自定義 (只有主動回報才回傳此欄位)                                                          |
+
+### Account[​](#account "Direct link to Account")
+
+帳號資訊
+
+| Parameter   | Type   | Meaning                               |
+| ----------- | ------ | ------------------------------------- |
+| name        | string | 客戶姓名                              |
+| account     | string | 帳號                                  |
+| branchNo    | string | 分公司代號                            |
+| accountType | string | 帳戶類型 : `stock` 證券 `futopt` 期貨 |
+
+## Constants ( 欄位對應數值 )[​](#constants--欄位對應數值- "Direct link to Constants ( 欄位對應數值 )")
+
+### BSAction[​](#bsaction "Direct link to BSAction")
+
+買賣別 (buySell)
+
+| Name | Meaning |
+| ---- | ------- |
+| Buy  | 買      |
+| Sell | 賣      |
+
+### MarketType[​](#markettype "Direct link to MarketType")
+
+盤別
+
+| Name        | Meaning  |
+| ----------- | -------- |
+| Common      | 整股     |
+| Fixing      | 定盤     |
+| IntradayOdd | 盤中零股 |
+| Odd         | 盤後零股 |
+| Emg         | 興櫃     |
+| EmgOdd      | 興櫃零股 |
+
+使用不同MarketType時，相對應的Quantity所代表的單位及範圍也會不同，詳如下表:
+
+| Name        | Quantity Unit | Quantity Ranges |
+| ----------- | ------------- | --------------- |
+| Common      | 千股          | 1000 \~ 499000  |
+| Fixing      | 千股          | 1000 \~ 499000  |
+| IntradayOdd | 股            | 1 \~ 999        |
+| Odd         | 股            | 1 \~ 999        |
+| Emg         | 千股          | 1000 \~ 499000  |
+| EmgOdd      | 股            | 1 \~ 999        |
+
+使用不同 MarketType 時，可使用的 PriceType , TimeInForce 會不同，詳如下表：
+
+| MarketType  | Available PriceType                                  | Available TimeInForce |
+| ----------- | ---------------------------------------------------- | --------------------- |
+| Common      | Limit 、 LimitUp 、 LimitDown 、 Market 、 Reference | ROD 、 IOC 、 FOK     |
+| Fixing      | Reference                                            | ROD                   |
+| IntradayOdd | Limit 、 LimitUp 、 LimitDown 、 Reference           | ROD                   |
+| Odd         | Limit 、 LimitUp 、 LimitDown 、 Reference           | ROD                   |
+| Emg         | Limit                                                | ROD                   |
+| EmgOdd      | Limit                                                | ROD                   |
+
+### PriceType[​](#pricetype "Direct link to PriceType")
+
+價格類型 (priceType)
+
+| Name      | Meaning                 |
+| --------- | ----------------------- |
+| Limit     | 限價                    |
+| LimitUp   | 漲停                    |
+| LimitDown | 跌停                    |
+| Market    | 市價                    |
+| Reference | 參考價 (定盤時為定盤價) |
+
+### TimeInForce[​](#timeinforce "Direct link to TimeInForce")
+
+委託條件 (TimeInForce)
+
+| Name | Meaning                               |
+| ---- | ------------------------------------- |
+| ROD  | 當日有效(Rest of Day)                 |
+| FOK  | 全部成交否則取消(Fill-or-Kill)        |
+| IOC  | 立即成交否則取消(Immediate-or-Cancel) |
+
+### OrderType[​](#ordertype "Direct link to OrderType")
+
+委託類別 (orderType)
+
+| Name     | Meaning  |
+| -------- | -------- |
+| Stock    | 現股     |
+| Margin   | 融資     |
+| Short    | 融券     |
+| DayTrade | 現沖先賣 |
+| SBL      | 借券     |
+
+### StockType[​](#stocktype "Direct link to StockType")
+
+股票分類別
+
+| Name          | Meaning    |
+| ------------- | ---------- |
+| Stock         | 股票       |
+| ConvertBond   | 可轉債     |
+| ETF\_and\_ETN | ETF 與 ETN |
+
+### functionType[​](#functiontype "Direct link to functionType")
+
+功能類別
+
+| Name                           | Value |
+| ------------------------------ | ----- |
+| 新單                           | 0     |
+| 新單執行                       | 10    |
+| 改價                           | 15    |
+| 改量                           | 20    |
+| 刪單                           | 30    |
+| 完全成交（for 委託單歷程查詢） | 50    |
+| 失敗                           | 90    |
+
+### market[​](#market "Direct link to market")
+
+市場
+
+| Name     | Value   |
+| -------- | ------- |
+| 上市股票 | TAIEX   |
+| 上櫃股票 | TAISDAQ |
+| 興櫃股票 | TAIEMG  |
+
+### status[​](#status "Direct link to status")
+
+委託單狀態
+
+| Name                        | Value                                                      |
+| --------------------------- | ---------------------------------------------------------- |
+| 預約單                      | 0                                                          |
+| 系統將委託送往後台          | 4 ( 請用GetOrderResult查詢狀態 )                           |
+| 後台傳送中                  | 8 ( 請用GetOrderResult查詢狀態 )                           |
+| 連線逾時                    | 9 ( 請稍後再使用GetOrderResult查詢狀態 or 聯絡您的營業員 ) |
+| 委託成功                    | 10                                                         |
+| 未成交刪單成功              | 30                                                         |
+| 部分成交，剩餘取消          | 40                                                         |
+| 完全成交                    | 50                                                         |
+| 失敗                        | 90                                                         |
+| 委託單歷程查詢標示          | 14 - 改價ACK、24 - 改量ACK、34 - 刪單ACK                   |
+| 改價成功 （歷史委託單查詢） | 15                                                         |
+| 改量成功 （歷史委託單查詢） | 20                                                         |
+| 改價失敗 （主動回報）       | 19                                                         |
+| 改量失敗 （主動回報）       | 29                                                         |
+| 刪單失敗 （主動回報）       | 39                                                         |

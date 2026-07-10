@@ -1,0 +1,130 @@
+# Historical Stats
+
+取得近 52 週股價數據（依代碼查詢）
+
+```text
+historical/stats/{symbol}
+
+```
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name       | Type   | Description |
+| ---------- | ------ | ----------- |
+| `symbol`\* | string | 股票代碼    |
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+
+reststock = sdk.marketdata.rest_client.stock 
+# reststock.historical.stats(symbol = "0050")  # 2.2.3 及以前版本
+
+## 2.2.4 及以後版本 (使用 Exception 進行例外處理)
+from fubon_neo.fugle_marketdata.rest.base_rest import FugleAPIError
+
+try:  
+  reststock.historical.stats(symbol = "0050")
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"}    
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime();  // 建立行情連線
+
+const client = sdk.marketdata.restClient
+client.stock.historical.stats({ symbol: '0050' })
+  .then(data => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.Stock;
+
+var stats = await rest.History.Stats("0050");
+var stats_cont = stats.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(stats_cont);
+
+```
+
+Response Body：
+
+```json
+{
+  "date": "2023-02-09",
+  "type": "EQUITY",
+  "exchange": "TWSE",
+  "market": "TSE",
+  "symbol": "0050",
+  "name": "元大台灣50",
+  "openPrice": 120.5,
+  "highPrice": 121,
+  "lowPrice": 120.3,
+  "closePrice": 120.9,
+  "change": 0.05,
+  "changePercent": 0.04,
+  "tradeVolume": 5032245,
+  "tradeValue": 607543546,
+  "previousClose": 120.85000000000001,
+  "week52High": 145.05,
+  "week52Low": 96.5
+}
+
+```
+
+## Response[​](#response "Direct link to Response")
+
+| Name              | Type   | Description        |
+| ----------------- | ------ | ------------------ |
+| `date`\*          | string | 日期               |
+| `type`\*          | string | Ticker 類型        |
+| `exchange`\*      | string | 交易所             |
+| `market`\*        | string | 市場別             |
+| `symbol`\*        | string | 股票代碼           |
+| `name`\*          | string | 股票簡稱           |
+| `openPrice`\*     | number | 最後交易日開盤價   |
+| `highPrice`\*     | number | 最後交易日最高價   |
+| `lowPrice`\*      | number | 最後交易日最低價   |
+| `closePrice`\*    | number | 最後交易日收盤價   |
+| `change`\*        | number | 最後交易日漲跌     |
+| `changePercent`\* | number | 最後交易日漲跌幅   |
+| `tradeVolume`\*   | number | 最後交易日成交量   |
+| `tradeValue`\*    | number | 最後交易日成交金額 |
+| `previousClose`\* | number | 前一交易日收盤價   |
+| `week52High`\*    | number | 近 52 週高點       |
+| `week52Low`\*     | number | 近 52 週低點       |
+
+info
+
+'\*' 表示必揭示欄位。

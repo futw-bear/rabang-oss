@@ -1,0 +1,165 @@
+# 停損停利單
+
+富邦新一代 API 支援條件下單後的停損停利單，
+
+停損停利運作機制 : 當觸發的條件單，觸發後，並委託成交，就會啟動停損停利的監控機制，而當停利條件達成時，停損就會失效；反之亦然 (同一般市面上常見OCO)
+
+![TPSL](/TradeAPI/assets/images/TPSL-c929bfde158264f3327c48f316c32bde.png)
+
+## 程式範例[​](#程式範例 "Direct link to 程式範例")
+
+* Python
+* Node.js
+* C#
+
+```py
+# 設計條件內容
+condition = Condition(
+    market_type = TradingType.Reference,        
+    symbol = "TXO20000E4",
+    trigger = TriggerContent.MatchedPrice,
+    trigger_value = "100",
+    comparison = Operator.LessThan
+)
+
+order = FutOptConditionOrder(
+    buy_sell = BSAction.Buy,
+    symbol = "TXO20000E4",
+    price =  "100",
+    lot =  1,
+    market_type = FutOptConditionMarketType.Option,
+    price_type = FutOptConditionPriceType.Limit,
+    time_in_force = TimeInForce.ROD,
+    order_type = FutOptConditionOrderType.New
+)
+
+tp = FutOptTPSLOrder(
+    time_in_force=TimeInForce.ROD,
+    price_type=FutOptConditionPriceType.Limit,
+    order_type=FutOptConditionOrderType.Close,
+    target_price="85",
+    price="85"
+)
+
+
+sl = FutOptTPSLOrder(
+    time_in_force=TimeInForce.ROD,
+    price_type=FutOptConditionPriceType.Limit,
+    order_type=FutOptConditionOrderType.Close,
+    target_price="60",
+    price="60"
+)
+
+tpsl = FutOptTPSLWrapper(
+    stop_sign= StopSign.Full,
+    tp=tp,              # optional field 
+    sl=sl,              # optional field
+    end_date="20240517" # optional field
+)
+
+
+sdk.futopt.single_condition(account, "20240426", "20240430", StopSign.Full, condition, order, tpsl)
+
+```
+
+```js
+// 設計條件內容
+const condition = {
+    marketType: TradingType.Reference,
+    symbol: "TXO20000E4",
+    trigger: TriggerContent.MatchedPrice,
+    triggerValue: "100",
+    comparison: Operator.LessThan
+}
+
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "TXO20000E4",
+  price: "100",
+  lot: 1,
+  marketType: FutOptConditionMarketType.Option,
+  priceType: FutOptConditionPriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: FutOptConditionOrderType.New
+
+};
+
+const tp = {
+    timeInForce: TimeInForce.ROD,
+    priceType: FutOptConditionPriceType.Limit,
+    orderType: FutOptConditionOrderType.Close,
+    targetPrice: "120",
+    price: "120"
+
+}
+
+const sl  = {
+    timeInForce: TimeInForce.ROD,
+    priceType: FutOptConditionPriceType.Limit,
+    orderType: FutOptConditionOrderType.Close,
+    targetPrice: "60",
+    price: "60"
+}
+
+const tpsl = {
+    stopSign: StopSign.Full,
+    tp: tp,           // optional field 
+    sl: sl,           // optional field
+    endDate: "20240517"
+}
+
+
+sdk.futopt.singleCondition(account, "20240426", "20240430", StopSign.Full, condition, order, tpsl)
+
+```
+
+```cs
+// 設計條件內容
+var condition = new Condition(
+    TradingType.Reference,
+    "TXO20000E4",
+    TriggerContent.MatchedPrice,
+    "100",
+    Operator.LessThan
+);
+
+var order = new FutOptConditionOrder(
+    BSAction.Buy,
+    "TXO20000E4",
+    "100",
+    1,
+    FutOptConditionMarketType.Option,
+    FutOptConditionPriceType.Limit,
+    TimeInForce.Rod,
+    FutOptConditionOrderType.New
+);
+var tp = new FutOptTpslOrder(
+    TimeInForce.Rod,
+    FutOptConditionPriceType.Limit,
+    FutOptConditionOrderType.Close,
+    "120",
+    "120",
+    null  // 2.2.0 版本新增，暫無相關功能
+);
+
+var sl = new FutOptTpslOrder(
+    TimeInForce.Rod,
+    FutOptConditionPriceType.Limit,
+    FutOptConditionOrderType.Close,
+    "85",
+    "85",
+    null  // 2.2.0 版本新增，暫無相關功能
+);
+
+var tpsl = new FutOptTpslWrapper(
+    StopSign.Full,
+    tp,
+    sl,
+    "20240517",
+    false
+);
+
+
+sdk.FutOpt.SingleCondition(account, "20240426", "20240430", StopSign.Full, condition, order, tpsl);
+
+```

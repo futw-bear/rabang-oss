@@ -1,0 +1,165 @@
+# Snapshot Quotes
+
+股票行情快照（依市場別）
+
+```text
+snapshot/quotes/{market}
+
+```
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name       | Type   | Description                                                                                 |
+| ---------- | ------ | ------------------------------------------------------------------------------------------- |
+| `market`\* | string | 市場別，可選 `TSE` 上市；`OTC` 上櫃；`ESB` 興櫃一般板；`TIB` 臺灣創新板；`PSB` 興櫃戰略新板 |
+| `type`     | string | 標的類型，可選 `ALLBUT099` 包含一般股票、特別股及ETF ； `COMMONSTOCK` 為一般股票            |
+
+## Response[​](#response "Direct link to Response")
+
+| Name               | Type      | Description              |
+| ------------------ | --------- | ------------------------ |
+| `date`\*           | string    | 日期                     |
+| `time`\*           | string    | 時間                     |
+| `market`\*         | string    | 市場別                   |
+| `data`\*           | object\[] | 快照資料                 |
+| >> `type`          | string    | Ticker 類型              |
+| >> `symbol`        | string    | 股票代碼                 |
+| >> `name`          | string    | 股票簡稱                 |
+| >> `openPrice`     | number    | 開盤價                   |
+| >> `highPrice`     | number    | 最高價                   |
+| >> `lowPrice`      | number    | 最低價                   |
+| >> `closePrice`    | number    | 收盤價                   |
+| >> `change`        | number    | 漲跌                     |
+| >> `changePercent` | number    | 漲跌幅                   |
+| >> `tradeVolume`   | number    | 成交量                   |
+| >> `tradeValue`    | number    | 成交金額                 |
+| >> `lastUpdated`   | number    | 快照時間                 |
+| >> `lastPrice`     | number    | 最後一筆成交價（含試撮） |
+| >> `isTrial`       | bool      | 試撮註記                 |
+
+info
+
+'\*' 表示必揭示欄位。
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+
+reststock = sdk.marketdata.rest_client.stock 
+# reststock.snapshot.quotes(market='TSE')  # 2.2.3 及以前版本
+
+## 2.2.4 及以後版本 (使用 Exception 進行例外處理)
+from fubon_neo.fugle_marketdata.rest.base_rest import FugleAPIError
+
+try:  
+  reststock.snapshot.quotes(market='TSE')
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"}   
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+client.stock.snapshot.quotes({ market: 'TSE' })
+  .then(data => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+using FugleMarketData.QueryModels;
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime(); // 建立行情連線
+ 
+var rest = sdk.MarketData.RestClient.Stock;
+
+var quotes = await rest.Snapshot.Quotes(FugleMarketData.QueryModels.MarketType.TSE);
+
+var quotes_cont = quotes.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(quotes_cont);
+
+```
+
+Response Body：
+
+```json
+{
+  "date": "2023-05-29",
+  "time": "133500",
+  "market": "TSE",
+  "data": [
+    {
+      "type": "EQUITY",
+      "symbol": "0050",
+      "name": "元大台灣50",
+      "openPrice": 127.45,
+      "highPrice": 127.55,
+      "lowPrice": 126.5,
+      "closePrice": 126.75,
+      "change": 0.8,
+      "changePercent": 0.64,
+      "tradeVolume": 14444,
+      "tradeValue": 1832941850,
+      "lastUpdated": 1685338200000000
+    },
+    {
+      "type": "EQUITY",
+      "symbol": "0051",
+      "name": "元大中型100",
+      "openPrice": 61,
+      "highPrice": 62.2,
+      "lowPrice": 61,
+      "closePrice": 62,
+      "change": 1.3,
+      "changePercent": 2.14,
+      "tradeVolume": 191,
+      "tradeValue": 11816050,
+      "lastUpdated": 1685338200000000
+    },
+    {
+      "type": "EQUITY",
+      "symbol": "0052",
+      "name": "富邦科技",
+      "openPrice": 111.8,
+      "highPrice": 112.1,
+      "lowPrice": 111.1,
+      "closePrice": 111.7,
+      "change": 1.2,
+      "changePercent": 1.09,
+      "tradeVolume": 565,
+      "tradeValue": 63088400,
+      "lastUpdated": 1685338200000000
+    },
+    ......
+  ]
+}
+
+```

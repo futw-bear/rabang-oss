@@ -1,0 +1,28 @@
+# 登出
+
+logout
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別 | 說明     |
+| ----------- | ---- | -------- |
+| is\_success | bool | 是否成功 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+from fubon_neo.sdk import FubonSDK, Order
+from fubon_neo.constant import TimeInForce, OrderType, PriceType, MarketType, BSAction
+
+sdk = FubonSDK()
+
+sdk.logout()
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+True
+
+```

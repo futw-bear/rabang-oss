@@ -1,0 +1,102 @@
+# 交割款查詢
+
+querySettlement
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                         | 說明                                   |
+| ------- | -------------------------------------------------------------------------------------------- | -------------------------------------- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#account) | 帳號                                   |
+| range   | string                                                                                       | 時間區間，目前有效值為"0d"(當日)、"3d" |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                     | 說明                             |
+| --------- | ------------------------ | -------------------------------- |
+| isSuccess | bool                     | 是否成功                         |
+| data      | Object \<SettlementData> | 回傳交割款資訊                   |
+| message   | string ? (optional)      | 當isSuccess = false 回傳錯誤訊息 |
+
+### 交割款 SettlementData 欄位[​](#交割款-settlementdata--欄位 "Direct link to 交割款 SettlementData  欄位")
+
+Return type : Object
+
+| 參數                     | 類別    | 說明         |
+| ------------------------ | ------- | ------------ |
+| > AccountRes             | list    | Object       |
+| >> account               | string  | 帳號         |
+| >> branchNo              | string  | 分公司代號   |
+| > details                | list    | Object       |
+| >> date                  | string  | 查詢日       |
+| >> settlementDate        | string? | 交割日       |
+| >> buyValue              | int?    | 買進金額     |
+| >> buyFee                | int?    | 買進手續費   |
+| >> buySettlement         | int?    | 買進應收付款 |
+| >> buyTax                | int?    | 買進交易稅   |
+| >> sellValue             | int?    | 賣出金額     |
+| >> sellFee               | int?    | 賣出手續費   |
+| >> sellSettlement        | int?    | 賣出應收付款 |
+| >> sellTax               | int?    | 賣出交易稅   |
+| >> totalBsValue          | int?    | 合計買賣金額 |
+| >> totalFee              | int?    | 合計手續費   |
+| >> totalTax              | int?    | 合計交易稅   |
+| >> totalSettlementAmount | int?    | 合計交割金額 |
+| >> currency              | string? | 幣別         |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+sdk.accounting.querySettlement(target_user,"3d");
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+{
+  isSuccess: true,
+  data:{
+    account: { branchNo: '6460', account: '26' },
+    details:[
+            {
+                date: "2024/03/04",
+                settlementDate: "2024/03/06",
+                buyValue: 735500,
+                buyFee: 313,
+                buySettlement: -1429513,
+                buyTax: 0,
+                sellValue: 770500,
+                sellFee: 320,
+                sellSettlement: 0,
+                sellTax: 2309,
+                totalBsValue: 1506000,
+                totalFee: 633,
+                totalSettlementAmount: -1429513,
+                totalTax: 2309,
+                currency: "TWD"
+            },
+            {
+                date: "2024/03/05",
+                settlementDate: "2024/03/07",
+                buyValue: 2261470,
+                buyFee: 1065,
+                buySettlement: -3895335,
+                buyTax: 0,
+                sellValue: 2488170,
+                sellFee: 1137,
+                sellSettlement: 677626,
+                sellTax: 7412,
+                totalBsValue: 4749640,
+                totalFee: 2202,
+                totalSettlementAmount: -3217709,
+                totalTax: 7412,
+                currency: "TWD"
+            },
+            {
+                date: "2024/03/06"
+            }
+        ]
+  }
+}
+
+```

@@ -1,0 +1,147 @@
+# Trades
+
+接收訂閱股票最新成交資訊
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name             | Type    | Description                                                     |
+| ---------------- | ------- | --------------------------------------------------------------- |
+| `channel`\*      | string  | 訂閱頻道：`trades`, `candles`, `books`, `aggregates`, `indices` |
+| `symbol`\*       | string  | 股票代碼                                                        |
+| `intradayOddLot` | boolean | `intradayOddLot` true: 盤中零股, false: 股票, default: false    |
+
+## Response[​](#response "Direct link to Response")
+
+| Name               | Type    | Description                |
+| ------------------ | ------- | -------------------------- |
+| `symbol`\*         | string  | 股票代號                   |
+| `type`\*           | string  | Ticker 類型                |
+| `exchange`\*       | string  | 交易所                     |
+| `market`           | string  | 市場別                     |
+| `time`\*           | number  | 時間                       |
+| `serial`\*         | number  | 流水號                     |
+| `bid`              | number  | 成交買價                   |
+| `ask`              | number  | 成交賣價                   |
+| `price`            | number  | 成交價格                   |
+| `size`             | number  | 成交單量                   |
+| `volume`           | number  | 成交總量                   |
+| `isLimitDownPrice` | boolean | 最後成交價為跌停價：`true` |
+| `isLimitUpPrice`   | boolean | 最後成交價為漲停價：`true` |
+| `isLimitDownBid`   | boolean | 最佳一檔委買跌停價：`true` |
+| `isLimitUpBid`     | boolean | 最佳一檔委買漲停價：`true` |
+| `isLimitDownAsk`   | boolean | 最佳一檔委賣跌停價：`true` |
+| `isLimitUpAsk`     | boolean | 最佳一檔委賣漲停價：`true` |
+| `isLimitDownHalt`  | boolean | 暫緩撮合且瞬間趨跌：`true` |
+| `isLimitUpHalt`    | boolean | 暫緩撮合且瞬間趨漲：`true` |
+| `isTrial`          | boolean | 試撮階段：`true`           |
+| `isDelayedOpen`    | boolean | 延後開盤信號：`true`       |
+| `isDelayedClose`   | boolean | 延後收盤信號：`true`       |
+| `isContinuous`     | boolean | 最後成交為逐筆交易：`true` |
+| `isOpen`           | boolean | 開盤信號：`true`           |
+| `isClose`          | boolean | 收盤信號：`true`           |
+| `time`             | number  | 成交時間                   |
+
+info
+
+'\*' 表示必揭示欄位 、 上方Boolean型態皆為發生時才會顯示
+
+## Example[​](#example "Direct link to Example")
+
+### Subscribe channel[​](#subscribe-channel "Direct link to Subscribe channel")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK
+
+def handle_message(message):
+    print(message)
+
+sdk = FubonSDK()
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime()  # 建立行情連線
+
+stock = sdk.marketdata.websocket_client.stock
+stock.on('message', handle_message)
+stock.connect()
+stock.subscribe({
+    'channel': 'trades',
+    'symbol': '2330'
+})
+
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const stock = sdk.marketdata.webSocketClient.stock;
+
+stock.connect().then(() => {
+  stock.subscribe({ channel: "trades", symbol: "0050" });
+});
+
+stock.on("message", (message) => {
+  const data = JSON.parse(message);
+  console.log(data);
+});
+
+```
+
+```cs
+using FubonNeo.Sdk;
+using FugleMarketData.WebsocketModels;
+
+var sdk = new FubonSDK();
+
+var result = sdk.Login("Your ID", "Your password", "Your cert path", "Your cert password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var stock = sdk.MarketData.WebSocketClient.Stock;
+
+stock.OnMessage += (msg) => Console.WriteLine($"receive: { msg }");
+
+await stock.Connect();
+
+await stock.Subscribe(StockChannel.Trades, "2330");
+
+```
+
+訂閱多檔商品
+
+同時訂閱多檔商品方式，請參考 [訂閱頻道](https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/getting-started.txt#%E8%A8%82%E9%96%B1%E9%A0%BB%E9%81%93)
+
+### Receive data[​](#receive-data "Direct link to Receive data")
+
+```json
+{
+  "event": "data",
+  "data": {
+    "symbol": "2330",
+    "type": "EQUITY",
+    "exchange": "TWSE",
+    "market": "TSE",
+    "bid": 567,
+    "ask": 568,
+    "price": 568,
+    "size": 4778,
+    "volume": 54538,
+    "isClose": true,
+    "time": 1685338200000000,
+    "serial": 6652422
+  },
+  "id": "<CHANNEL_ID>",
+  "channel": "trades"
+}
+
+```

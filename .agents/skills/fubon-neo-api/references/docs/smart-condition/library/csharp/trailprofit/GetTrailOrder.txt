@@ -1,0 +1,148 @@
+# 移動鎖利查詢
+
+GetTrailOrder
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                         | 說明 |
+| ------- | -------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | List                | 條件單回傳資訊                   |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionDetail 欄位[​](#委託資訊-conditiondetail--欄位 "Direct link to 委託資訊 ConditionDetail  欄位")
+
+Return type : Object
+
+| 參數                     | 類別   | 說明             |
+| ------------------------ | ------ | ---------------- |
+| guid                     | string | 條件單號         |
+| batchNo                  | string | 分單批號         |
+| orderLevel               | string | 條件單層級       |
+| lastTime                 | string | 更新時間         |
+| parentGuid               | string | 父單單號         |
+| symbol                   | string | 商品代號         |
+| orderAmount              | string | 委託金額         |
+| childBatchNo             | string | 子單分單批號     |
+| account                  | string | 帳號             |
+| conditionContent         | string | 條件內容         |
+| action                   | string | 處理方式         |
+| conditionBuySell         | string | 買賣別           |
+| conditionSymbol          | string | 商品名稱         |
+| conditionPrice           | string | 價格             |
+| conditionVolume          | string | 委託數量         |
+| conditionFilledVolume    | string | 成交數量         |
+| createTime               | string | 建立時間         |
+| startDate                | string | 預約開始時間     |
+| status                   | string | 目前狀態         |
+| errorMessage             | string | 目前狀態異常說明 |
+| detailRecordsCount       | string | 查詢明細筆數     |
+| detailRecords            | List   | 查詢明細資料     |
+| >> guid                  | string | 條件單號         |
+| >> account               | string | 帳號             |
+| >> conditionContent      | string | 條件內容         |
+| >> action                | string | 處理方式         |
+| >> conditionBuySell      | string | 買賣別           |
+| >> conditionSymbol       | string | 商品名稱         |
+| >> conditionPrice        | string | 價格             |
+| >> conditionVolume       | string | 委託數量         |
+| >> conditionFilledVolume | string | 成交數量         |
+| >> startDate             | string | 預約時間         |
+| >> status                | string | 目前狀態         |
+| >> errorMessage          | string | 目前狀態異常說明 |
+| tpslCount                | string | 停損停利筆數     |
+| tpslRecord               | List   | 停損停利明細資料 |
+| >> guid                  | string | 條件單號         |
+| >> account               | string | 帳號             |
+| >> conditionContent      | string | 條件內容         |
+| >> action                | string | 處理方式         |
+| >> conditionBuySell      | string | 買賣別           |
+| >> conditionSymbol       | string | 商品名稱         |
+| >> conditionPrice        | string | 價格             |
+| >> conditionVolume       | string | 委託數量         |
+| >> conditionFilledVolume | string | 成交數量         |
+| >> startDate             | string | 預約時間         |
+| >> status                | string | 目前狀態         |
+| >> errorMessage          | string | 目前狀態異常說明 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+sdk.Stock.GetTrailOrder(account);
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+
+{
+    isSuccess = True,
+    message = ,
+    data = [
+            ConditionDetail {
+                Guid = 5c154a76-e7ef-4b8f-94b5-80bf08fa4b8e,
+                BatchNo = ,
+                OrderLevel = 0,
+                LastTime = 2024-08-02 16:45:01,
+                ConditionType = ,
+                ParentGuid = ,
+                Symbol = 2889,
+                OrderAmount = 0,
+                ChildBatchNo = ,
+                Account = 1307515,
+                ConditionContent = 從2024/08/02到2024/08/02內當國票金從1000(原始基準價)，下跌達10%，持續至預定張數全部成交或期限到達為止,
+                Action = 下單,
+                ConditionBuySell = 現股買,
+                ConditionSymbol = 國票金 (2889),
+                ConditionPrice = 成交價(1) 檔(ROD),
+                ConditionVolume = 1張,
+                ConditionFilledVolume = 0張,
+                CreateTime = 2024-08-02 10:07:31,
+                StartDate = 2024/08/02,
+                Status = 條件單中止(I),
+                ErrorMessage = null,
+                DetailRecordsCount = 0,
+                DetailRecords = [],
+                TpslCount = 0,
+                TpslRecord = []
+            },
+            ConditionDetail
+            {
+                Guid = c71117c8-aa70-4477-9f04-ff4c73a4fad0,
+                BatchNo = "",
+                OrderLevel = 0,
+                LastTime = 2024-07-29 17:30:00,
+                ConditionType = ,
+                ParentGuid = ,
+                Symbol = 2330,
+                OrderAmount = 0,
+                ChildBatchNo = "",
+                Account = 1307515,
+                ConditionContent = 從2024/07/29到2024/07/29內當台積電從860(原始基準價)，上漲達5%，持續至預定張數全部成交或期限到達為止,
+                Action = 下單,
+                ConditionBuySell = 現股買,
+                ConditionSymbol = 台積電 (2330),
+                ConditionPrice = 成交價(5) 檔(ROD),
+                ConditionVolume = 2張,
+                ConditionFilledVolume = 0張,
+                CreateTime = 2024-07-29 11:01:49,
+                StartDate = 2024/07/29,
+                Status = 條件單中止(I),
+                ErrorMessage = null,
+                DetailRecordsCount = 0,
+                DetailRecords = [],
+                TpslCount = 0,
+                TpslRecord = []
+            }
+    ]
+}
+
+
+```

@@ -1,0 +1,302 @@
+# 快速開始
+
+本頁重點
+
+* 本頁提供富邦新一代 API（Fubon Neo API）登入與下單範例。
+* 開始前請先完成[事前準備](https://www.fbs.com.tw/TradeAPI/docs/trading/prepare.txt)（開戶、憑證、聲明與連線測試）。
+* 安裝方式與版本相容性請見[安裝與版本相容性](https://www.fbs.com.tw/TradeAPI/docs/install-compatibility.txt)。
+
+| 項目     | 說明                                                                       |
+| -------- | -------------------------------------------------------------------------- |
+| 前置條件 | 完成事前準備                                                               |
+| 支援語言 | Python / C# / JavaScript (Node.js) / C++、Go（僅支援證券交易帳務及條件單） |
+| 下載來源 | SDK 下載頁面                                                               |
+| 安裝方式 | 請見安裝與版本相容性                                                       |
+| 下一步   | 依語言完成登入與下單範例                                                   |
+
+請先參考[事前準備](https://www.fbs.com.tw/TradeAPI/docs/trading/prepare.txt)完成風險預告書申請與憑證下載。
+
+## 安裝與版本相容性[​](#安裝與版本相容性 "Direct link to 安裝與版本相容性")
+
+安裝步驟與最低版本需求請見[安裝與版本相容性](https://www.fbs.com.tw/TradeAPI/docs/install-compatibility.txt)，下載 SDK 請至[SDK 下載頁面](https://www.fbs.com.tw/TradeAPI/docs/download/download-sdk.txt)。
+
+## 套件安裝[​](#套件安裝 "Direct link to 套件安裝")
+
+<!-- -->
+
+* Python
+* Node.js
+* C#
+
+```py
+pip install fubon_neo-<version>-cp37-abi3-win_amd64.whl
+
+```
+
+首先先建立一個project資料夾，並利用下列指令初始化
+
+```bash
+npm init
+
+```
+
+官網下載回來的檔案會像是 fubon-neo-\<version>.tgz，並且把它放入剛剛建立的資料夾中
+
+把 node.js project 裡面的 package.json 增加一行
+
+```json
+"dependencies": {
+  ...
+  "fubon-neo": "file://<path-to-js-binary>/fubon-neo-<version>.tgz",
+  ...
+}
+
+```
+
+然後到命令行輸入以下指令
+
+```bash
+npm install
+
+```
+
+官網下載回來的檔案會像是 FubonNeo.\<version>.nupkg
+
+* 使用方法一 : Visual Studio Nuget 套件管理員安裝( **以.NET 7為例** ) :
+
+  將套件放置在新增的專案下方後，點擊 `工具` -> `Nuget套件管理員` -> `套件管理員設定`
+
+  ![nugetset](/TradeAPI/assets/images/nugetset-dcd96ee20e4663a6c4b996264d1b962e.png)
+
+  跳出視窗後，
+
+  1. 點擊右上角的 `+`
+  2. 點擊下方的 `...` 選取套件存放位置
+  3. 將名稱更名
+  4. 點擊 `更新`
+  5. 按下確定 ![nugetsource](/TradeAPI/assets/images/nugetsource-8523418911907166548dd2f4afd61d1c.png)
+
+  點擊`工具` -> `Nuget套件管理員` -> `管理方案的Nuget套件`
+
+  ![nugetpackage](/TradeAPI/assets/images/nugetpackage-d71a41371e06f457ac161917ba1a0af6.png)
+
+  接者選取
+
+  1. 套件來源，選取前一個步驟命名的套件名稱
+  2. 點選瀏覽
+  3. 點擊套件
+  4. 選取專案
+  5. 安裝版本
+
+  ![nugetinstall](/TradeAPI/assets/images/nugetinstall-1cce8168b9c84304d8a20eaf103da69d.png)
+
+  安裝完成! 即可使用新一代SDK。
+
+***
+
+* 使用方法二 : Visual Studio Nuget 套件管理員安裝( **以.NETFramework 4.7.2為例**) :<br /><!-- -->將套件放置在新增的專案下方後，點擊 `工具` -> `Nuget套件管理員` -> `套件管理員設定`
+
+  ![nugetset](/TradeAPI/assets/images/nugetset-dcd96ee20e4663a6c4b996264d1b962e.png)
+
+  跳出視窗後，
+
+  1. 點擊右上角的 `+`
+  2. 點擊下方的 `...` 選取套件存放位置
+  3. 將名稱更名
+  4. 點擊 `更新`
+  5. 按下確定 ![nugetsource](/TradeAPI/assets/images/nugetsource-8523418911907166548dd2f4afd61d1c.png)
+
+  點擊右方方案總管中`在解決方案與可用檢視之間切換` (若找不到方案總管，可至上方檢視中開啟) ， 開啟資料夾後，找到.csproj檔案
+
+  ![csprojadd](/TradeAPI/assets/images/csprojadd-884ccdbfb9631160aff1fabfc80d6f80.png)
+
+  csproj 檔案裡面增加 sdk 的 reference (Version 內容再依版號填入)
+
+  ```xml
+
+  <ItemGroup>
+    ...
+    <PackageReference Include="FubonNeo" Version="1.0.0" />  
+    ...
+  </ItemGroup>
+  ...
+
+  ```
+
+  點擊檔案總管中的 `.sln`， 於專案名稱中點選右鍵，重新載入專案
+
+  ![csprojimport](/TradeAPI/assets/images/csprojimport-a4dfc02aa766b2640c3b75692978f535.png)
+
+***
+
+* 若不使用 Visual Studio Nuget套件管理員，可使用 Command Line如下
+
+  在 project 資料夾下面新增 nuget.config 檔案：
+
+  ```bash
+  cd /您的資料夾路徑/
+  cd .>nuget.config   #新增nuget.config
+
+  ```
+
+  並將下列內容貼至nuget.config
+
+  ```xml
+  <?xml version="1.0" encoding="utf-8"?>
+  <configuration>
+      <packageSources>
+          <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+          <add key="local" value="./" />
+      </packageSources>
+      <config>
+          <add key="repositoryPath" value="./" />
+      </config>
+      <packageSourceMapping>
+          <!-- key value for <packageSource> should match key values from <packageSources> element -->
+          <packageSource key="nuget.org">
+              <package pattern="*" />
+          </packageSource>
+          <packageSource key="local">
+              <package pattern="FubonNeo*" />
+          </packageSource>
+      </packageSourceMapping>
+  </configuration>
+
+  ```
+
+  接著在 project 的 csproj 檔案裡面增加 sdk 的 reference (Version 內容再依版號填入)
+
+  ```xml
+    ...
+    <ItemGroup>
+      <PackageReference Include="FubonNeo" Version="1.0.0" />   
+    </ItemGroup>
+    ...
+
+  ```
+
+  接著
+
+  ```cs
+  dotnet restore
+
+  ```
+
+###
+
+並將憑證放置您的資料夾結構應該像是：
+
+```text
+.
+└── XXXXXXXXXX.pfx
+
+```
+
+### [​](#-1 "Direct link to -1")
+
+* Python
+* Node.js
+* C#
+
+若您未曾使用 SDK 進行過登入，或更換了 SDK 執行環境，請在資料夾新增一個 `index.py` 檔案，貼上以下內容並執行：
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+from fubon_neo.constant import TimeInForce, OrderType, PriceType, MarketType, BSAction
+
+sdk = FubonSDK()
+   
+accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證位置", "您的憑證密碼") #若有歸戶，則會回傳多筆帳號資訊
+## accounts = sdk.login("您的身分證號", "您的登入密碼", "您的憑證路徑位置")  # 若憑證選用＂預設密碼＂, SDK v1.3.2與較新版本適用
+
+acc = accounts.data[0]
+
+```
+
+若您未曾使用 SDK 進行過登入，或更換了 SDK 執行環境，請在資料夾新增一個 `index.js` 檔案，貼上以下內容並執行：
+
+```js
+const { FubonSDK, BSAction, TimeInForce, OrderType, PriceType, MarketType } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證路徑" ,"您的憑證密碼");
+// const accounts = sdk.login("您的身分證號", "您的登入密碼", "您的憑證路徑位置");  // 若憑證選用＂預設密碼＂, SDK v1.3.2與較新版本適用
+
+const acc = accounts.data[0];
+
+```
+
+若您未曾使用 SDK 進行過登入，或更換了 SDK 執行環境，請在資料夾新增一個 `index.cs` 檔案，貼上以下內容並執行：
+
+```cs
+using FubonNeo.Sdk;
+
+var sdk = new FubonSDK();
+var accounts = sdk.Login("您的身分證字號", "您的登入密碼", "您的憑證路徑", "您的憑證密碼"); // 若有歸戶，則會回傳多筆帳號資訊
+/*
+// 若憑證選用＂預設密碼＂, SDK v1.3.2　與較新版本適用
+var acc_obj = sdk.Login("您的身分證號", "您的登入密碼", "您的憑證路徑");
+*/
+
+var acc = accounts.data[0];
+
+```
+
+## 送出委託，買入股票[​](#送出委託買入股票 "Direct link to 送出委託，買入股票")
+
+再將以下範例程式碼補上， 將示範如何使用富邦新一代 API 送出一張以跌停價買入 富邦金(2881)的限價委託：
+
+* Python
+* Node.js
+* C#
+
+```py
+order = Order(
+    buy_sell = BSAction.Buy,
+    symbol = "2881",
+    price = None,
+    quantity = 2000,
+    market_type = MarketType.Common,
+    price_type = PriceType.LimitDown,
+    time_in_force = TimeInForce.ROD,
+    order_type = OrderType.Stock,
+    user_def = "FromPy" # 使用者可自定義填入 , Optional field
+)
+sdk.stock.place_order(acc, order)
+
+```
+
+```js
+const order = {
+  buySell: BSAction.Buy,
+  symbol: 2881,
+  price: "66",
+  quantity: 2000,
+  marketType: MarketType.Common,
+  priceType: PriceType.LimitDown,
+  timeInForce: TimeInForce.ROD,
+  orderType: OrderType.Stock,
+  userDef: "fromJs"
+};
+//
+sdk.stock.placeOrder(acc, order);
+
+```
+
+```cs
+var order = new Order(
+    BsAction.Buy,
+    "2881",
+    "66",
+    2000,
+    MarketType.Common,
+    PriceType.LimitDown,
+    TimeInForce.Rod,
+    OrderType.Stock,
+    null
+);
+
+sdk.Stock.PlaceOrder(acc ,order); // 使用阻塞委託下單
+
+```

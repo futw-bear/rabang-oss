@@ -1,0 +1,111 @@
+# 查詢股票報價資訊
+
+query\_symbol\_quote
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數         | 類別                                                                                                                         | 說明                                                                |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| account      | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#account)                                    | 帳號                                                                |
+| symbol       | String                                                                                                                       | 股票代碼                                                            |
+| market\_type | [MarketType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#markettype) (Optional)(default = Common) | 市場別 ： 支援 `Common` 整股，`IntradayOdd` 盤中零股、`Fixing` 定盤 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別        | 說明                             |
+| --------- | ----------- | -------------------------------- |
+| isSuccess | bool        | 是否成功                         |
+| data      | SymbolQuote | 回傳查詢資訊                     |
+| message   | string      | 當isSuccess : false 回傳錯誤訊息 |
+
+### 商品資訊 SymbolQuote 欄位[​](#商品資訊-symbolquote-欄位 "Direct link to 商品資訊 SymbolQuote 欄位")
+
+Return type : Object
+
+| 參數               | 類型   | 說明                   |
+| ------------------ | ------ | ---------------------- |
+| market             | string | 市場別                 |
+| symbol             | string | 股票代碼               |
+| is\_tib\_or\_psb   | bool   | 是否為創新版或戰略新板 |
+| market\_type       | string | 市場類型               |
+| status             | int    | 狀態 (bitmask 加總)    |
+| reference\_price   | double | 參考價格               |
+| unit               | string | 交易單位               |
+| update\_time       | string | 更新時間               |
+| limitup\_price     | double | 漲停價                 |
+| limitdown\_price   | double | 跌停價                 |
+| open\_price        | double | 開盤價                 |
+| high\_price        | double | 最高價                 |
+| low\_price         | double | 最低價                 |
+| last\_price        | double | 最新成交價             |
+| total\_volume      | int    | 總成交量               |
+| total\_transaction | int    | 總成交筆數             |
+| total\_value       | double | 總成交金額             |
+| last\_size         | int    | 最新成交量             |
+| last\_transaction  | int    | 最新成交筆數           |
+| last\_value        | double | 最新成交金額           |
+| bid\_price         | double | 買1價格                |
+| bid\_volume        | int    | 買1數量                |
+| ask\_price         | double | 賣1價格                |
+| ask\_volume        | int    | 賣1數量                |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cpp
+auto query_quote = sdk->stock->query_symbol_quote(target_account,"2330");
+//auto query_quote = sdk->stock->query_symbol_quote(target_account, "2330", MarketType::INTRADAY_ODD);
+
+// 搭配自定義 .cpp & hpp  Output 
+
+if (!query_quote.is_success) {
+     std::cout << "get query. Message: "
+        << (query_quote.message.has_value() ? query_quote.message.value() : "No message")
+        << std::endl;
+     return 0;
+}
+
+if (query_quote.data.has_value()) {
+     const fubon::SymbolQuote& data = query_quote.data.value();
+     std::cout << data << std::endl;
+}
+else {
+     std::cout << "Query Quote succeeded but no data returned." << std::endl;
+}
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cpp
+{
+    isSuccess = True,
+    message = ,
+    data =  SymbolQuote{ 
+        market = TAIEX,                    // string - 市場別 
+        symbol = 2330,                     // string - 股票代碼 
+        istibOrPsb = False,               // bool - 是否為創新板或戰略新板
+        marketType = Common,              // string - 市場類型 (現股)
+        status = 15,                      // int - 狀態 (bitmask 加總: 1+2+4+8 = 可融券賣出+可借券賣出+可先買後賣當沖+可先賣後買當沖)
+        referencePrice = 780,             // double - 參考價格 (前一交易日收盤價)
+        unit = 1000,                      // int - 交易單位 
+        updateTime = ,                    // string - 更新時間 
+        limitupPrice = 858,               // double - 漲停價
+        limitdownPrice = 702,             // double - 跌停價
+        openPrice = 1155,                 // double - 開盤價
+        highPrice = 1160,                 // double - 最高價
+        lowPrice = 1145,                  // double - 最低價
+        lastPrice = 1145,                 // double - 最新成交價
+        totalVolume = 20501,              // int - 總成交量 
+        totalTransaction = 0,             // int - 總成交筆數
+        totalValue = 23551095000,         // int - 總成交金額 
+        lastSize = 6673,                  // int - 最新成交量 
+        lastTransaction = 0,              // int - 最新成交筆數
+        lastValue = 7640585000,           // int - 最新成交金額 
+        bidPrice = 1145,                  // double - 買一價格 
+        bidVolume = 1549,                 // int - 買一數量 
+        askPrice = 1150,                  // double - 賣一價格 
+        askVolume = 4169                  // int - 賣一數量 
+    }
+} 
+
+```

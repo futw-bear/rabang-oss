@@ -1,0 +1,108 @@
+# 批次修改委託數量
+
+BatchModifyQuantity
+
+### 先使用 MakeModifyQuantityObj 建立 ModifyQuantityObj 物件[​](#先使用-makemodifyquantityobj-建立-modifyquantityobj-物件 "Direct link to 先使用 MakeModifyQuantityObj 建立 ModifyQuantityObj 物件")
+
+| 參數        | 類別                                                                                             | 說明                                                |
+| ----------- | ------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
+| orderResult | [OrderResult](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#orderresult) | 預計修改的委託單                                    |
+| quantity    | int64                                                                                            | 修改後的委託量 ( 修改後數量包含此委託單已成交部份 ) |
+
+將回傳的物件放入 BatchModifyQuantity 的方法中
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數               | 類別                                                                                     | 說明             |
+| ------------------ | ---------------------------------------------------------------------------------------- | ---------------- |
+| account            | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#account) | 帳號             |
+| modifyQuantityObjs | \[]ModifyQuantityObj                                                                     | 批次改量物件列表 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別             | 說明                              |
+| --------- | ---------------- | --------------------------------- |
+| IsSuccess | bool             | 是否成功                          |
+| Data      | \*\[]OrderResult | 回傳修改資訊列表                  |
+| Message   | \*string         | 當 IsSuccess = false 回傳錯誤訊息 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```go
+package main
+
+import (
+    "fmt"
+    "fubon"
+)
+
+func main() {
+    sdk := fubon.NewSDK()
+    // ... 登入、連線等初始化步驟 ...
+    
+    // 方法 1: 使用批次明細回傳的內容改量
+    batchList, _ := sdk.Stock.BatchOrderLists(account)
+    if batchList.Data != nil && len(*batchList.Data) > 0 {
+        batchRes := (*batchList.Data)[0]
+        batchDetail, _ := sdk.Stock.BatchOrderDetail(account, batchRes)
+        
+        if batchDetail.Data != nil && len(*batchDetail.Data) >= 2 {
+            modifyObjs := []fubon.ModifyQuantity{
+                sdk.Stock.MakeModifyQuantityObj((*batchDetail.Data)[0], 1000),
+                sdk.Stock.MakeModifyQuantityObj((*batchDetail.Data)[1], 1000),
+            }
+            
+            batchQty, err := sdk.Stock.BatchModifyQuantity(account, modifyObjs)
+            if err != nil {
+                fmt.Printf("❌ Batch Modify Quantity Format/Parse Error: %v\n", err)
+                return
+            }
+            
+            if batchQty.IsSuccess && batchQty.Data != nil {
+                fmt.Printf("✅ Modified %d orders quantity\n", len(*batchQty.Data))
+                for i, result := range *batchQty.Data {
+                    fmt.Printf("Order %d: BeforeQty=%d, AfterQty=%d\n", 
+                        i+1, *result.BeforeQty, *result.AfterQty)
+                }
+            }
+        }
+    }
+    
+    // 方法 2: 使用不同的單筆委託改量
+    ordResult, _ := sdk.Stock.OrderResults(account)
+    if ordResult.Data != nil && len(*ordResult.Data) >= 2 {
+        modifyObjs := []fubon.ModifyQuantity{
+            sdk.Stock.MakeModifyQuantityObj((*ordResult.Data)[0], 1000),
+            sdk.Stock.MakeModifyQuantityObj((*ordResult.Data)[1], 1000),
+        }
+        
+        batchQty, _ := sdk.Stock.BatchModifyQuantity(account, modifyObjs)
+        // ... 處理結果
+    }
+}
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```go
+Result{
+    IsSuccess: true,
+    Message:   nil,
+    Data: &[]OrderResult{
+        {
+            FunctionType:   20,                   // 功能別 (20=改量)
+            Date:           "2024/03/08",         // 交易日期
+            SeqNo:          "00000000042",        // 委託單流水序號
+            OrderNo:        "x0026",              // 委託書號
+            StockNo:        "2881",               // 股票代號
+            BeforeQty:      2000,                 // 改單前有效量
+            AfterQty:       1000,                 // 有效委託股數 (改量後)
+            UserDef:        "batch2",            // 自訂欄位
+            // ... 其他欄位
+        },
+        // ... 更多改量結果
+    },
+}
+
+```

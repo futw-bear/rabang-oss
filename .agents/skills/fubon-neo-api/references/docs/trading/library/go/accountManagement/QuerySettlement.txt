@@ -1,0 +1,138 @@
+# 交割款查詢
+
+QuerySettlement
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                     | 說明                                            |
+| ------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#account) | 帳號                                            |
+| range   | string                                                                                   | 時間區間，目前有效值為 "0d" (當日)、"3d" (三日) |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別             | 說明                              |
+| --------- | ---------------- | --------------------------------- |
+| IsSuccess | bool             | 是否成功                          |
+| Data      | \*SettlementData | 回傳交割款資訊                    |
+| Message   | \*string         | 當 IsSuccess = false 回傳錯誤訊息 |
+
+### 交割資訊 SettlementData 欄位[​](#交割資訊-settlementdata-欄位 "Direct link to 交割資訊 SettlementData 欄位")
+
+| 參數    | 類別            | 說明         |
+| ------- | --------------- | ------------ |
+| Account | \*AccountRes    | 帳戶資訊     |
+| Details | \*\[]Settlement | 交割明細列表 |
+
+### 帳戶 AccountRes 欄位[​](#帳戶-accountres-欄位 "Direct link to 帳戶 AccountRes 欄位")
+
+| 參數     | 類別     | 說明       |
+| -------- | -------- | ---------- |
+| Account  | \*string | 帳號       |
+| BranchNo | \*string | 分公司代號 |
+
+### 交割明細 Settlement 欄位[​](#交割明細-settlement-欄位 "Direct link to 交割明細 Settlement 欄位")
+
+| 參數                  | 類別     | 說明                    |
+| --------------------- | -------- | ----------------------- |
+| Date                  | \*string | 查詢日                  |
+| SettlementDate        | \*string | 交割日 (Optional)       |
+| BuyValue              | \*int64  | 買進金額 (Optional)     |
+| BuyFee                | \*int64  | 買進手續費 (Optional)   |
+| BuySettlement         | \*int64  | 買進應收付款 (Optional) |
+| BuyTax                | \*int64  | 買進交易稅 (Optional)   |
+| SellValue             | \*int64  | 賣出金額 (Optional)     |
+| SellFee               | \*int64  | 賣出手續費 (Optional)   |
+| SellSettlement        | \*int64  | 賣出應收付款 (Optional) |
+| SellTax               | \*int64  | 賣出交易稅 (Optional)   |
+| TotalBsValue          | \*int64  | 合計買賣金額 (Optional) |
+| TotalFee              | \*int64  | 合計手續費 (Optional)   |
+| TotalTax              | \*int64  | 合計交易稅 (Optional)   |
+| TotalSettlementAmount | \*int64  | 合計交割金額 (Optional) |
+| Currency              | \*string | 幣別 (Optional)         |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```go
+package main
+
+import (
+    "fmt"
+    "fubon"
+)
+
+func main() {
+    sdk := fubon.NewSDK()
+    // ... 登入、連線等初始化步驟 ...
+    
+    // 查詢交割款 (查詢三日)
+    settlement, err := sdk.Accounting.QuerySettlement(account, "3d")
+    if err != nil {
+        fmt.Printf("❌ Query Settlement Format/Parser Error: %v\n", err)
+        return
+    }
+    
+    if settlement.IsSuccess && settlement.Data != nil {
+        fmt.Println("✅ Settlement Data:")
+        fmt.Printf("Account: %s\n", *settlement.Data.Account.Account)
+        
+        if settlement.Data.Details != nil {
+            for i, detail := range *settlement.Data.Details {
+                fmt.Printf("\n=== Day %d (%s) ===\n", i+1, *detail.Date)
+                
+                if detail.SettlementDate != nil {
+                    fmt.Printf("交割日: %s\n", *detail.SettlementDate)
+                    fmt.Printf("買進: %d (手續費: %d, 稅: %d)\n", 
+                        *detail.BuyValue, *detail.BuyFee, *detail.BuyTax)
+                    fmt.Printf("賣出: %d (手續費: %d, 稅: %d)\n", 
+                        *detail.SellValue, *detail.SellFee, *detail.SellTax)
+                    fmt.Printf("合計交割款: %d\n", *detail.TotalSettlementAmount)
+                } else {
+                    fmt.Println("尚無交割資料")
+                }
+            }
+        }
+    }
+}
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```go
+Result{
+    IsSuccess: true,
+    Message:   nil,
+    Data: &SettlementData{
+        Account: &AccountRes{
+            Account:  "26",
+            BranchNo: "6460",
+        },
+        Details: &[]Settlement{
+            {
+                Date:                  "2024/03/04",
+                SettlementDate:        "2024/03/06",
+                BuyValue:              735500,
+                BuyFee:                313,
+                BuySettlement:         -1429513,
+                BuyTax:                0,
+                SellValue:             770500,
+                SellFee:               320,
+                SellSettlement:        0,
+                SellTax:               2309,
+                TotalBsValue:          1506000,
+                TotalFee:              633,
+                TotalSettlementAmount: -1429513,
+                TotalTax:              2309,
+                Currency:              "TWD",
+            },
+            {
+                Date:           "2024/03/06",
+                SettlementDate: nil,  // 尚未產生交割資料
+                // 其他欄位皆為 nil
+            },
+        },
+    },
+}
+
+```

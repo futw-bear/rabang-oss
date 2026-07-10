@@ -1,0 +1,89 @@
+# 查詢歷史成交
+
+filledHistory
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數       | 類別                                                                                                                  | 說明                                                                                                      |
+| ---------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| account    | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#account)                   | 帳號                                                                                                      |
+| marketType | [FutOptMarketType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#futoptmarkettype) | 盤別種類 : `Future` 期貨日盤 、 `FutureNight` 期貨夜盤 、 `Option` 選擇權日盤 、 `OptionNight` 選擇權夜盤 |
+| startDate  | string                                                                                                                | 查詢開始日                                                                                                |
+| endDate    | string? (空值預設與開始日相同)                                                                                        | 查詢終止日                                                                                                |
+
+info
+
+可查詢最近兩日之歷史資料
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | Object              | 回傳成交資訊                     |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 成交資訊 FutOptFilledData 欄位[​](#成交資訊-futoptfilleddata-欄位 "Direct link to 成交資訊 FutOptFilledData 欄位")
+
+Return type : Object
+
+| 參數            | 類別                                                                                                                                               | 說明                                                        |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| date            | string                                                                                                                                             | 成交日期                                                    |
+| branchNo        | string                                                                                                                                             | 分公司代號                                                  |
+| account         | string                                                                                                                                             | 帳號                                                        |
+| seqNo           | string ?                                                                                                                                           | 委託單流水序號 (只有主動回報才回傳此欄位)                   |
+| orderNo         | string                                                                                                                                             | 委託書號                                                    |
+| symbol          | string                                                                                                                                             | 商品代號                                                    |
+| expiryDate      | string                                                                                                                                             | 到期日                                                      |
+| strikePrice     | number                                                                                                                                             | 履約價                                                      |
+| callPut         | js<!-- -->:string<!-- --> / ts:[CallPut](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#callput)                 | 買賣權 : `Call` 買權、 `Put` 賣權                           |
+| buySell         | js<!-- -->:string<!-- --> / ts:[BSAction](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#bsaction)               | 買賣別 : `Buy` 買 、 `Sell` 賣                              |
+| symbolLeg2      | string                                                                                                                                             | 商品代號 - 複式第二隻腳                                     |
+| expiryDateLeg2  | string                                                                                                                                             | 到期日 - 複式第二隻腳                                       |
+| strikePriceLeg2 | number                                                                                                                                             | 履約價 - 複式第二隻腳                                       |
+| callPutLeg2     | js<!-- -->:string<!-- --> / ts:[CallPut](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#callput)                 | 買賣權- 複式第二隻腳: `Call` 買權、 `Put` 賣權              |
+| buySellLeg2     | js<!-- -->:string<!-- --> / ts:[BSAction](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#bsaction)               | 買賣別 - 複式第二隻腳: `Buy` 買 、 `Sell` 賣                |
+| orderType       | js<!-- -->:string<!-- --> / ts:[FutOptOrderType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#futoptordertype) | 委託單類型 : `New` 新倉 、 `Close` 平倉 、 `FdayTrade` 當沖 |
+| filledNo        | string                                                                                                                                             | 成交流水號                                                  |
+| filledAvgPrice  | number                                                                                                                                             | 成交均價                                                    |
+| filledLot       | number                                                                                                                                             | 成交股數                                                    |
+| filledPrice     | number                                                                                                                                             | 成交單價                                                    |
+| filledTime      | string                                                                                                                                             | 成交時間                                                    |
+| userDef         | string ?                                                                                                                                           | 用戶自定義 (只有主動回報才回傳此欄位)                       |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+const filledHistory = sdk.futopt.filledHistory(account,FutOptMarketType.Future,"20230921","20230922");
+console.log(filledHistory)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+{
+  isSuccess: true,
+  data:[
+  {
+    date: "2023/09/15",             // 成交日期 (string)
+    branchNo: "6460",               // 分公司代號 (string)
+    account: "26",                  // 帳號 (string)
+    orderNo: "bA422",               // 委託書號 (string)
+    symbol: "FITX",                 // 商品代號 (string)
+    expiryDate: "202404",           // 履約日 (string)
+    buySell: "Buy",                 // 買賣別 (BSAction)
+    filledNo: "00000000001",        // 成交流水號 (string)
+    filledAvgPrice: 20890.0,        // 成交均價 (float)
+    filledLots: 1,                  // 成交股數 (int)
+    filledPrice: 20890.0,           // 成交單價 (float)
+    orderType: "New",               // 委託單類型 (FutOptOrderType)
+    filledTime: "10:31:00.931",     // 成交時間 (string)
+  },
+    ...
+  ]
+}
+
+
+```

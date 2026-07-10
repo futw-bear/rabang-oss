@@ -1,0 +1,133 @@
+# 修改委託單數量
+
+modify\_lot
+
+### 先使用make\_modify\_lot\_obj 建立 FutOptModifyLot 物件[​](#先使用make_modify_lot_obj-建立-futoptmodifylot-物件 "Direct link to 先使用make_modify_lot_obj 建立 FutOptModifyLot 物件")
+
+| 參數        | 類別                                                                                                                    | 說明                                                |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| orderResult | [FutOptOrderResult](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#futoptorderresult) | 預計修改的委託單                                    |
+| lot         | int                                                                                                                     | 修改後的委託量 ( 修改後數量包含此委託單已成交部份 ) |
+
+將回傳的物件放入 modify\_lot 的方法中
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數            | 類別                                                                                                                | 說明           |
+| --------------- | ------------------------------------------------------------------------------------------------------------------- | -------------- |
+| account         | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#account)                 | 帳號           |
+| futOptModifyLot | [FutOptModifyLot](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#futoptmodifylot) | 修改的委託單   |
+| unblock         | bool (optional) (default = False)                                                                                   | 是否採用非阻塞 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別              | 說明                               |
+| ----------- | ----------------- | ---------------------------------- |
+| is\_success | bool              | 是否成功                           |
+| data        | FutOptOrderResult | 回傳委託單修改資訊                 |
+| message     | string            | 當is\_success = false 回傳錯誤訊息 |
+
+### 修改資訊 FutOptOrderResult 欄位[​](#修改資訊-futoptorderresult-欄位 "Direct link to 修改資訊 FutOptOrderResult 欄位")
+
+Return type : Object
+
+| 參數                | 類別                                                                                                                  | 說明                                                                                                                                            |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| function\_type      | int                                                                                                                   | 功能別 : `0` 新單 、`10` 新單執行、 `15` 改價、 `20` 改量、`30`刪單 、`90`失敗                                                                  |
+| date                | string                                                                                                                | 交易日期                                                                                                                                        |
+| seq\_no             | string                                                                                                                | 委託單流水序號                                                                                                                                  |
+| branch\_no          | string                                                                                                                | 分公司代號                                                                                                                                      |
+| account             | string                                                                                                                | 帳號                                                                                                                                            |
+| order\_no           | string                                                                                                                | 委託書號                                                                                                                                        |
+| asset\_type         | int                                                                                                                   | 資產類別 : `1` 期貨 、`2` 選擇權                                                                                                                |
+| market              | string                                                                                                                | 市場類型 : `TAIMEX` 期貨、選擇權                                                                                                                |
+| market\_type        | [FutOptMarketType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#futoptmarkettype) | 盤別種類 : `Future` 期貨日盤 、 `Option` 選擇權日盤 、 `FutureNight` 期貨夜盤 、 `OptionNight` 選擇權夜盤                                       |
+| unit                | int                                                                                                                   | 單位數                                                                                                                                          |
+| currency            | string                                                                                                                | 幣別                                                                                                                                            |
+| symbol              | string                                                                                                                | 商品代號                                                                                                                                        |
+| expiry\_date        | string                                                                                                                | 到期日                                                                                                                                          |
+| strike\_price       | float                                                                                                                 | 履約價                                                                                                                                          |
+| call\_put           | [CallPut](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#callput)                   | 買賣權 : `Call` 買權、 `Put` 賣權                                                                                                               |
+| buy\_sell           | [BSAction](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#bsaction)                 | 買賣別 : `Buy` 買 、 `Sell` 賣                                                                                                                  |
+| symbol\_leg2        | string                                                                                                                | 商品代號 - 複式第二隻腳                                                                                                                         |
+| expiry\_date\_leg2  | string                                                                                                                | 到期日 - 複式第二隻腳                                                                                                                           |
+| strike\_price\_leg2 | float                                                                                                                 | 履約價 - 複式第二隻腳                                                                                                                           |
+| call\_put\_leg2     | [CallPut](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#callput)                   | 買賣權 - 複式第二隻腳 : `Call` 買權、 `Put` 賣權                                                                                                |
+| buy\_sell\_leg2     | [BSAction](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#bsaction)                 | 買賣別 - 複式第二隻腳: `Buy` 買 、 `Sell` 賣                                                                                                    |
+| price\_type         | [FutOptPriceType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#futoptpricetype)   | 原始委託價格別 : `Limit` 限價 、 `Market` 市價 、 `RangeMarket` 範圍市價、`Reference` 參考價                                                    |
+| price               | float                                                                                                                 | 價格                                                                                                                                            |
+| lot                 | int                                                                                                                   | 原始委託股口數                                                                                                                                  |
+| time\_in\_force     | [TimeInforce](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#timeinforce)           | 委託條件別 : `ROD` ROD 、 `FOK` FOK 、 `IOC` IOC                                                                                                |
+| order\_type         | [FutOptOrderType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#futoptordertype)   | 委託單類型 : `New` 新倉 、 `Close` 平倉 、 `Auto` 自動 、 `FdayTrade` 當沖                                                                      |
+| is\_pre\_order      | bool                                                                                                                  | 是否為預約單                                                                                                                                    |
+| status              | int                                                                                                                   | 委託單狀態 : `0` 預約單 、 `4` 中台收到委託 、 `8` 後台傳送中 、 `9` 後台連線逾時 、`10` 委託成功 、 `30`刪單成功 、 `50` 完全成交 、 `90` 失敗 |
+| after\_price\_type  | [FutOptPriceType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#futoptpricetype)   | 有效委託價格別 : `Limit` 限價 、 `Market` 市價 、`RangeMarket` 範圍市價、 `Reference` 參考價                                                    |
+| after\_price        | float                                                                                                                 | 有效委託價格                                                                                                                                    |
+| after\_lot          | int                                                                                                                   | 有效委託口數                                                                                                                                    |
+| filled\_lot         | int                                                                                                                   | 成交口數                                                                                                                                        |
+| filled\_money       | float                                                                                                                 | 成交價金                                                                                                                                        |
+| before\_lot         | int                                                                                                                   | 改單前有效口數                                                                                                                                  |
+| before\_price       | float                                                                                                                 | 改單前有效價                                                                                                                                    |
+| user\_def           | string                                                                                                                | 自訂欄位                                                                                                                                        |
+| last\_time          | string                                                                                                                | 最後異動時間                                                                                                                                    |
+| detail              | list                                                                                                                  | 委託歷程 (查詢order\_result\_detail or order\_history才有值)                                                                                    |
+| error\_message      | string                                                                                                                | 錯誤訊息                                                                                                                                        |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+modify_lot_obj = sdk.futopt.make_modify_lot_obj(target_order, 2)
+sdk.futopt.modify_lot(account, modify_lot_obj)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+Result {
+    is_success: True,
+    message: None,
+    data : FutOptOrderResult{
+            function_type: 20,                  # 功能別 (int)
+            date: "2024/03/25",                 # 交易日期 (string)
+            seq_no: "03100161319",              # 委託單流水序號 (string)
+            branch_no: "15901",                 # 分公司代號 (string)
+            account: "1234567",                 # 帳號 (string)
+            order_no: "l001D",                  # 委託書號 (string)
+            asset_type: 1,                      # 資產類別 (int)
+            market: "TAIMEX",                   # 市場類型 (string)
+            market_type: FutureNight,           # 盤別種類 (FutOptMarketType)
+            unit: None,                         # 單位數 (int)
+            currency: "TWD",                    # 幣別 (string)
+            symbol: "FIMTX",                    # 商品代號 (string)
+            expiry_date: "202404",                  # 到期日 (string)
+            strike_price: None,                 # 履約價 (float)
+            call_put: None,                     # 買賣權 (CallPut)
+            buy_sell: Buy,                      # 買賣別 (BSAction)
+            symbol_leg2: None,                  # 商品代號 - 複式第二隻腳 (string)
+            expiry_date_leg2: None,             # 到期日 - 複式第二隻腳 (string)
+            strike_price_leg2: None,            # 履約價 - 複式第二隻腳 (float)
+            call_put_leg2: None,                # 買賣權 - 複式第二隻腳 (CallPut)
+            buy_sell_leg2: None,                # 買賣別 - 複式第二隻腳 (BSAction)
+            price_type: Limit,                  # 原始委託價格別 (FutOptPriceType)
+            price: 20000,                       # 價格 (float)
+            lot: 3,                             # 原始委託股口數 (int)
+            time_in_force: ROD,                 # 委託條件別 (TimeInforce)
+            order_type: New,                    # 委託單類型 (FutOptOrderType)
+            is_pre_order: False,                # 是否為預約單 (bool)
+            status: 10,                         # 委託單狀態 (int)
+            after_price_type: Limit,            # 有效委託價格別 (FutOptPriceType)
+            after_price: 20000,                 # 有效委託價格 (float)
+            after_lot: 2,                       # 有效委託股口數 (int)
+            filled_lot: 0,                      # 成交股口數 (int)
+            filled_money: 0,                    # 成交價金 (int)
+            before_lot: 0,                      # 改單前有效股口數 (int)
+            before_price: 20000,                # 改單前有效價格 (float)
+            user_def: None,                     # 自訂欄位 (string)
+            last_time: "18:24:40",              # 最後異動時間 (string)
+            details: None,                        # 委託歷程 (list)
+            error_message: None,                # 錯誤訊息 (string)
+    }
+}
+
+```

@@ -1,0 +1,63 @@
+# 取消條件單
+
+cancel\_condition\_orders
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                      | 說明     |
+| ------- | ----------------------------------------------------------------------------------------- | -------- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/cpp/EnumMatrix.txt#account) | 帳號     |
+| guid    | string                                                                                    | 條件單號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別                | 說明                             |
+| ----------- | ------------------- | -------------------------------- |
+| is\_success | bool                | 是否成功                         |
+| data        | Object              | 條件單回傳資訊                   |
+| message     | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 CancelResult 欄位[​](#委託資訊-cancelresult--欄位 "Direct link to 委託資訊 CancelResult  欄位")
+
+Return type : Object
+
+| 參數     | 類別   | 說明         |
+| -------- | ------ | ------------ |
+| advisory | string | 回覆狀態內容 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cpp
+auto cancel_condition = sdk->stock->cancel_condition_orders(target_account, "564b7ad6-a332-470c-93ea-cf3fea00d7fa");
+if (!cancel_condition.is_success) {
+    std::cout << "cancel condition result failed reason: "
+        << (cancel_condition.message.has_value() ? cancel_condition.message.value() : "No message")
+        << std::endl;
+}
+else {
+    if (cancel_condition.data.has_value()) {
+        for (const auto& result : cancel_condition.data.value()) {
+            std::cout << result << std::endl;
+        }
+    }
+    else {
+        std::cout << "cancel condition success but no data returned." << std::endl;
+    }
+}
+
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cpp
+
+Result {
+    isSuccess = true,
+    message = None,
+    data = CancelResult {
+             advisory = 成功筆數:1,失敗筆數:0!
+            }
+ }
+
+```

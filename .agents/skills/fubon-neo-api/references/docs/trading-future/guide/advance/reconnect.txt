@@ -1,0 +1,82 @@
+# 斷線重連
+
+以下將用簡單示範，利用callback偵測交易Socket，接收到斷線事件後，程式自動進行Socket重新連線:
+
+* Python
+* Node.js
+* C#
+
+```py
+# A callback to receive event 
+def on_event(code, content):
+    print("===event=====")
+    print(code)
+    print(content)
+    if code == "300":
+        print("Reconnect")
+        try:
+            accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證路徑", "您的憑證密碼")
+            print("Reconnect successs")
+        except Exception as e:
+            print("Reconnect failed")
+            print(e)
+    print("========")
+    
+sdk.set_on_event(on_event) 
+
+```
+
+```js
+sdk.setOnEvent(function(order, content) { 
+    console.log("===Event===\n",order, content)
+    if(content[0] == "300"){
+        console.log("Reconnect")
+        try{
+             accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證路徑", "您的憑證密碼");
+             console.log("Reconnect success")
+        }catch(e){
+            console.log("Reconnect Failed")
+        }
+    }});
+
+```
+
+```cs
+public class MyCallback : Callback
+{
+    public string response = "";
+    private FubonSDK _sdk;
+
+    public MyCallback(ref FubonSDK sdk)
+    {
+        _sdk = sdk;
+    }
+    public void OnEvent(string code, string data)
+    {
+
+        Console.WriteLine(code);
+        Console.WriteLine(data);
+        if (code == "300")
+        {
+            Console.WriteLine("Reconnect");
+
+            try
+            {
+                _sdk.Login("您的身分證字號", "您的登入密碼", "您的憑證路徑", "您的憑證密碼");
+                Console.WriteLine("Reconnect success");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine("Reconnect Failed");
+            }
+        }
+    }
+}
+
+
+var callback = new MyCallback(ref sdk);
+sdk.RegisterCallback(callback);
+
+
+```

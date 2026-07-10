@@ -1,0 +1,33 @@
+# 富邦新一代 API 證券行情服務
+
+本頁重點
+
+* 富邦新一代 API（Fubon Neo API）證券行情服務提供台股即時與歷史資料。
+* 介面包含 Web API 與 WebSocket API。
+* 資料來源為交易所與資訊供應商，使用前請詳閱規範與聲明。
+* 下一步可從 [Web API](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/getting-started.txt) 或 [WebSocket API](https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/getting-started.txt) 開始。
+
+| 項目     | 說明                                             |
+| -------- | ------------------------------------------------ |
+| 服務     | 新一代 API 證券行情服務                          |
+| 市場     | 台灣證券市場                                     |
+| 介面     | Web API / WebSocket API                          |
+| 資料來源 | 臺灣證券交易所、證券櫃檯買賣中心、臺灣期貨交易所 |
+| 規範     | 使用規範與聲明                                   |
+
+即時行情資料來源為臺灣證券交易所、證券櫃檯買賣中心、臺灣期貨交易所。請您詳閱相關使用[規範與聲明](#statement)。
+
+## Web API[​](#web-api "Direct link to Web API")
+
+富邦行情 [Web API](https://www.fbs.com.tw/TradeAPI/docs/market-data/http-api/getting-started.txt) 提供開發者友善的 API 服務。您可以查詢台股的日內行情、行情快照與歷史行情等數據；數據來源為時報資訊與群馥科技。
+
+## WebSocket API[​](#websocket-api "Direct link to WebSocket API")
+
+富邦行情 [WebSocket API](https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/getting-started.txt) 提供台股即時行情服務。透過 WebSocket API 可以滿足您想要接收即時行情的需求。
+
+## 使用規範與聲明[​](#statement "Direct link to 使用規範與聲明")
+
+* 透過本服務取得之行情資料僅供參考，成交值及成交量不含零股及鉅額交易，使用者依本資料交易發生交易損失需自行負責。
+* 時報資訊與群馥科技對資料內容錯誤、更新延誤或傳輸中斷不負任何責任。您應對您所為之任何金融或投資決策自行負責。
+* 使用者應遵守[臺灣證券交易所股份有限公司交易資訊使用管理辦法](https://www.selaw.com.tw/Chinese/RegulatoryInformationResult/Article?isIntegratedSearch=True\&sysNumber=LW10809760\&searchString1=%E8%87%BA%E7%81%A3%E8%AD%89%E5%88%B8%E4%BA%A4%E6%98%93%E6%89%80%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E4%BD%BF%E7%94%A8%E7%AE%A1%E7%90%86%E8%BE%A6%E6%B3%95)、[臺灣期貨交易所股份有限公司交易資訊使用管理辦法](https://www.selaw.com.tw/Chinese/RegulatoryInformationResult/Article?isIntegratedSearch=True\&sysNumber=LW10815483\&searchString1=%E8%87%BA%E7%81%A3%E6%9C%9F%E8%B2%A8%E4%BA%A4%E6%98%93%E6%89%80%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E4%BD%BF%E7%94%A8%E7%AE%A1%E7%90%86%E8%BE%A6%E6%B3%95)、[財團法人中華民國證券櫃檯買賣中心有價證券交易資訊使用管理辦法](https://www.selaw.com.tw/Chinese/RegulatoryInformationResult/Article?isIntegratedSearch=True\&sysNumber=LW10813063\&searchString1=%E8%B2%A1%E5%9C%98%E6%B3%95%E4%BA%BA%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E8%AD%89%E5%88%B8%E6%AB%83%E6%AA%AF%E8%B2%B7%E8%B3%A3%E4%B8%AD%E5%BF%83%E6%9C%89%E5%83%B9%E8%AD%89%E5%88%B8%E4%BA%A4%E6%98%93%E8%B3%87%E8%A8%8A%E4%BD%BF%E7%94%A8%E7%AE%A1%E7%90%86%E8%BE%A6%E6%B3%95)、各資訊來源提供者所定之資訊使用相關規範及智慧財產權相關法令，所有資訊以各資訊來源提供者公告資料為準。如有盜接 、轉接交易資訊，或以其他方式出售、出租、轉讓、再授權交易資訊，或將交易資訊另行取樣並編製指數、其他衍生性商品或將之傳送予第三人，應負違約及侵權之相關民、刑事責任。
+* 富邦新一代 API 行情服務由 [Fugle](https://www.fugle.tw/) 技術團隊開發提供。

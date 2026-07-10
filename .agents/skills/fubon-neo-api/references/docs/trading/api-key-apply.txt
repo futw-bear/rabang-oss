@@ -1,0 +1,51 @@
+# API Key 說明
+
+版本限制
+
+2.2.7版本新增功能
+
+您仍可使用現有的帳號憑證登入並使用 API。<br />**API Key 是一個選擇性功能**，主要提供 **更高的安全性與靈活性**，適合有進階需求的使用者。
+
+### 為什麼選擇 API Key？[​](#為什麼選擇-api-key "Direct link to 為什麼選擇 API Key？")
+
+* **細緻權限控管**：可限制金鑰僅能使用特定功能（例如僅查詢行情、不允許下單）。
+* **IP 白名單**：僅允許指定 IP 存取，降低外部風險。
+* **快速撤銷**：隨時停用金鑰，不影響主要帳號。
+
+此功能 **非強制**，但若您希望提升安全性或需要更彈性的整合方式，**建議啟用 API Key**。
+
+注意事項
+
+**請注意！** 當 API Key 列表有變動時（新增或移除），所有以 API Key 方式登入的 session 都會被強制登出
+
+機制調整 >= v2.2.8 (需使用新版SDK)
+
+API Key 權限變更強制斷線機制，調整為僅限於受變更影響之 key<br />(例：使用key1、key2同時登入上線，刪除 key1 => key1 session 強制斷線； key2 session 不受影響)<br />
+
+## 申請憑證[​](#申請憑證 "Direct link to 申請憑證")
+
+申請 API Key 前，需先申請您的網頁憑證，即可進行 API Key 申請
+
+1. 進入[金鑰申請及管理](https://www.fbs.com.tw/TradeAPI/docs/key.txt)
+
+![key\_login\_step1](/TradeAPI/assets/images/key_login_step1-d6356e971b19e5a35f3a1b089bf2a6a7.png)
+
+2. 輸入您的身分證字號、電子平台密碼 ![key\_login\_step2](/TradeAPI/assets/images/key_login_step2-516ea7a99d80eba338fd760b77a2bc93.png)
+
+3. 申請網頁版憑證，收取 OTP ![OTP](/TradeAPI/assets/images/OTP-3771c5ab5c12c603f48994c14e130c77.png)
+
+4. 申請完憑證後，即可進行憑證匯出與新增金鑰 ![key\_login\_step3](/TradeAPI/assets/images/key_login_step3-48c99a5a670c60ce55e5d09a4fb097eb.png)
+
+使用預設密碼憑證
+
+在系統提示輸入憑證密碼時，請使用您的登入 ID
+
+5. 進行金鑰申請
+
+   * 點擊新增金鑰<br />![add\_key](/TradeAPI/assets/images/add_key-ce15b3f601484f2a96499f2a85150398.png)
+
+   * 設置控制權限 ( IP或有效期限若不輸入，則為無限制 ) ![add\_key\_step2](/TradeAPI/assets/images/add_key_step2-ee688b483e6d020bb1ad988c42cd2325.png)
+
+   * 設置成功，顯示 Secret Key ( Secret Key 關閉後即不再顯示 ) ![add\_key\_step3](/TradeAPI/assets/images/add_key_step3-6913c4ffe9e7e563c740c6ae15f80cbe.png)
+
+6. 可檢視先前申請的 Key 內容或停用 ( Key 最多申請 30 把 ) ![key\_list](/TradeAPI/assets/images/key_list-7e65381ef6623e6c61a53a7cef01bf94.png)

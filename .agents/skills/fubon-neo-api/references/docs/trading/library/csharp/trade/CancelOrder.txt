@@ -1,0 +1,105 @@
+# 刪除委託單
+
+CancelOrder
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數        | 類別                                                                                                 | 說明               |
+| ----------- | ---------------------------------------------------------------------------------------------------- | ------------------ |
+| account     | Account                                                                                              | 帳號               |
+| orderResult | [orderResult](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#orderresult) | 欲取消的委託單物件 |
+| unblock     | bool (optional) (default = false)                                                                    | 是否採用非阻塞     |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別        | 說明                             |
+| --------- | ----------- | -------------------------------- |
+| isSuccess | bool        | 是否成功                         |
+| data      | OrderResult | 回傳修改資訊                     |
+| message   | string      | 當isSuccess = False 回傳錯誤訊息 |
+
+### 修改資訊 OrderResult 欄位[​](#修改資訊-orderresult-欄位 "Direct link to 修改資訊 OrderResult 欄位")
+
+Return type : Object
+
+| 參數           | 類別                                                                                                 | 說明                                                                                                                     |
+| -------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| functionType   | int                                                                                                  | 功能別 : `0` 新單 、 `10` 新單執行 、 `15` 改價 、 `20` 改量 、 `30` 刪單 、 `90` 失敗                                   |
+| date           | string                                                                                               | 交易日期                                                                                                                 |
+| seqNo          | string                                                                                               | 委託單流水序號                                                                                                           |
+| branchNo       | string                                                                                               | 分公司代號                                                                                                               |
+| account        | string                                                                                               | 帳號                                                                                                                     |
+| orderNo        | string                                                                                               | 委託書號                                                                                                                 |
+| assetType      | int                                                                                                  | 資產類別 : `0` 證券                                                                                                      |
+| market         | string                                                                                               | 市場類型 : `TAIEX` 上市股票 、 `TAISDAQ` 上櫃股票 、 `TAIEMG` 興櫃股票                                                   |
+| marketType     | [MarketType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#markettype)   | 盤別種類 : `Common` 整股 、 `Fixing` 定盤 、 `IntradayOdd` 盤中零股 、 `Odd` 盤後零股 、 `Emg` 興櫃 、 `EmgOdd` 興櫃零股 |
+| stockNo        | string                                                                                               | 股票代號                                                                                                                 |
+| buySell        | [BsAction](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#bsaction)       | 買賣別 : `Buy` 買 、 `Sell` 賣                                                                                           |
+| priceType      | [PriceType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#pricetype)     | 原始委託價格別 : `Limit` 限價 、 `LimitUp` 漲停 、 `LimitDown` 跌停 、 `Market` 市價 、 `Reference` 參考價               |
+| price          | double                                                                                               | 價格                                                                                                                     |
+| quantity       | int                                                                                                  | 原始委託股數                                                                                                             |
+| timeInForce    | [TimeInForce](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#timeinforce) | 委託條件別 : `Rod` Rod 、 `Fok` Fok 、 `Ioc` Ioc                                                                         |
+| orderType      | [OrderType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#ordertype)     | 委託單類型 : `Stock` 現股 、 `Margin` 融資 、 `Short` 融券 、 `DayTrade` 現沖先賣 、 `SBL`借券                           |
+| isPreOrder     | bool                                                                                                 | 是否為預約單                                                                                                             |
+| status         | int                                                                                                  | 委託單狀態，詳細列表請參考 [STATUS](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#status)    |
+| afterPriceType | [PriceType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#pricetype)     | 有效委託價格別 : `Limit` 限價 、 `LimitUp` 漲停 、 `LimitDown` 跌停 、 `Market` 市價 、 `Reference` 參考價               |
+| afterPrice     | double                                                                                               | 有效委託價格                                                                                                             |
+| unit           | int                                                                                                  | 單位數                                                                                                                   |
+| afterQty       | int                                                                                                  | 有效委託股數（包含已成交部分）                                                                                           |
+| filledQty      | int                                                                                                  | 成交股數                                                                                                                 |
+| filledMoney    | int                                                                                                  | 成交價金                                                                                                                 |
+| beforeQty      | int                                                                                                  | 改單前有效量                                                                                                             |
+| beforePrice    | double                                                                                               | 改單前有效價                                                                                                             |
+| user\_def      | string                                                                                               | 自訂欄位                                                                                                                 |
+| lastTime       | string                                                                                               | 最後異動時間                                                                                                             |
+| details        | list                                                                                                 | 委託歷程 (查詢order\_result\_detail or order\_history才有值)                                                             |
+| errorMessage   | string                                                                                               | 錯誤訊息                                                                                                                 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+Console.WriteLine(sdk.Stock.CancelOrder(account, cancel_order));
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+{
+    isSuccess = True,
+    message = ,
+    data =   OrderResult {
+                functionType = 30,         // 功能別 (int)
+                date = 2024/03/08,         // 交易日期 (string)
+                seqNo = 00000308948,       // 委託單流水序號 (string)
+                branchNo = 6460,           // 分公司代號 (string)
+                account = 26,              // 帳號 (string)
+                orderNo = x0023,           // 委託書號 (string)
+                assetType = 0,             // 資產類別 (int)
+                market = TAIEX,            // 市場類型 (string)
+                marketType = Common,       // 盤別種類 (MarketType)
+                stockNo = 1101,            // 股票代號 (string)
+                buySell = Sell,            // 買賣別 (BsAction)
+                priceType = Limit,         // 原始委託價格別 (PriceType)
+                price = 41.2,              // 價格 (double)
+                quantity = 5000,           // 原始委託股數 (int)
+                timeInForce = Rod,         // 委託條件別 (TimeInforce)
+                orderType = Stock,         // 委託單類型 (string)
+                isPreOrder = False,        // 是否為預約單 (bool)
+                status = 30,               // 委託單狀態 (int)
+                afterPriceType = Limit,    // 有效委託價格別 (PriceType)
+                afterPrice = 41.2,         // 有效委託價格 (double)
+                unit = 1000,               // 單位數 (int)
+                afterQty = 0,              // 有效委託股數 (int)
+                filledQty = 0,             // 成交股數 (int)
+                filledMoney = 0,           // 成交價金 (int)
+                beforeQty = 5000,          // 改單前有效量 (int)
+                beforePrice = 41.2,        // 改單前有效價 (double)
+                userDef = 12345678,        // 自訂欄位 (string)
+                lastTime = 12:53:57.536,   // 最後異動時間 (string)
+                details = ,                 // 委託歷程 (list)
+                errorMessage =             // 錯誤訊息 (string)
+            }
+}
+
+```

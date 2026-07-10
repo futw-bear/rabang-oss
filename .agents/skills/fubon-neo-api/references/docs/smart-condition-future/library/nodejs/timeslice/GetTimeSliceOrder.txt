@@ -1,0 +1,120 @@
+# 分時分量查詢
+
+getTimeSliceOrder
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數       | 類別                                                                                                                                                                      | 說明             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| account    | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#account)                                                                       | 帳號             |
+| batchNo    | string                                                                                                                                                                    | 分時分量條件單號 |
+| marketType | [FutOptConditionMarketType](https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/EnumMatrix.txt#futoptconditionmarkettype) (Optional) default : 日盤 | 盤別             |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | List                | 條件單回傳資訊                   |
+| message   | string ? (optional) | 當isSuccess : false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionDetail 欄位[​](#委託資訊-conditiondetail--欄位 "Direct link to 委託資訊 ConditionDetail  欄位")
+
+Return type : Object
+
+| 參數                     | 類別   | 說明             |
+| ------------------------ | ------ | ---------------- |
+| guid                     | string | 條件單號         |
+| batchNo                  | string | 分單批號         |
+| orderLevel               | string | 條件單層級       |
+| lastTime                 | string | 更新時間         |
+| parentGuid               | string | 父單單號         |
+| symbol                   | string | 商品代號         |
+| orderAmount              | string | 委託金額         |
+| childBatchNo             | string | 子單分單批號     |
+| account                  | string | 帳號             |
+| conditionContent         | string | 條件內容         |
+| action                   | string | 處理方式         |
+| conditionBuySell         | string | 買賣別           |
+| conditionSymbol          | string | 商品名稱         |
+| conditionPrice           | string | 價格             |
+| conditionVolume          | string | 委託數量         |
+| conditionFilledVolume    | string | 成交數量         |
+| createTime               | string | 建立時間         |
+| startDate                | string | 預約開始時間     |
+| status                   | string | 目前狀態         |
+| errorMessage             | string | 目前狀態異常說明 |
+| detailRecordsCount       | string | 查詢明細筆數     |
+| detailRecords            | List   | 查詢明細資料     |
+| >> guid                  | string | 條件單號         |
+| >> account               | string | 帳號             |
+| >> conditionContent      | string | 條件內容         |
+| >> action                | string | 處理方式         |
+| >> conditionBuySell      | string | 買賣別           |
+| >> conditionSymbol       | string | 商品名稱         |
+| >> conditionPrice        | string | 價格             |
+| >> conditionVolume       | string | 委託數量         |
+| >> conditionFilledVolume | string | 成交數量         |
+| >> startDate             | string | 預約時間         |
+| >> status                | string | 目前狀態         |
+| >> errorMessage          | string | 目前狀態異常說明 |
+| tpslCount                | string | 停損停利筆數     |
+| tpslRecord               | List   | 停損停利明細資料 |
+| >> guid                  | string | 條件單號         |
+| >> account               | string | 帳號             |
+| >> conditionContent      | string | 條件內容         |
+| >> action                | string | 處理方式         |
+| >> conditionBuySell      | string | 買賣別           |
+| >> conditionSymbol       | string | 商品名稱         |
+| >> conditionPrice        | string | 價格             |
+| >> conditionVolume       | string | 委託數量         |
+| >> conditionFilledVolume | string | 成交數量         |
+| >> startDate             | string | 預約時間         |
+| >> status                | string | 目前狀態         |
+| >> errorMessage          | string | 目前狀態異常說明 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+sdk.futopt.getTimeSliceOrder(account,"1234567")
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+
+{
+    isSuccess: true,
+    data :
+        [
+            {
+                guid: "f76c49ee-e955-41ac-8e11-02d6d2b78918",
+                batchNo: "",
+                orderLevel: "0",
+                lastTime: "2024-08-16 17:13:29",
+                conditionType: "定時",
+                parentGuid: "",
+                symbol: "TXO20000H4",
+                orderAmount: "0",
+                childBatchNo: "",
+                account: "9974825",
+                conditionContent: "當於2024/08/16 定時單時間大於等於09:15:00 全部成交為止",
+                action: "下單(新倉)",
+                conditionBuySell: "買",
+                conditionSymbol: "買 台指2024年8 月買權履約價：20000",
+                conditionPrice: "500(ROD)",
+                conditionVolume: "1口",
+                conditionFilledVolume: "0口",
+                createTime: "2024-08-16 17:13:28",
+                startDate: "2024/08/16",
+                status: "預約(N)",
+                detailRecordsCount: "0",
+                detailRecords: [],
+                tpslCount: "0",
+                tpslRecord: []
+            }
+    ]
+}
+
+```

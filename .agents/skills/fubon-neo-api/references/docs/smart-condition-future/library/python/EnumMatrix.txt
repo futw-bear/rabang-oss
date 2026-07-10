@@ -1,0 +1,257 @@
+# 參數對照表
+
+## 類別[​](#類別 "Direct link to 類別")
+
+Class
+
+### Condition Object[​](#condition-object "Direct link to Condition Object")
+
+| Parameter      | Type           | Meaning                                                                                                                                 |
+| -------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| market\_type   | TradingType    | [監控類型](#tradingtype) 可選用參數 : `Reference` 自動參考委託物件、`Scheduled` 時間                                                    |
+| symbol         | string         | 股票代號                                                                                                                                |
+| trigger        | TriggerContent | [觸發條件](#triggercontent) 可選用參數 : `BidPrice` 買進價、`AskPrice` 賣出價、`MatchedPrice` 成交價、`TotalQuantity` 總量、`Time` 時間 |
+| trigger\_value | string         | 監控條件數值 (若為時間則填入HHMMSS)                                                                                                     |
+| comparison     | Operator       | [比對值](#operator) 可選用參數`GreaterThanOrEqual` 大於等於、`LessThanOrEqual`小於等於 、 `GreaterThan` 大於 、 `LessThan` 小於         |
+
+info
+
+1. 選擇 `Reference`時， trigger 可搭配 `BidPrice` 、`AskPrice` 、`MatchedPrice` 、`TotalQuantity`
+2. 選擇`Scheduled` 時，symbol需填入欲觸發之商品，trigger需帶入`Time`
+
+### FutOptConditionOrder Object[​](#futoptconditionorder-object "Direct link to FutOptConditionOrder Object")
+
+| Parameter       | Type                      | Meaning                                                                                                                                                                                                                         |
+| --------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| buy\_sell       | BSAction                  | [買賣別](#bsaction) 可選用參數`Buy` 買 、 `Sell` 賣                                                                                                                                                                             |
+| symbol          | string                    | 股票代號                                                                                                                                                                                                                        |
+| price           | string                    | 委託價格                                                                                                                                                                                                                        |
+| quantity        | int                       | 委託數量                                                                                                                                                                                                                        |
+| market\_type    | FutOptConditionMarketType | [盤別](#futoptconditionmarkettype) 可選用參數 : `Future` 期貨日盤、`Option` 選擇權日盤、`FutureNight` 期貨夜盤、`OptionNight` 選擇權夜盤 (**IMPORTANT:** 以下功能不支援夜盤： 1. 分時分量, 2. 移動鎖利, 3. 時間觸發條件)        |
+| price\_type     | FutOptConditionPriceType  | [價格別](#futoptconditionpricetype) : 可選參數 :`BidPrice` 買進價、 `AskPrice` 賣出價、`MatchedPrice`成交價、`Limit` 限價、`LimitUp` 漲停、`LimitDown` 跌停、`Market` 市價、`Reference` 參考價(平盤價) 、`RangeMarket` 範圍市價 |
+| time\_in\_force | TimeInforce               | [委託條件](#timeinforce) : 可選參數 :`ROD`、`IOC`、`FOK`                                                                                                                                                                        |
+| order\_type     | FutOptConditionOrderType  | [委託類別](#futoptconditionordertype) : 可選參數 :`New` 新倉、`Close` 平倉                                                                                                                                                      |
+
+caution
+
+以下功能不支援夜盤：
+
+1. 分時分量
+2. 移動鎖利
+3. 時間觸發條件
+
+### FutOptTPSLOrder Object[​](#futopttpslorder-object "Direct link to FutOptTPSLOrder Object")
+
+| Parameter              | Type                     | Meaning                                                                                                                                                                                                                         |
+| ---------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| time\_in\_force        | TimeInforce              | [委託條件](#timeinforce) : 可選參數 :`ROD`、`IOC`、`FOK`                                                                                                                                                                        |
+| price\_type            | FutOptConditionPriceType | [價格別](#futoptconditionpricetype) : 可選參數 :`BidPrice` 買進價、 `AskPrice` 賣出價、`MatchedPrice`成交價、`Limit` 限價、`LimitUp` 漲停、`LimitDown` 跌停、`Market` 市價、`Reference` 參考價(平盤價) 、`RangeMarket` 範圍市價 |
+| order\_type            | FutOptConditionOrderType | [委託類別](#futoptconditionordertype) : 可選參數 :`New` 新倉、`Close` 平倉                                                                                                                                                      |
+| target\_price          | string                   | 停損/停利觸發價                                                                                                                                                                                                                 |
+| price                  | string                   | 停損/停利委託價                                                                                                                                                                                                                 |
+| trigger (**保留欄位**) | TriggerContent           | 2.2.0 版本新增欄位，暫無相關功能，可忽略                                                                                                                                                                                        |
+
+info
+
+`priceType` 若為`limit`時，`price`需填入價格；其餘price填入空字串
+
+### FutOptTPSLWrapper Object[​](#futopttpslwrapper-object "Direct link to FutOptTPSLWrapper Object")
+
+| Parameter  | Type                                    | Meaning                                                                                           |
+| ---------- | --------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| stop\_sign | StopSign                                | [停止條件](#stopsign) : 可選用 `Full` 全部成交為止、`Partial`部分成交為止、`UntilEnd`效期結束為止 |
+| TP         | FutOptTPSLOrder Object (Optional)       | 停利條件內容                                                                                      |
+| SL         | FutOptTPSLOrder Object (Optional)       | 停損條件內容                                                                                      |
+| end\_date  | string (Optional : 空值同母單StartDate) | 條件停止日期                                                                                      |
+| day\_trade | bool (Optional)                         | 全部成交後當沖 (期貨固定為True)                                                                   |
+
+### FutOptTrailOrder[​](#futopttrailorder "Direct link to FutOptTrailOrder")
+
+| Parameter       | Type                     | Meaning                                                                                                                                                                                                                         |
+| --------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| symbol          | string                   | 商品代號                                                                                                                                                                                                                        |
+| price           | string                   | 基準價                                                                                                                                                                                                                          |
+| direction       | Direction                | [方向](#direction) : 可選用 `Up` 上漲、`Down` 下跌                                                                                                                                                                              |
+| tick\_num       | int                      | 上漲 / 下跌 ticker 數                                                                                                                                                                                                           |
+| buysell         | BSAction                 | 買賣別 : 可選用 `Buy` 買進 、`Sell` 賣出                                                                                                                                                                                        |
+| lot             | int                      | 委託口數                                                                                                                                                                                                                        |
+| price\_type     | FutOptConditionPriceType | [價格別](#futoptconditionpricetype) : 可選參數 :`BidPrice` 買進價、 `AskPrice` 賣出價、`MatchedPrice`成交價、`Limit` 限價、`LimitUp` 漲停、`LimitDown` 跌停、`Market` 市價、`Reference` 參考價(平盤價) 、`RangeMarket` 範圍市價 |
+| diff            | int                      | 買賣價格檔數 (根據 priceType 加減檔數) ，正值為向上加檔數、負值為向下加檔數                                                                                                                                                     |
+| time\_in\_force | TimeInForce              | [委託條件](#timeinforce) 可選用參數為 `ROD`、`FOK`、`IOC`                                                                                                                                                                       |
+| order\_type     | FutOptConditionOrderType | [委託類別](#futoptconditionordertype) : 可選參數 :`New` 新倉、`Close` 平倉                                                                                                                                                      |
+
+### SplitDescription[​](#splitdescription "Direct link to SplitDescription")
+
+| Parameter        | Type              | Meaning                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ---------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| method           | SliceType         | [Slice Condition](#slicetype) : 可選用 :<br />`Type1` 從 `start_time` 開始，每隔幾秒送一筆，總共`total_quantity`，每筆送 `single_quantity`<br />`Type2` 從 `start_time` 開始到 `end_time` 結束，每隔 `interval` 秒送一筆，總共 `total_quantity`，剩餘張數加總至最後一筆<br />`Type3` 從 `start_time` 開始到 `end_time` 結束，每隔 `interval` 秒送一筆，總共 `total_quantity`，剩餘張數從最後一筆往前分配.<br /><br /> |
+| interval         | int               | 下單間隔時間                                                                                                                                                                                                                                                                                                                                                                                                          |
+| single\_quantity | int               | 單筆下單量 (股數)                                                                                                                                                                                                                                                                                                                                                                                                     |
+| total\_quantity  | int (Optional)    | 總共下單量 (股數)                                                                                                                                                                                                                                                                                                                                                                                                     |
+| start\_time      | string            | 開始時間                                                                                                                                                                                                                                                                                                                                                                                                              |
+| end\_time        | string (Optional) | 結束時間                                                                                                                                                                                                                                                                                                                                                                                                              |
+
+caution
+
+請注意，總共下單量需大於單筆下單量。
+
+### ConditionOrderResult[​](#conditionorderresult "Direct link to ConditionOrderResult")
+
+| Parameter | Type   | Meaning  |
+| --------- | ------ | -------- |
+| guid      | string | 條件單號 |
+
+## Constants ( 欄位對應數值 )[​](#constants--欄位對應數值- "Direct link to Constants ( 欄位對應數值 )")
+
+### BSAction[​](#bsaction "Direct link to BSAction")
+
+買賣別 (buySell)
+
+| Name | Meaning |
+| ---- | ------- |
+| Buy  | 買      |
+| Sell | 賣      |
+
+### ConditionMarketType[​](#conditionmarkettype "Direct link to ConditionMarketType")
+
+盤別
+
+| Name        | Meaning  |
+| ----------- | -------- |
+| Common      | 整股     |
+| Fixing      | 定盤     |
+| IntradayOdd | 盤中零股 |
+| Odd         | 盤後零股 |
+
+### TradingType[​](#tradingtype "Direct link to TradingType")
+
+監控類型
+
+| Name      | Meaning          |
+| --------- | ---------------- |
+| Reference | 自動參考委託物件 |
+| Index     | 指數             |
+| Scheduled | 時間             |
+
+### TriggerContent[​](#triggercontent "Direct link to TriggerContent")
+
+觸發條件
+
+| Name          | Meaning |
+| ------------- | ------- |
+| BidPrice      | 買進價  |
+| AskPrice      | 賣出價  |
+| MatchedPrice  | 成交價  |
+| TotalQuantity | 總量    |
+| Time          | 時間    |
+
+### Operator[​](#operator "Direct link to Operator")
+
+| Name               | Meaning  |
+| ------------------ | -------- |
+| GreaterThanOrEqual | 大於等於 |
+| LessThanOrEqual    | 小於等於 |
+| GreaterThan        | 大於     |
+| LessThan           | 小於     |
+
+### StopSign[​](#stopsign "Direct link to StopSign")
+
+| Name     | Meaning      |
+| -------- | ------------ |
+| Full     | 全部成交為止 |
+| Partial  | 部分成交為止 |
+| UntilEnd | 效期結束為止 |
+
+### TimeInForce[​](#timeinforce "Direct link to TimeInForce")
+
+委託條件 (TimeInForce)
+
+| Name | Meaning                               |
+| ---- | ------------------------------------- |
+| ROD  | 當日有效(Rest of Day)                 |
+| FOK  | 全部成交否則取消(Fill-or-Kill)        |
+| IOC  | 立即成交否則取消(Immediate-or-Cancel) |
+
+### FutOptConditionMarketType[​](#futoptconditionmarkettype "Direct link to FutOptConditionMarketType")
+
+委託類型 (FutOptConditionMarketType)
+
+| Name   | Meaning    |
+| ------ | ---------- |
+| Future | 期貨日盤   |
+| Option | 選擇權日盤 |
+
+### FutOptConditionPriceType[​](#futoptconditionpricetype "Direct link to FutOptConditionPriceType")
+
+價格類型 (FutOptConditionPriceType)
+
+| Name         | Meaning        |
+| ------------ | -------------- |
+| Limit        | 限價           |
+| BidPrice     | 買進價         |
+| AskPrice     | 賣出價         |
+| Market       | 市價           |
+| MatchedPrice | 成交價         |
+| LimitUp      | 漲停價         |
+| LimitDown    | 跌停價         |
+| Reference    | 參考價(平盤價) |
+| RangeMarket  | 範圍市價       |
+
+### FutOptConditionOrderType[​](#futoptconditionordertype "Direct link to FutOptConditionOrderType")
+
+委託類型 (FutOptConditionOrderType)
+
+| Name  | Meaning |
+| ----- | ------- |
+| New   | 新倉    |
+| Close | 平倉    |
+
+### Direction[​](#direction "Direct link to Direction")
+
+移動鎖利上漲/下跌追蹤 (direction)
+
+| Name | Meaning |
+| ---- | ------- |
+| Up   | 上漲    |
+| Down | 下跌    |
+
+### SliceType[​](#slicetype "Direct link to SliceType")
+
+分單型態 (SliceType)
+
+| Name  | Meaning                                                          |
+| ----- | ---------------------------------------------------------------- |
+| Type1 | 從開始時間，每隔幾秒送一筆，總共送N筆，每筆送M張                 |
+| Type2 | 從開始到結束，每隔X秒送一筆，總共N張，剩餘張數加總至最後一筆     |
+| Type3 | 從開始到結束，每隔X秒送一筆，總共N張，剩餘張數從最後一筆往前分配 |
+
+### ConditionStatus[​](#conditionstatus "Direct link to ConditionStatus")
+
+條件單狀態 (ConditionStatus)
+
+| Name   | Meaning      |
+| ------ | ------------ |
+| Type1  | 今日相關查詢 |
+| Type2  | 尚有效單     |
+| Type3  | 條件比對中   |
+| Type4  | 委託處理中   |
+| Type5  | 委託成功     |
+| Type6  | 已通知       |
+| Type7  | 委託失敗     |
+| Type8  | 已有成交     |
+| Type9  | 刪除成功     |
+| Type10 | 異常         |
+| Type11 | 失效         |
+
+### HistoryStatus[​](#historystatus "Direct link to HistoryStatus")
+
+歷史條件單狀態 (HistoryStatus)
+
+| Name  | Meaning                          |
+| ----- | -------------------------------- |
+| Type1 | 所有條件單 ( 不包含已刪除、失效) |
+| Type2 | 選擇期間內全部成交單             |
+| Type3 | 選擇期間內部分成交單             |
+| Type4 | 選擇期間刪除單                   |
+| Type5 | 選擇期間失效單                   |
+| Type6 | 選擇期間內已觸發記錄             |

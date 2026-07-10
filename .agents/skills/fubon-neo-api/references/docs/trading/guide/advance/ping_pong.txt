@@ -1,0 +1,47 @@
+# 連線參數修改
+
+新一代 API SDK 使用 WebSocket 安全連線方式與富邦伺服器主機建立連線，使用標準的 ping/pong control frames 進行連線確認。預設每 30 秒發送 ping frame 給伺服器，若達連續兩次無收到伺服器 pong 回應即判斷連線品質較弱，並進行斷線與提示。
+
+為能更廣泛適用於不同使用者場景，自 `2.2.1` 版以後，使用者可自行設定此部分參數。在建立連線時可選擇自定參數，例如設定每 300 秒發送 ping frame，並若連續三次無回應即斷線，則連線功能呼叫方式如下：
+
+* Python
+* Node.js
+* C#
+
+```python
+sdk = FubonSDK(300, 3)
+
+```
+
+```js
+var sdk = new FubonSDK(300, 3);
+
+```
+
+```cs
+var sdk = new FubonSDK(300, 3, "wss://neoapi.fbs.com.tw/TASP/XCPXWS");
+
+```
+
+其中第一個參數為間隔秒數，第二個參數為最大可忍受無回應次數。
+
+參數設定建議
+
+因網際網路難免時有雍塞情形，參數設定建議不小於預設值 (30,2)，以免對於連線品質判斷過於敏感，導致不必要的連線中斷。
+
+測試環境連線
+
+使用測試環境需以下進行連線（`2.2.1`版以後）：
+
+```python
+# "wss://neoapitest.fbs.com.tw/TASP/XCPXWS" 為測試環境連線 url
+
+sdk = FubonSDK(30, 3, "wss://neoapitest.fbs.com.tw/TASP/XCPXWS")
+
+# C# 或 JavaScript, 使用
+# var sdk = new FubonSDK(30, 3, "wss://neoapitest.fbs.com.tw/TASP/XCPXWS");
+
+
+```
+
+註：前兩個參數之值僅為範例參考，可依需求自由調整。

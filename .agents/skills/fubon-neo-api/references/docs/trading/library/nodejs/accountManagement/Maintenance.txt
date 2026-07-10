@@ -1,0 +1,109 @@
+# 維持率查詢
+
+maintenance
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                         | 說明 |
+| ------- | -------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | Object              | 回傳維持率資訊                   |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 維持率 MaintenanceData 欄位[​](#維持率-maintenancedata-欄位 "Direct link to 維持率 MaintenanceData 欄位")
+
+Return type : Object
+
+| 參數                   | 類別                                                                                                                            | 說明                                                                                           |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| > date                 | string                                                                                                                          | 查詢日                                                                                         |
+| > branchNo             | string                                                                                                                          | 分公司代號                                                                                     |
+| > account              | string                                                                                                                          | 帳號                                                                                           |
+| > maintenanceSummary   | list                                                                                                                            | Object                                                                                         |
+| >> marginValue         | number                                                                                                                          | 整戶融資市值                                                                                   |
+| >> shortsellValue      | number                                                                                                                          | 整戶融券市值                                                                                   |
+| >> shortsellMargin     | number                                                                                                                          | 整戶融券保證金額                                                                               |
+| >> collateral          | number                                                                                                                          | 擔保品                                                                                         |
+| >> marginLoanAmt       | number                                                                                                                          | 整戶融資金額                                                                                   |
+| >> maintenanceRatio    | number                                                                                                                          | 整戶維持率                                                                                     |
+| >> MaintenanceDetail   | list                                                                                                                            | Object                                                                                         |
+| >>> stockNo            | string                                                                                                                          | 股票代碼                                                                                       |
+| >>> orderNo            | string                                                                                                                          | 委託書號                                                                                       |
+| >>> orderType          | js<!-- -->:string<!-- --> / ts:[OrderType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#ordertype) | 委託單類型 : `Stock` 現股 、 `Margin` 融資 、 `Short` 融券 、 `DayTrade` 現沖先賣 、 `SBL`借券 |
+| >>> quantity           | number                                                                                                                          | 持有股數                                                                                       |
+| >>> price              | number                                                                                                                          | 計算價                                                                                         |
+| >>> costPrice          | number                                                                                                                          | 成本價                                                                                         |
+| >>> shortsellMargin    | number                                                                                                                          | 融券保證金                                                                                     |
+| >>> collateral         | number                                                                                                                          | 擔保品                                                                                         |
+| >>> marginLoanAmt      | number                                                                                                                          | 融資金                                                                                         |
+| >>> maintenanceRatio   | number                                                                                                                          | 維持率                                                                                         |
+| >>> collateralInterest | number                                                                                                                          | 擔保品利息                                                                                     |
+| >>> marginInterest     | number                                                                                                                          | 融資金利息                                                                                     |
+| >>> shortsellInterest  | number                                                                                                                          | 融券保證金利息                                                                                 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+sdk.accounting.maintenance(target_user);
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+{
+  isSuccess: true,
+  data: {
+    date: '2024/02/27',
+    branchNo: '6460',
+    account: '26',
+    maintenanceSummary: {
+      marginValue: 3135000,
+      shortsellValue: 0,
+      shortsellMargin: 0,
+      collateral: 0,
+      marginLoanAmt: 1494000,
+      maintenanceRatio: 209.83
+    },
+    maintenanceDetail: [
+      {
+        stockNo: '2603',
+        orderNo: 'x4580',
+        orderType: 'Stock',
+        quantity: 10000,
+        price: 152.5,
+        costPrice: 119,
+        shortsellMargin: 0,
+        collateral: 0,
+        marginLoanAmt: 0,
+        maintenanceRatio: 213.58,
+        collateralInterest: 0,
+        marginInterest: 20818,
+        shortsellInterest: 0
+      },
+      {
+        stockNo: '4968',
+        orderNo: 'x6029',
+        orderType: 'Stock',
+        quantity: 10000,
+        price: 161,
+        costPrice: 159,
+        shortsellMargin: 0,
+        collateral: 0,
+        marginLoanAmt: 0,
+        maintenanceRatio: 206.41,
+        collateralInterest: 0,
+        marginInterest: 23019,
+        shortsellInterest: 0
+      }
+    ]
+  }
+}
+
+```

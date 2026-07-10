@@ -1,0 +1,274 @@
+# 非阻塞下單
+
+首先，我們先理解阻塞與非阻塞的概念， 阻塞（Block）和非阻塞（Unblock）是用來描述事件、操作或通信方式的兩種不同方式，以下是它們的基本概念和區別：
+
+info
+
+非阻塞模式一般搭配主動回報進行委託單管理
+
+info
+
+阻塞（Block）模式亦可搭配並行（concurrency）程式設計，達到同時送出多筆指令的效果
+
+請參考 [**並行（concurrency）程式設計下單範例**](#%E4%B8%A6%E8%A1%8Cconcurrency%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E4%B8%8B%E5%96%AE%E7%AF%84%E4%BE%8B)
+
+### 阻塞（Block）：[​](#阻塞block "Direct link to 阻塞（Block）：")
+
+阻塞操作是指事件或操作按照預定的順序進行，並且一個操作完成後，才會回覆結果。
+
+![sync](/TradeAPI/assets/images/normal-24db51cb3aa3d4c74d40c79d4ab38ac8.png)
+
+### 非阻塞（Unblock）：[​](#非阻塞unblock "Direct link to 非阻塞（Unblock）：")
+
+非阻塞操作是指事件或操作不必按照固定的順序進行，可以並行執行，且一個操作不需要等待另一個操作的完成。 當API server接收到您發出的Request後就直接回覆，即為非阻塞。
+
+![async](/TradeAPI/assets/images/async-f1632167c6d8f31259864d28445e3ffc.png)
+
+### 使用阻塞機制下單[​](#使用阻塞機制下單 "Direct link to 使用阻塞機制下單")
+
+委託後，回覆的Order Response即會帶回完整的資料內容。
+
+* Python
+* Node.js
+* C#
+
+```py
+#建立委託單內容
+order = Order(
+    buy_sell = BSAction.Buy,
+    symbol = "2881",
+    price = "66",
+    quantity = 2000,
+    market_type = MarketType.Common,
+    price_type = PriceType.Limit,
+    time_in_force = TimeInForce.ROD,
+    order_type = OrderType.Stock,
+    user_def = "FromPy" # optional field
+) 
+
+sdk.stock.place_order(accounts.data[0], order)  #下單委託
+
+#或採用
+#sdk.stock.place_order(accounts.data[0], order, False)
+
+
+```
+
+```js
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "2881",
+  price: "66",
+  quantity: 2000,
+  marketType: MarketType.Common,
+  priceType: PriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: OrderType.Stock,
+  userDef: "fromJs"
+};
+
+sdk.stock.placeOrder(accounts.data[0], order); 
+
+// 或採用
+//sdk.stock.placeOrder(accounts.data[0], order, false);
+
+
+```
+
+```cs
+var order = new Order(
+    BsAction.Buy,
+    "2881",
+    "66",
+    2000,
+    MarketType.Common,
+    PriceType.Limit,
+    TimeInForce.Rod,
+    OrderType.Stock,
+    null
+);
+
+sdk.Stock.PlaceOrder(accounts.data[0] ,order); // 使用阻塞委託下單
+// 或採用
+//sdk.stock.placeOrder(accounts.data[0], order, false);
+
+
+```
+
+### 使用非阻塞機制下單[​](#使用非阻塞機制下單 "Direct link to 使用非阻塞機制下單")
+
+委託後，回覆的Order Response可能會少帶出委託書號···等資訊。
+
+* Python
+* Node.js
+* C#
+
+```py
+#建立委託單內容
+order = Order(
+    buy_sell = BSAction.Buy,
+    symbol = "2881",
+    price = "66",
+    quantity = 2000,
+    market_type = MarketType.Common,
+    price_type = PriceType.Limit,
+    time_in_force = TimeInForce.ROD,
+    order_type = OrderType.Stock,
+    user_def = "FromPy" # optional field
+) 
+
+sdk.stock.place_order(accounts.data[0], order, True)  #下單委託
+
+
+```
+
+```js
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "2881",
+  price: "66",
+  quantity: 2000,
+  marketType: MarketType.Common,
+  priceType: PriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: OrderType.Stock,
+  userDef: "fromJs"
+};
+
+sdk.stock.placeOrder(accounts.data[0], order, true);
+
+
+```
+
+```cs
+var order = new Order(
+    BsAction.Buy,
+    "2881",
+    "66",
+    2000,
+    MarketType.Common,
+    PriceType.Limit,
+    TimeInForce.Rod,
+    OrderType.Stock,
+    null
+);
+
+sdk.Stock.PlaceOrder(accounts.data[0] ,order, true); // 使用非阻塞委託下單
+
+
+```
+
+以下為支援非阻塞委託的函數
+
+* PlaceOrder - 下單委託
+* ModifyPrice - 修改委託價格
+* ModifyQuantity - 修改委託數量
+* CancelOrder - 取消委託
+
+### 並行（concurrency）程式設計下單範例[​](#並行concurrency程式設計下單範例 "Direct link to 並行（concurrency）程式設計下單範例")
+
+* Python
+* Node.js
+* C#
+
+```py
+import concurrent.futures
+
+#Create Order Object
+order = Order(
+    buy_sell = BSAction.Buy,
+    symbol = "2881",
+    price = "66",
+    quantity = 2000,
+    market_type = MarketType.Common,
+    price_type = PriceType.Limit,
+    time_in_force = TimeInForce.ROD,
+    order_type = OrderType.Stock,
+    user_def = "FromPy" # optional
+)
+
+# 下單
+
+def my_place_order():
+  sdk.stock.place_order(accounts.data[0], order)  #Place Order
+
+with concurrent.futures.ThreadPoolExecutor() as executor:
+  # Submit 20 tasks
+  futures = [executor.submit(my_place_order) for _ in range(20)]
+
+  # Wait for all tasks to complete
+  concurrent.futures.wait(futures)
+
+
+```
+
+```js
+//Create Order Object
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "2881",
+  price: "66",
+  quantity: 2000,
+  marketType: MarketType.Common,
+  priceType: PriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: OrderType.Stock,
+  userDef: "fromJs"
+};
+
+// 下單
+
+function my_place_order() {
+  return new Promise((resolve) => {
+    sdk.stock.placeOrder(accounts.data[0], order);
+    resolve();
+  });
+}
+
+async function main() {
+  const tasks = [];
+
+  for (let i = 0; i < 20; i++) {
+    tasks.push(my_place_order());
+  }
+
+  await Promise.all(tasks); // Wait for all tasks to complete
+}
+
+main().then(() => {
+  console.log("All tasks completed")
+});
+
+
+```
+
+```cs
+using System;
+using System.Threading.Tasks;
+
+// Create Order Object
+var order = new Order(
+    BsAction.Buy,
+    "2881",
+    "66",
+    2000,
+    MarketType.Common,
+    PriceType.Limit,
+    TimeInForce.Rod,
+    OrderType.Stock,
+    null
+);
+
+// 下單
+
+Task[] tasks = new Task[20];
+
+for (int i = 0; i < 20; i++)
+{
+  tasks[i] = Task.Run(() => sdk.Stock.PlaceOrder(accounts.data[0], order));
+}
+
+Task.WaitAll(tasks);
+
+
+```

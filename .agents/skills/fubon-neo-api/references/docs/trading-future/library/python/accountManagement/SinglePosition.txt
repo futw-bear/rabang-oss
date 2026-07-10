@@ -1,0 +1,159 @@
+# 單式部位查詢
+
+query\_single\_position
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                                | 說明 |
+| ------- | --------------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別   | 說明                               |
+| ----------- | ------ | ---------------------------------- |
+| is\_success | bool   | 是否成功                           |
+| data        | List   | 回傳部位資訊                       |
+| message     | string | 當is\_success = false 回傳錯誤訊息 |
+
+### Position 欄位[​](#position-欄位 "Direct link to Position 欄位")
+
+Return type : Object
+
+| 參數                | 類別                                                                                                                | 說明                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| date                | string                                                                                                              | 部位建立日期                                      |
+| branch\_no          | string                                                                                                              | 分公司代號                                        |
+| account             | string                                                                                                              | 帳號                                              |
+| is\_spread          | bool                                                                                                                | 是否為複式部位                                    |
+| position\_kind      | int                                                                                                                 | 部位種類 : `1` 期貨 、`2` 選擇權                  |
+| symbol              | string                                                                                                              | 商品代號                                          |
+| expiry\_date        | string                                                                                                              | 履約日                                            |
+| strike\_price       | float                                                                                                               | 履約價                                            |
+| call\_put           | [CallPut](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#callput)                 | 權利別 : `Call` 、 `Put`                          |
+| buy\_sell           | [BSAction](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#bsaction)               | 買賣別 : `Buy` 買、`Sell` 賣                      |
+| price               | float                                                                                                               | 成交價                                            |
+| orig\_lots          | int                                                                                                                 | 原始口數                                          |
+| tradable\_lots      | int                                                                                                                 | 可交易口數                                        |
+| order\_type         | [FutOptOrderType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#futoptordertype) | 委託別 : `New` 新倉、`Close`平倉、`FdayTrade`當沖 |
+| currency            | string                                                                                                              | 幣別                                              |
+| market\_price       | string                                                                                                              | 即時價                                            |
+| initial\_margin     | float                                                                                                               | 原始保證金                                        |
+| maintenance\_margin | float                                                                                                               | 維持保證金                                        |
+| clearing\_margin    | float                                                                                                               | 結算保證金                                        |
+| opt\_value          | float                                                                                                               | 選擇權市值                                        |
+| opt\_long\_value    | float                                                                                                               | 選擇權買進市值                                    |
+| opt\_short\_value   | float                                                                                                               | 選擇權賣出市值                                    |
+| profit\_or\_loss    | float                                                                                                               | 部位損益                                          |
+| premium             | float                                                                                                               | 權利金                                            |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+sdk.futopt_accounting.query_single_position(accounts)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+Result {
+    is_success: True,
+    message: None,
+    data: [
+        Position {
+            date: "2024/04/08",                 # 部位建立日期 (string)
+            branch_no: "15901",                  # 分公司代號 (string)
+            account: "1234567",                  # 帳號 (string)
+            order_no: "l0001-0000",              # 訂單編號 (string)
+            position_kind: 1,                    # 部位種類  (int)
+            symbol: "FITX",                      # 商品代號 (string)
+            expiry_date: 202404,                 # 履約日 (string)
+            strike_price: None,                  # 履約價 (float)
+            call_put: None,                      # 權利別  (CallPut)
+            buy_sell: Buy,                       # 買賣別 (BSAction)
+            price: 20362,                        # 成交價 (float)
+            orig_lots: 2,                        # 原始口數 (int)
+            tradable_lot: 2,                     # 可交易口數 (int)
+            order_type: New,                     # 委託別  (FutOptOrderType)
+            currency: "TWD",                     # 幣別 (string)
+            market_price: "20521.0000",          # 即時價 (string)
+            initial_margin: 358000.0,            # 原始保證金 (float)
+            maintenance_margin: 274000.0,        # 維持保證金 (float)
+            clearing_margin: 264000.0,           # 結算保證金 (float)
+            profit_or_loss: 63600.0,             # 部位損益 (float)
+            premium: 0.0,                        # 權利金 (float)
+        },
+        Position {
+            date: "2024/03/29",                  # 部位建立日期 (string)
+            branch_no: "15901",                   # 分公司代號 (string)
+            account: "1234567",                   # 帳號 (string)
+            order_no: "l0007-0000",               # 訂單編號 (string)
+            position_kind: 2,                     # 部位種類 (int)
+            symbol: "TX1",                        # 商品代號 (string)
+            expiry_date: 202404,                  # 履約日 (string)
+            strike_price: 20600,                 # 履約價 (float)
+            call_put: Call,                       # 權利別 (CallPut)
+            buy_sell: Buy,                        # 買賣別 (BSAction)
+            price: 10,                            # 成交價 (float)
+            orig_lots: 2,                         # 原始口數 (int)
+            tradable_lot: 2,                      # 可交易口數 (int)
+            order_type: NEW,                      # 委託別 (FutOptOrderType)
+            currency: "TWD",                      # 幣別 (string)
+            market_price: "4.6000",               # 即時價 (string)
+            initial_margin: 52660.0,              # 原始保證金 (float)
+            maintenance_margin: 36460.0,          # 維持保證金 (float)
+            clearing_margin: 34460.0,             # 結算保證金 (float)
+            profit_or_loss: -540.0,               # 部位損益 (float)
+            premium: -1000.0,                     # 權利金 (float)
+        },
+        Position {
+            date: "2024/03/29",                   # 部位建立日期 (string)
+            branch_no: "15901",                    # 分公司代號 (string)
+            account: "1234567",                    # 帳號 (string)
+            order_no: "l0007-0001",                # 訂單編號 (string)
+            position_kind: 2,                      # 部位種類  (int)
+            symbol: "TX1",                         # 商品代號 (string)
+            expiry_date: 202404,                   # 履約日 (string)
+            strike_price: 20600,                  # 履約價 (float)
+            call_put: Call,                        # 權利別  (CallPut)
+            buy_sell: Buy,                         # 買賣別  (BSAction)
+            price: 10,                             # 成交價 (float)
+            orig_lots: 2,                          # 原始口數 (int)
+            tradable_lot: 2,                       # 可交易口數 (int)
+            order_type: NEW,                       # 委託別  (FutOptOrderType)
+            currency: "TWD",                       # 幣別 (string)
+            market_price: "4.6000",                # 即時價 (string)
+            initial_margin: 52660.0,              # 原始保證金 (float)
+            maintenance_margin: 36460.0,          # 維持保證金 (float)
+            clearing_margin: 34460.0,             # 結算保證金 (float)
+            profit_or_loss: -540.0,               # 部位損益 (float)
+            premium: -1000.0,                     # 權利金 (float)
+        },
+        Position {
+            date: "2024/03/01",                   # 部位建立日期 (string)
+            branch_no: "15901",                    # 分公司代號 (string)
+            account: "1234567",                    # 帳號 (string)
+            order_no: "l0002-0000",                # 訂單編號 (string)
+            position_kind: 2,                      # 部位種類  (int)
+            symbol: "TXO",                         # 商品代號 (string)
+            expiry_date: 202404,                   # 履約日 (string)
+            strike_price: 18500,                  # 履約價 (float)
+            call_put: Call,                        # 權利別 (CallPut)
+            buy_sell: Sell,                        # 買賣別 (BSAction)
+            price: 625,                            # 成交價 (float)
+            orig_lots: 5,                          # 原始口數 (int)
+            tradable_lot: 4,                       # 可交易口數 (int)
+            order_type: NEW,                       # 委託別  (FutOptOrderType)
+            currency: "TWD",                       # 幣別 (string)
+            market_price: "2020.0000",             # 即時價 (string)
+            initial_margin: 584000.0,              # 原始保證金 (float)
+            maintenance_margin: 544000.0,          # 維持保證金 (float)
+            clearing_margin: 536000.0,             # 結算保證金 (float)
+            profit_or_loss: -279000.0,             # 部位損益 (float)
+            premium: 125000.0,                     # 權利金 (float)
+        }
+    ]
+}
+
+```

@@ -1,0 +1,128 @@
+# 權益數查詢
+
+QueryMarginEquity
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                                | 說明 |
+| ------- | --------------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別   | 說明                             |
+| --------- | ------ | -------------------------------- |
+| isSuccess | bool   | 是否成功                         |
+| data      | List   | 回傳未實現資訊                   |
+| message   | string | 當isSuccess = False 回傳錯誤訊息 |
+
+#### 權益數 Equity 欄位[​](#權益數-equity-欄位 "Direct link to 權益數 Equity 欄位")
+
+Return type : Object
+
+| 參數              | 類別   | 說明                                                                        |
+| ----------------- | ------ | --------------------------------------------------------------------------- |
+| date              | string | 查詢日期                                                                    |
+| branchNo          | string | 分公司代號                                                                  |
+| account           | string | 帳號                                                                        |
+| currency          | string | 幣別 : `NTD` 約當台幣 、`TWD` 新台幣、`USD` 美元、`CNY` 人民幣 、`JPY` 日圓 |
+| yesterdayBalance  | double | 昨日餘額                                                                    |
+| todayBalance      | double | 今日餘額                                                                    |
+| initialMargin     | double | 原始保證金                                                                  |
+| maintenanceMargin | double | 維持保證金                                                                  |
+| clearingMargin    | double | 結算保證金                                                                  |
+| todayEquity       | double | 本日權益                                                                    |
+| todayDeposit      | double | 今日入金                                                                    |
+| todayWithdrawal   | double | 今日出金                                                                    |
+| todayTradingFee   | double | 今日交易手續費                                                              |
+| todayTradingTax   | double | 今日交易稅                                                                  |
+| receivablePremium | double | 收取權利金                                                                  |
+| payablePremium    | double | 付出權利金                                                                  |
+| excessMargin      | double | 超額保證金                                                                  |
+| availableMargin   | double | 可動用保證金                                                                |
+| disgorgement      | double | 追繳金額                                                                    |
+| optPnl            | double | 未沖銷選擇權浮動損益                                                        |
+| optValue          | double | 選擇權市值                                                                  |
+| optLongValue      | double | 未沖銷選擇權買方市值                                                        |
+| optShortValue     | double | 未沖銷選擇權賣方市值                                                        |
+| futRealizedPnl    | double | 期貨平倉損益                                                                |
+| futUnrealizedPnl  | double | 期貨未平倉損益                                                              |
+| buyLot            | int    | 買進口數                                                                    |
+| sellLot           | int    | 賣出口數                                                                    |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+Console.WriteLine(sdk.FutOptAccounting.QueryMarginEquity(account));
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+{
+    isSuccess  = True,
+    message  = ,
+    data  = [
+            Equity{
+                  date = 2024/04/08,                     // 查詢日期 (string)
+                  branchNo = 15901,                       // 分公司代號 (string)
+                  account = 1234567,                      // 帳號 (string)
+                  currency = NTD,                         // 幣別 (string)
+                  yesterdayBalance = 22435152.4,           // 昨日餘額 (double)
+                  todayBalance = 22434910.4,               // 今日餘額 (double)
+                  initialMargin = 1114946.0,               // 原始保證金 (double)
+                  maintenanceMargin = 939214.0,            // 維持保證金 (double)
+                  clearingMargin = 915760.0,               // 結算保證金 (double)
+                  todayEquity = 22694910.4,                // 本日權益 (double)
+                  todayDeposit= 0.0,                     // 本日入金 (double)
+                  todayWithdrawal= 2102.0,               // 本日出金 (double)
+                  todayTradingFee= 16.0,                 // 本日交易手續費 (double)
+                  todayTradingTax= 0.0,                  // 本日交易稅 (double)
+                  receivablePremium= 0.0,                // 收取權利金 (double)
+                  payablePremium= 9250.0,                // 付出權利金 (double)
+                  excessMargin= 28744525.0,              // 超額保證金 (double)
+                  availableMargin = 21453562.4,            // 可動用保證金 (double)
+                  disgorgement = 0.0,                      // 追繳金額 (double)
+                  optPnl = -248600.0,                      // 未沖銷選擇權浮動損益 (double)
+                  optValue = -193100.0,                    // 選擇權市值 (double)
+                  optLongValue = 311900.0,                 // 未沖銷選擇權買方市值 (double)
+                  optShortValue = 505000.0,                // 未沖銷選擇權賣方市值 (double)
+                  futRealizedPnl = 0.0,                    // 期貨平倉損益 (double)
+                  futUnrealizedPnl = 60700.0,              // 期貨未平倉損益 (double)
+                  buyLot = 22,                             // 買進口數 (int)
+                  sellLot = 7,                             // 賣出口數 (int)
+              },
+            Equity {
+                  date = 2024/04/08,                     // 查詢日期 (string)
+                  branchNo = 15901,                       // 分公司代號 (string)
+                  account = 1234567,                      // 帳號 (string)
+                  currency = TWD,                         // 幣別 (string)
+                  yesterdayBalance = 19880310.0,           // 昨日餘額 (double)
+                  todayBalance = 19880068.0,               // 今日餘額 (double)
+                  initialMargin = 1114946.0,               // 原始保證金 (double)
+                  maintenanceMargin = 939214.0,            // 維持保證金 (double)
+                  clearingMargin = 915760.0,               // 結算保證金 (double)
+                  todayEquity = 20140068.0,                // 本日權益 (double)
+                  todayDeposit= 0.0,                     // 本日入金 (double)
+                  todayWithdrawal= 2102.0,               // 本日出金 (double)
+                  todayTradingFee= 16.0,                 // 本日交易手續費 (double)
+                  todayTradingTax= 0.0,                  // 本日交易稅 (double)
+                  receivablePremium= 0.0,                // 收取權利金 (double)
+                  payablePremium= 9250.0,                // 付出權利金 (double)
+                  excessMargin= 28744525.0,              // 超額保證金 (double)
+                  availableMargin = 18898720.0,            // 可動用保證金 (double)
+                  disgorgement = 0.0,                      // 追繳金額 (double)
+                  optPnl = -248600.0,                      // 未沖銷選擇權浮動損益 (double)
+                  optValue = -193100.0,                    // 選擇權市值 (double)
+                  optLongValue = 311900.0,                 // 未沖銷選擇權買方市值 (double)
+                  optShortValue = 505000.0,                // 未沖銷選擇權賣方市值 (double)
+                  futRealizedPnl = 0.0,                    // 期貨平倉損益 (double)
+                  futUnrealizedPnl = 60700.0,              // 期貨未平倉損益 (double)
+                  buyLot = 22,                             // 買進口數 (int)
+                  sellLot = 7                              // 賣出口數 (int)
+              }
+          ]
+}
+
+```

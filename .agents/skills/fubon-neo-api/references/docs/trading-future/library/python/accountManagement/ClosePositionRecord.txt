@@ -1,0 +1,95 @@
+# 平倉查詢
+
+close\_position\_record
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數        | 類別                                                                                                | 說明     |
+| ----------- | --------------------------------------------------------------------------------------------------- | -------- |
+| account     | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#account) | 帳號     |
+| start\_date | string                                                                                              | 查詢起日 |
+| end\_date   | string                                                                                              | 查詢迄日 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別   | 說明                               |
+| ----------- | ------ | ---------------------------------- |
+| is\_success | bool   | 是否成功                           |
+| data        | List   | 回傳平倉資訊                       |
+| message     | string | 當is\_success = false 回傳錯誤訊息 |
+
+### 已實現彙總 CloseRecord 欄位[​](#已實現彙總-closerecord-欄位 "Direct link to 已實現彙總 CloseRecord 欄位")
+
+Return type : Object
+
+| 參數             | 類別                                                                                                                | 說明                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| date             | string                                                                                                              | 資料日期                                                                   |
+| branch\_no       | string                                                                                                              | 分公司代號                                                                 |
+| position\_kind   | int                                                                                                                 | 部位種類 : `1` 期貨 、`2` 選擇權                                           |
+| account          | string                                                                                                              | 帳號                                                                       |
+| order\_no        | string                                                                                                              | 委託書號                                                                   |
+| market           | string                                                                                                              | 市場別 : `TAIMEX` 期貨、選擇權                                             |
+| symbol           | string                                                                                                              | 商品代號                                                                   |
+| expiry\_date     | string                                                                                                              | 履約日                                                                     |
+| strike\_price    | float                                                                                                               | 履約價                                                                     |
+| call\_put        | [CallPut](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#callput)                 | 權利別 : `Call` Call 、`Put` Put                                           |
+| buy\_sell        | [BSAction](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#bsaction)               | 買賣別 : `Buy` 買、`Sell` 賣                                               |
+| order\_type      | [FutOptOrderType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/python/EnumMatrix.txt#futoptordertype) | 委託單類型 : `New` 新倉 、 `Close` 平倉 、 `Auto` 自動 、 `FdayTrade` 當沖 |
+| price            | float                                                                                                               | 成交價                                                                     |
+| orig\_lots       | int                                                                                                                 | 原始口數                                                                   |
+| transaction\_fee | float                                                                                                               | 交易手續費                                                                 |
+| tax              | float                                                                                                               | 交易稅                                                                     |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+sdk.futopt_accounting.close_position_record(accounts,"20240310","20240410")
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+Result {
+    is_success: True,
+    message: None,
+    data : [
+                CloseRecord {
+                    date: "2024/04/10",             # 資料日期(string)
+                    branch_no: "15000",             # 分公司代號(string)
+                    account: "9974825",             # 帳號 (string)
+                    position_kind: 1,               # 部位種類: `1` 期貨, `2` 選擇權 (int)
+                    order_no: "15001-0000",         # 委託書號 (string)
+                    market: "TAIMEX",               # 市場別 : `TAIMEX` (string)
+                    symbol: "FITX",                 # 商品代號 (string)
+                    expiry_date: "202404",          # 履約日 (string)
+                    strike_price: None,             # 履約價 (float)
+                    call_put: None,                 # Call/Put Type : `Call` Call, `Put` Put (CallPut)
+                    buy_sell: Buy,                  # Buy/Sell Type : `Buy`, `Sell` (BSAction)
+                    price: 20847.0,                 # 成交價 (float)
+                    orig_lots: 1,                   # 原始口數 (int)
+                    transaction_fee: 40.0,          # 交易手續費 (float)
+                    tax: 83.0,                      # 交易稅 (float)
+                },
+                CloseRecord {
+                    date: "2024/04/10",            # 資料日期 (string)
+                    branch_no: "15000",             # 分公司代號 (string)
+                    account: "9974825",             # 帳號 (string)
+                    position_kind: 1,               # 部位種類d : `1` 期貨, `2` 選擇權 (int)
+                    order_no: "C0005-0000",         # 委託書號 (string)
+                    market: "TAIMEX",               # 市場別 : `TAIMEX` 期貨, 選擇權 (string)
+                    symbol: "FITX",                 # 商品代號 (string)
+                    expiry_date: "202405",          # 履約日 (string)
+                    strike_price: None,             # 履約價 (float)
+                    call_put: None,                 # Call/Put Type : `Call` Call, `Put` Put (CallPut)
+                    buy_sell: Buy,                  # Buy/Sell Type : `Buy`, `Sell` (BSAction)
+                    price: 20890.0,                 # 成交價 (float)
+                    orig_lots: 1,                   # 原始口數 (int)
+                    transaction_fee: 40.0,          # 交易手續費 (float)
+                    tax: 84.0,                      # 交易稅 (float)
+                }
+            ]
+}
+
+```

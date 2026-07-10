@@ -1,0 +1,75 @@
+# 分時分量條件單
+
+TimeSliceOrder
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數             | 類別                                                                                                                                | 說明                                                                              |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| account          | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#account)                                 | 帳號                                                                              |
+| start\_date      | string                                                                                                                              | 條件開始監控時間                                                                  |
+| end\_date        | string                                                                                                                              | 條件結束監控時間                                                                  |
+| stop\_sign       | [StopSign](https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/EnumMatrix.txt#stopsign)                       | 條件停止條件 : `Full` 全部成交為止、`Partial`部分成交為止、`UntilEnd`效期結束為止 |
+| splitDescription | [SplitDescription](https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/EnumMatrix.txt#splitdescription)       | 分單條件                                                                          |
+| OrderObject      | [OrderObject](https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/csharp/EnumMatrix.txt#futoptconditionorder-object) | 委託內容                                                                          |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | Object              | 條件單回傳資訊                   |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionOrderResult 欄位[​](#委託資訊-conditionorderresult-欄位 "Direct link to 委託資訊 ConditionOrderResult 欄位")
+
+Return type : Object
+
+| 參數 | 類別   | 說明     |
+| ---- | ------ | -------- |
+| guid | string | 條件單號 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+// 設計條件內容
+var split = new SplitDescription(
+    TimeSliceOrderType.Type1,
+     300,
+     1,
+     10,
+     "083000",
+     null
+);
+
+
+var order = new FutOptConditionOrder(
+    BsAction.Buy,
+    "TXO20000E4",
+    "100",
+    1,
+    FutOptConditionMarketType.Option,
+    FutOptConditionPriceType.Limit,
+    TimeInForce.Rod,
+    FutOptConditionOrderType.New
+);
+
+sdk.FutOpt.TimeSliceOrder(target_account, "20240427","20240516", StopSign.Full, split, order);
+
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+
+{
+    isSuccess = True,
+    message = ,
+    data = ConditionOrderResult {
+            guid = 24081200000006
+        }
+}
+
+
+```

@@ -1,0 +1,158 @@
+# Intraday Tickers
+
+股票或指數列表（依條件查詢）
+
+```text
+intraday/tickers
+
+```
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name            | Type    | Description                                                                                 |
+| --------------- | ------- | ------------------------------------------------------------------------------------------- |
+| `type`\*        | string  | Ticker 類型，可選 `EQUITY` 股票；`INDEX` 指數；`WARRANT` 權證；`ODDLOT` 盤中零股            |
+| `exchange`      | string  | 交易所，可選 `TWSE` 臺灣證券交易所；`TPEx` 證券櫃檯買賣中心                                 |
+| `market`        | string  | 市場別，可選 `TSE` 上市；`OTC` 上櫃；`ESB` 興櫃一般板；`TIB` 臺灣創新板；`PSB` 興櫃戰略新板 |
+| `industry`      | string  | 產業別，參閱 [產業別代碼](#%E7%94%A2%E6%A5%AD%E5%88%A5%E4%BB%A3%E7%A2%BC)                   |
+| `isNormal`      | boolean | 查詢正常股票（非注意、處置股票）：`true`                                                    |
+| `isAttention`   | boolean | 查詢注意股票：`true`                                                                        |
+| `isDisposition` | boolean | 查詢處置股票：`true`                                                                        |
+| `isHalted`      | boolean | 查詢暫停交易股票：`true`                                                                    |
+
+股票專用條件
+
+`isNormal`、`isAttention`、`isDisposition`、`isHalted` 為股票專用條件，若設定此類條件，將回傳對應股票列表
+
+## Response[​](#response "Direct link to Response")
+
+| Name            | Type      | Description                      |
+| --------------- | --------- | -------------------------------- |
+| `date`\*        | string    | 日期                             |
+| `type`\*        | string    | Ticker 類型                      |
+| `exchange`\*    | string    | 交易所                           |
+| `market`        | string    | 市場別                           |
+| `industry`      | string    | 產業別                           |
+| `isNormal`      | boolean   | 查詢正常股票（非注意、處置股票） |
+| `isAttention`   | boolean   | 查詢注意股票                     |
+| `isDisposition` | boolean   | 查詢處置股票                     |
+| `isHalted`      | boolean   | 查詢暫停交易股票                 |
+| `data`          | object\[] | 股票列表                         |
+| >> `symbol`     | string    | 股票代碼                         |
+| >> `name`       | string    | 股票簡稱                         |
+
+info
+
+'\*' 表示必揭示欄位。
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+
+reststock = sdk.marketdata.rest_client.stock  
+# reststock.intraday.tickers(type='EQUITY', exchange="TWSE", isNormal=True)  # 2.2.3 及以前版本
+
+## 2.2.4 及以後版本 (使用 Exception 進行例外處理)
+from fubon_neo.fugle_marketdata.rest.base_rest import FugleAPIError
+
+try:  
+  reststock.intraday.tickers(type='EQUITY', exchange="TWSE", isNormal=True)
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"} 
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+client.stock.intraday
+  .tickers({ type: "EQUITY", exchange: "TWSE", isNormal: true })
+  .then((data) => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+using FugleMarketData.QueryModels;
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.Stock;
+
+var ticker = await rest.Intraday.Tickers(FugleMarketData.QueryModels.Stock.Intraday.TickersType.Equity);
+var ticker_cont = ticker.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(ticker_cont);
+
+```
+
+Response Body：
+
+```json
+{
+  "date": "2023-02-09",
+  "type": "EQUITY",
+  "exchange": "TWSE",
+  "isNormal": true,
+  "data": [
+    {
+      "symbol": "0050",
+      "name": "元大台灣50"
+    },
+    {
+      "symbol": "0051",
+      "name": "元大中型100"
+    },
+    {
+      "symbol": "0052",
+      "name": "富邦科技"
+    },
+    ......
+  ]
+}
+
+```
+
+## 產業別代碼[​](#產業別代碼 "Direct link to 產業別代碼")
+
+| 代碼 | 產業別   | 代碼 | 產業別           | 代碼 | 產業別       |
+| ---- | -------- | ---- | ---------------- | ---- | ------------ |
+| `01` | 水泥工業 | `16` | 觀光餐旅         | `29` | 電子通路業   |
+| `02` | 食品工業 | `17` | 金融保險         | `30` | 資訊服務業   |
+| `03` | 塑膠工業 | `18` | ~~貿易百貨~~     | `31` | 其他電子業   |
+| `04` | 紡織纖維 | `19` | 綜合             | `32` | 文化創意業   |
+| `05` | 電機機械 | `20` | 其他             | `33` | 農業科技業   |
+| `06` | 電器電纜 | `21` | 化學工業         | `34` | ~~電子商務~~ |
+| `08` | 玻璃陶瓷 | `22` | 生技醫療業       | `35` | 綠能環保     |
+| `09` | 造紙工業 | `23` | 油電燃氣業       | `36` | 數位雲端     |
+| `10` | 鋼鐵工業 | `24` | 半導體業         | `37` | 運動休閒     |
+| `11` | 橡膠工業 | `25` | 電腦及週邊設備業 | `38` | 居家生活     |
+| `12` | 汽車工業 | `26` | 光電業           | `80` | 管理股票     |
+| `14` | 建材營造 | `27` | 通信網路業       |      |              |
+| `15` | 航運業   | `28` | 電子零組件業     |      |              |

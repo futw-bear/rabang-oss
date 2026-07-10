@@ -1,0 +1,121 @@
+# 交割款查詢
+
+QuerySettlement
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                         | 說明                                   |
+| ------- | -------------------------------------------------------------------------------------------- | -------------------------------------- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#account) | 帳號                                   |
+| range   | string                                                                                       | 時間區間，目前有效值為"0d"(當日)、"3d" |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別           | 說明                             |
+| --------- | -------------- | -------------------------------- |
+| isSuccess | bool           | 是否成功                         |
+| data      | SettlementData | 回傳交割資訊                     |
+| message   | string         | 當isSuccess = False 回傳錯誤訊息 |
+
+### 交割資訊 SettlementData 欄位[​](#交割資訊-settlementdata---欄位 "Direct link to 交割資訊 SettlementData   欄位")
+
+Return type : Object
+
+| 參數                     | 類別              | 說明                            |
+| ------------------------ | ----------------- | ------------------------------- |
+| > account                | object            | Object                          |
+| >> account               | string            | 帳號                            |
+| >> branchNo              | string            | 分公司代號                      |
+| > details                | list              | Object                          |
+| >> date                  | string            | 查詢日                          |
+| >> settlementDate        | string (Optional) | 交割日 (若查無資料為空值)       |
+| >> buyValue              | int (Optional)    | 買進金額 (若查無資料為空值)     |
+| >> buyFee                | int (Optional)    | 買進手續費 (若查無資料為空值)   |
+| >> buySettlement         | int (Optional)    | 買進應收付款 (若查無資料為空值) |
+| >> buyTax                | int (Optional)    | 買進交易稅 (若查無資料為空值)   |
+| >> sellValue             | int (Optional)    | 賣出金額 (若查無資料為空值)     |
+| >> sellFee               | int (Optional)    | 賣出手續費 (若查無資料為空值)   |
+| >> sellSettlement        | int (Optional)    | 賣出應收付款 (若查無資料為空值) |
+| >> sellTax               | int (Optional)    | 賣出交易稅 (若查無資料為空值)   |
+| >> totalBsValue          | int (Optional)    | 合計買賣金額 (若查無資料為空值) |
+| >> totalFee              | int (Optional)    | 合計手續費 (若查無資料為空值)   |
+| >> totalTax              | int (Optional)    | 合計交易稅 (若查無資料為空值)   |
+| >> totalSettlementAmount | int (Optional)    | 合計交割金額 (若查無資料為空值) |
+| >> currency              | string (Optional) | 幣別 (若查無資料為空值)         |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+Console.WriteLine(sdk.Accounting.QuerySettlement(target_user,"3d"));
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+{
+    isSuccess = True,
+    message = ,
+    data = SettlementData{
+              account = AccountRes {          // 帳戶資訊
+                  account = 26,               // 帳號 (string)
+                  branchNo = 6460             // 分公司代號 (string)
+              },
+            details = [
+                    Settlement{                      // 交割資訊 
+                        date =  2024/03/04,          // 查詢日               (string)
+                        settlementDate = 2024/03/06, // 交割日期             (string)
+                        buyValue = 735500,           // 買進金額             (int)
+                        buyFee = 313,                // 買進費用             (int)
+                        buySettlement = -1429513,    // 買進應收付款         (int)
+                        buyTax = 0,                  // 買進交易稅           (int)
+                        sellValue = 770500,          // 賣出金額             (int)
+                        sellFee = 320,               // 賣出費用             (int)
+                        sellSettlement = 0,          // 賣出應收付款         (int)
+                        sellTax = 2309,              // 賣出交易稅           (int)
+                        totalBsValue = 1506000,      // 合計買賣金額         (int)
+                        totalFee = 633,              // 合計手續費           (int)
+                        totalSettlementAmount = -1429513, // 合計交割款金額  (int)
+                        totalTax = 2309,                  // 合計交易稅      (int)
+                        currency = TWD                    // 幣別           (string)
+                    },
+                    Settlement{
+                        date = 2024/03/05,             // 查詢日               (string)
+                        settlementDate = 2024/03/07,   // 交割日期             (string)
+                        buyValue = 2261470,            // 買進金額             (int)
+                        buyFee = 1065,                 // 買進費用             (int)
+                        buySettlement = -3895335,      // 買進應收付款         (int)
+                        buyTax = 0,                    // 買進交易稅           (int)
+                        sellValue = 2488170,           // 賣出金額             (int)
+                        sellFee = 1137,                // 賣出費用             (int)
+                        sellSettlement = 677626,       // 賣出應收付款         (int)
+                        sellTax = 7412,                // 賣出交易稅           (int)
+                        totalBsValue = 4749640,        // 合計買賣金額         (int)
+                        totalFee = 2202,                // 合計買賣手續費       (int)
+                        totalSettlementAmount = -3217709, // 合計交割款金額  (int)
+                        totalTax = 7412,                  // 合計交易稅      (int)
+                        currency = TWD                    // 幣別           (string)
+                    },
+                    Settlement{
+                        date = 2024/03/06,        // 查詢日               (string)
+                        settlementDate = ,        // 交割日期             (string)
+                        buyValue = ,              // 買進金額        (int)
+                        buyFee = ,                // 買進費用        (int)
+                        buySettlement = ,         // 買進應收付款    (int)
+                        buyTax = ,                // 買進交易稅      (int)
+                        sellValue = ,             // 賣出金額        (int)
+                        sellFee = ,               // 賣出費用        (int)
+                        sellSettlement = ,        // 賣出應收付款    (int)
+                        sellTax = ,               // 賣出交易稅      (int)
+                        totalBsValue = ,          // 合計買賣金額    (int)
+                        totalFee = ,              // 合計買賣手續費  (int)
+                        totalSettlementAmount = , // 合計交割款金額  (int)
+                        totalTax = ,              // 合計交易稅      (int)
+                        currency =                // 幣別           (string)
+                    }
+                ]
+            }
+}
+
+
+```

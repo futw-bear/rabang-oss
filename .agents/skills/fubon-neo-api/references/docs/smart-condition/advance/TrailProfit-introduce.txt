@@ -1,0 +1,73 @@
+# 移動鎖利條件單
+
+富邦新一代 API 支援移動鎖利單，
+
+移動鎖利運作機制 : 當基準條件觸發後，若設定的回檔幅度未達到，則不會觸發，當後續股價持續往上，則會使用新的價格作為基準，若此時回檔幅度到達設定值，則送出委託
+
+![trailProfit](/TradeAPI/assets/images/TrailProfit-57d72c840dd40176b183a22ef955bfdc.png)
+
+### 程式範例[​](#程式範例 "Direct link to 程式範例")
+
+* Python
+* Node.js
+* C#
+
+```py
+# 設計條件內容
+trail = TrailOrder(
+    symbol = "2330",
+    price = "1000",
+    direction = Direction.Down ,
+    percentage = 5,  # 漲跌 % 數
+    buy_sell = BSAction.Sell,
+    quantity = 2000,
+    price_type = ConditionPriceType.MatchedPrice,
+    diff = 1,     # 向上 or 向下追買 tick數 (向下為負值)
+    time_in_force = TimeInForce.ROD,
+    order_type = ConditionOrderType.Stock
+)
+
+sdk.stock.trail_profit(target_account, "20240427","20240516", StopSign.Full, trail)
+
+```
+
+```js
+// 設計條件內容
+const trail = {
+    symbol: "2330",
+    price: "1000",
+    direction: Direction.Down,
+    percentage: 5,  
+    buySell: BSAction.Sell,
+    quantity: 2000,
+    priceType: ConditionPriceType.MatchedPrice,
+    diff: 1,
+    timeInForce: TimeInForce.ROD,
+    orderType: ConditionOrderType.Stock
+    
+};
+
+sdk.stock.trailProfit(target_account, "20240427","20240516", StopSign.Full, trail)
+
+
+```
+
+```cs
+// 設計條件內容
+var trail = new TrailOrder(
+    "2330",
+    "1000",
+    Direction.Down ,
+    5,  // 漲跌 % 數
+    BsAction.Sell,
+    2000,
+    ConditionPriceType.MatchedPrice,
+    1, // 向上 or 向下追買 tick數 (向下為負值)
+    TimeInForce.Rod,
+    ConditionOrderType.Stock
+);
+
+
+sdk.Stock.TrailProfit(target_account, "20240427","20240516", StopSign.Full, trail);
+
+```

@@ -1,0 +1,150 @@
+# Intraday Candles
+
+期權價格Ｋ線（依商品查詢）
+
+```text
+intraday/candles/{symbol}
+
+```
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name        | Type   | Description                                                                             |
+| ----------- | ------ | --------------------------------------------------------------------------------------- |
+| `symbol`\*  | string | 期權代碼                                                                                |
+| `session`   | string | session 類型，可選 `afterhours` 夜盤                                                    |
+| `timeframe` | string | Ｋ線週期，可選 `1` 1分Ｋ；`5` 5分Ｋ；`10` 10分Ｋ；`15` 15分Ｋ；`30` 30分Ｋ；`60` 60分Ｋ |
+
+## Response[​](#response "Direct link to Response")
+
+| Name          | Type      | Description |
+| ------------- | --------- | ----------- |
+| `date`\*      | string    | 日期        |
+| `type`\*      | string    | Ticker 類型 |
+| `exchange`\*  | string    | 交易所      |
+| `market`      | string    | 市場別      |
+| `symbol`\*    | string    | 期權代碼    |
+| `timeframe`\* | string    | Ｋ線週期    |
+| `data`\*      | object\[] | Ｋ線資料    |
+| >> `time`     | number    | Ｋ線時間    |
+| >> `open`\*   | number    | Ｋ線開盤價  |
+| >> `high`\*   | number    | Ｋ線最高價  |
+| >> `low`\*    | number    | Ｋ線最低價  |
+| >> `close`\*  | number    | Ｋ線收盤價  |
+| >> `volume`   | number    | Ｋ線成交量  |
+| >> `average`  | number    | 成交均價    |
+
+info
+
+'\*' 表示必揭示欄位。
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password" ,"Your cert path" ,"Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+restfutopt = sdk.marketdata.rest_client.futopt
+# restfutopt.intraday.candles(symbol='TXFA4')  # 2.2.3 及以前版本
+
+## 2.2.4 及以後版本 (使用 Exception 進行例外處理)
+from fubon_neo.fugle_marketdata.rest.base_rest import FugleAPIError
+
+try:  
+  restfutopt.intraday.candles(symbol='TXFA4')
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"}   
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+client.futopt.intraday.candles({ symbol: 'TXFA4' })
+  .then(data => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+using FugleMarketData.QueryModels.FuOpt;
+using FugleMarketData.QueryModels.FuOpt.Intraday;
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.FutureOption;
+
+var candles = await rest.Intraday.Candles("TXFA4");
+// var candles = await rest.Intraday.Candles("TXFA4", new(){TimeFrame=FugleMarketData.QueryModels.FuOpt.Intraday.CandlesTimeFrame.FifteenMin});  // 15分鐘K
+
+var candle_cont = candles.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(candle_cont);
+
+```
+
+Response Body：
+
+```json
+{
+  "date": "2023-12-15",
+  "type": "FUTURE",
+  "exchange": "TAIFEX",
+  "symbol": "TXFA4",
+  "timeframe": "1",
+  "data": [
+    {
+      "date": "2023-12-15T08:45:00.000+08:00",
+      "open": 17744,
+      "high": 17756,
+      "low": 17744,
+      "close": 17756,
+      "volume": 98,
+      "average": 17749.97
+    },
+    {
+      "date": "2023-12-15T08:46:00.000+08:00",
+      "open": 17755,
+      "high": 17756,
+      "low": 17742,
+      "close": 17747,
+      "volume": 48,
+      "average": 17749.1
+    },
+    {
+      "date": "2023-12-15T08:47:00.000+08:00",
+      "open": 17746,
+      "high": 17746,
+      "low": 17731,
+      "close": 17731,
+      "volume": 26,
+      "average": 17747.8
+    },
+    ...
+  ]
+}
+
+```

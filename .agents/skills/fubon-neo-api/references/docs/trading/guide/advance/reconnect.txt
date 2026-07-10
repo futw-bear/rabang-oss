@@ -1,0 +1,347 @@
+# 斷線重連
+
+以下將用簡單示範，利用callback偵測交易Socket，接收到斷線事件後，程式自動進行Socket重新連線:
+
+* Python
+* Node.js
+* C#
+
+```py
+from fubon_neo.sdk import FubonSDK
+import threading
+
+# === 請填入你的真實憑證資料 ===
+USER_ID = "您的身分證字號"
+USER_PW = "您的登入密碼"
+CERT_PATH = "您的憑證位置"
+CERT_PW = "您的憑證密碼"
+
+# --- 若有行情 WebSocket 需要重連，可以在這裡實作 ---
+def handle_marketdata_ws_disconnect(code, msg):
+    print(f"[行情WS] 重新建立連線，原因: {code}, {msg}")
+
+# === 全域鎖定，避免同時重複觸發重連 ===
+relogin_lock = threading.Lock()
+
+# === 建立 FubonSDK 實例（全域使用，重複利用） ===
+sdk = FubonSDK()
+accounts = None    # 登入後會儲存帳號資訊
+
+# === 下單與成交等事件的處理函式（可自訂） ===
+def on_order(code, msg): pass
+def on_order_changed(code, msg): pass
+def on_filled(code, msg): pass
+
+def re_login():
+    """
+    當連線異常時，自動重新登入並重設事件 callback。
+    用 lock 確保同時間只會有一個重連動作。
+    """
+    if not relogin_lock.acquire(blocking=False):
+        print("[自動重連] 目前已有重連程序執行中，這次略過。")
+        return
+
+    try:
+        global accounts, sdk
+        print("[自動重連] 登出並重新登入...")
+        try:
+            sdk.logout()
+        except Exception as e:
+            print("[自動重連] 登出時發生例外：", e)
+
+        try:
+            sdk = FubonSDK()
+            accounts = sdk.login(USER_ID, USER_PW, CERT_PATH, CERT_PW)
+        except Exception as e:
+            print("[自動重連] 登入時發生例外：", e)
+            return
+
+        if accounts.is_success:
+            print("[自動重連] 重新登入成功，重新設定所有事件 callback。")
+            # 很重要：重新登入後一定要重設事件 callback！
+            sdk.set_on_event(on_event)
+            sdk.set_on_order(on_order)
+            sdk.set_on_order_changed(on_order_changed)
+            sdk.set_on_filled(on_filled)
+
+            # 若有行情 WS 也需要重連，可自行呼叫
+            handle_marketdata_ws_disconnect(-9000, "交易WS已重連")
+        else:
+            print("[自動重連] 重新登入失敗。")
+    finally:
+        relogin_lock.release()
+
+def on_event(code, content):
+    """
+    FubonSDK 的事件通知 callback。
+    """
+    print("[事件通知] 代碼:", code, "| 內容:", content)
+    if code == "300":
+        print("[事件通知] 偵測到斷線（代碼300），啟動自動重連。")
+        re_login()
+
+# === 一開始就要先登入並註冊各種 callback ===
+accounts = sdk.login(USER_ID, USER_PW, CERT_PATH, CERT_PW)
+if accounts.is_success:
+    print("[主程式] 登入成功，開始註冊事件 callback...")
+    sdk.set_on_event(on_event)
+    sdk.set_on_order(on_order)
+    sdk.set_on_order_changed(on_order_changed)
+    sdk.set_on_filled(on_filled)
+
+    # 範例：可以指定預設帳號（如果有多個）
+    acc = accounts.data[0] if hasattr(accounts, "data") else None
+else:
+    print("[主程式] 登入失敗！")
+
+# === 範例：手動模擬斷線事件，測試自動重連機制 ===
+on_event("300", "測試：WebSocket 已斷線")
+on_event("300", "測試：再觸發一次斷線，理論上 lock 會防止重複重連")
+
+# --- 範例結束 ---
+
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+// === 請填入你的真實憑證資料 ===
+const USER_ID = "您的身分證字號";
+const USER_PW = "您的登入密碼";
+const CERT_PATH = "您的憑證路徑";
+const CERT_PW = "您的憑證密碼";
+
+// === 全域鎖，避免同時重複觸發重連 ===
+let reloginLock = false;
+
+// === 建立 SDK 實例（全域用）===
+let sdk = new FubonSDK();
+let accounts = null;
+
+// === 下單與成交等事件的處理函式（可依需求擴充） ===
+function onOrder(code, msg) {}
+function onOrderChanged(code, msg) {}
+function onFilled(code, msg) {}
+
+// --- 若有行情 WS 需要重連，可在這裡擴充 ---
+function handleMarketdataWsDisconnect(code, msg) {
+    console.log(`[行情WS] 重新建立連線，原因: ${code}, ${msg}`);
+}
+
+function reLogin() {
+    // 用 flag 防止同時多次重連
+    if (reloginLock) {
+        console.log("[自動重連] 目前已有重連程序執行中，這次略過。");
+        return;
+    }
+    reloginLock = true;
+
+    console.log("[自動重連] 登出並重新登入...");
+    try {
+        // 取消 callback 註冊
+        sdk.setOnEvent(() => {});
+        sdk.setOnOrder(() => {});
+        sdk.setOnOrderChanged(() => {});
+        sdk.setOnFilled(() => {});
+        sdk.logout(); // 若沒登入也沒關係
+    } catch (e) {
+        console.log("[自動重連] 登出時發生例外：", e);
+    }
+
+    try {
+        // 重新建立 SDK 實例是好習慣
+        sdk = new FubonSDK();
+        accounts = sdk.login(USER_ID, USER_PW, CERT_PATH, CERT_PW);
+    } catch (e) {
+        console.log("[自動重連] 登入時發生例外：", e);
+        reloginLock = false;
+        return;
+    }
+
+    if (accounts && accounts.isSuccess) {
+        console.log("[自動重連] 重新登入成功，重新設定所有事件 callback。");
+        // 重新註冊所有事件 callback（非常重要）
+        sdk.setOnEvent(onEvent);
+        sdk.setOnOrder(onOrder);
+        sdk.setOnOrderChanged(onOrderChanged);
+        sdk.setOnFilled(onFilled);
+
+        // 如需行情WS，也可在這裡呼叫
+        handleMarketdataWsDisconnect(-9000, "交易WS已重連");
+    } else {
+        console.log("[自動重連] 重新登入失敗。");
+    }
+
+    reloginLock = false;
+}
+
+function onEvent(code, content) {
+    // 事件通知 callback
+    console.log("[事件通知] 代碼:", code, "| 內容:", content);
+    if (code === "300") {
+        console.log("[事件通知] 偵測到斷線（代碼300），啟動自動重連。");
+        reLogin();
+    }
+}
+
+// === 一開始先登入並註冊 callback ===
+accounts = sdk.login(USER_ID, USER_PW, CERT_PATH, CERT_PW);
+if (accounts && accounts.isSuccess) {
+    console.log("[主程式] 登入成功，開始註冊事件 callback...");
+    sdk.setOnEvent(onEvent);
+    sdk.setOnOrder(onOrder);
+    sdk.setOnOrderChanged(onOrderChanged);
+    sdk.setOnFilled(onFilled);
+
+    // 範例：可取得預設帳號
+    let acc = (accounts.data && accounts.data.length > 0) ? accounts.data[0] : null;
+} else {
+    console.log("[主程式] 登入失敗！");
+}
+
+// === 範例：手動觸發斷線事件，測試自動重連 ===
+Promise.all([
+    Promise.resolve().then(() => onEvent("300", "測試：WebSocket 已斷線")),
+]);
+
+// --- 範例結束 ---
+
+```
+
+```cs
+using System;
+using System.Threading;
+using FubonNeo.Sdk;
+
+class Program
+{
+    // === 請填入你的真實憑證資料 ===
+    static string USER_ID = "您的身分證字號";
+    static string USER_PW = "您的登入密碼";
+    static string CERT_PATH = "您的憑證位置";
+    static string CERT_PW = "您的憑證密碼";
+
+    // === 全域 lock，避免同時重複觸發重連 ===
+    static object reloginLock = new object();
+    static bool isReloginRunning = false;
+
+    // === 全域 SDK 物件（重複利用）===
+    static FubonSDK sdk = new FubonSDK();
+    static dynamic accounts = null; // SDK 回傳型別需依實際狀況確認
+
+    // === 下單與成交等事件處理器（可自行擴充）===
+    static void OnOrder(string code, OrderResult data) { }
+    static void OnOrderChanged(string code, OrderResult data) { }
+    static void OnFilled(string code, FilledData data) { }
+
+    // --- 若有行情 WS 需要重連，可在這裡擴充 ---
+    static void HandleMarketdataWsDisconnect(int code, string msg)
+    {
+        Console.WriteLine($"[行情WS] 重新建立連線，原因: {code}, {msg}");
+    }
+
+    static void ReLogin()
+    {
+        // 避免同時重複重連，用 lock 與旗標
+        lock (reloginLock)
+        {
+            if (isReloginRunning)
+            {
+                Console.WriteLine("[自動重連] 目前已有重連程序執行中，這次略過。");
+                return;
+            }
+            isReloginRunning = true;
+        }
+
+        try
+        {
+            Console.WriteLine("[自動重連] 登出並重新登入...");
+            try
+            {
+                sdk.Logout();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[自動重連] 登出時發生例外：" + e.Message);
+            }
+
+            try
+            {
+                sdk = new FubonSDK();
+                accounts = sdk.Login(USER_ID, USER_PW, CERT_PATH, CERT_PW);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[自動重連] 登入時發生例外：" + e.Message);
+                return;
+            }
+
+            if (accounts != null && accounts.isSuccess)
+            {
+                Console.WriteLine("[自動重連] 重新登入成功，重新設定所有事件 callback。");
+                // 重新設定 callback
+                sdk.OnEvent = OnEvent;
+                sdk.OnOrder = OnOrder;
+                sdk.OnOrderChanged = OnOrderChanged;
+                sdk.OnFilled = OnFilled;
+
+                // 行情WS重連（如需）
+                HandleMarketdataWsDisconnect(-9000, "交易WS已重連");
+            }
+            else
+            {
+                Console.WriteLine("[自動重連] 重新登入失敗。");
+            }
+        }
+        finally
+        {
+            lock (reloginLock)
+            {
+                isReloginRunning = false;
+            }
+        }
+    }
+
+    static void OnEvent(string code, string content)
+    {
+        Console.WriteLine("[事件通知] 代碼:" + code + " | 內容:" + content);
+        if (code == "300")
+        {
+            Console.WriteLine("[事件通知] 偵測到斷線（代碼300），啟動自動重連。");
+            ReLogin();
+        }
+    }
+
+    static void Main(string[] args)
+    {
+        // === 一開始登入並註冊 callback ===
+        accounts = sdk.Login(USER_ID, USER_PW, CERT_PATH, CERT_PW);
+        if (accounts != null && accounts.isSuccess)
+        {
+            Console.WriteLine("[主程式] 登入成功，開始註冊事件 callback...");
+            sdk.OnEvent = OnEvent;
+            sdk.OnOrder = OnOrder;
+            sdk.OnOrderChanged = OnOrderChanged;
+            sdk.OnFilled = OnFilled;
+
+            // 取得預設帳號（如果有多個）
+            var acc = (accounts.data != null && accounts.data.Count > 0) ? accounts.data[0] : null;
+        }
+        else
+        {
+            Console.WriteLine("[主程式] 登入失敗！");
+        }
+
+        // === 範例：手動觸發斷線事件，測試自動重連 ===
+        OnEvent("300", "測試：WebSocket 已斷線");
+        OnEvent("300", "測試：再觸發一次斷線，lock 應該會防止重複重連");
+
+        // 讓主程式暫停，觀察結果（可依需求移除）
+        Console.WriteLine("Press any key to exit...");
+        Console.ReadKey();
+    }
+}
+
+
+```

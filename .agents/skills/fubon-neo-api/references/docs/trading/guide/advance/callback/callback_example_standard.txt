@@ -1,0 +1,2690 @@
+# 主動回報範例（標準版）
+
+以下列舉主動回報範例，包含阻塞式 (non-async, unblock=False) 及 非阻塞式 (async, unblock=True) 功能
+
+（ 關於阻塞式與非阻塞式功能，請參考 [非阻塞下單](https://www.fbs.com.tw/TradeAPI/docs/trading/guide/advance/asyn_order.txt) ）
+
+caution
+
+此文件僅提供常見使用場景對應範例，不保證包含所有例外情況
+
+## 單筆下單[​](#單筆下單 "Direct link to 單筆下單")
+
+### 單筆新單[​](#單筆新單 "Direct link to 單筆新單")
+
+#### 阻塞式 (non-async, unblock=False)[​](#阻塞式-non-async-unblockfalse "Direct link to 阻塞式 (non-async, unblock=False)")
+
+1. 下單成功
+
+   * 主動回報（一筆）:
+
+     下單成功，status 顯示為 10
+
+     ```py
+     ==下單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 10,
+         date: "2024/10/17",
+         seq_no: "00000394159",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0002",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 10,
+         after_price_type: Limit,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 0,
+         before_price: 43,
+         user_def: "Test50",
+         last_time: "11:24:40.378",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+   * 函式回傳值 (return):
+
+     ```py
+     Result {
+         is_success: True,
+         message: None,
+         data: OrderResult {
+             function_type: 0,
+             date: "2024/10/17",
+             seq_no: "00000394159",
+             branch_no: "20706",
+             account: "9809268",
+             order_no: "x0002",
+             asset_type: 0,
+             market: "TAIEX",
+             market_type: Common,
+             stock_no: "1102",
+             buy_sell: Buy,
+             price_type: Limit,
+             price: 43,
+             quantity: 5000,
+             time_in_force: ROD,
+             order_type: Stock,
+             is_pre_order: false,
+             status: 10,
+             after_price_type: Limit,
+             after_price: 43,
+             unit: 1000,
+             after_qty: 5000,
+             filled_qty: 0,
+             filled_money: 0,
+             before_qty: 0,
+             before_price: 43,
+             user_def: "Test50",
+             last_time: "11:24:40.378",
+             details: None,
+             error_message: None,
+         }
+     }
+
+     ```
+
+2. 下單失敗
+
+   * 主動回報（一筆）:
+
+     下單異常，status 顯示為 90
+
+     ```py
+     ==下單主動回報==
+     Code [4385715]單價輸入錯誤[4385715]
+     內容 OrderResult {
+         function_type: 90,
+         date: "2024/10/17",
+         seq_no: "00000394160",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: None,
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 430,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 90,
+         after_price_type: Limit,
+         after_price: 430,
+         unit: 1000,
+         after_qty: 0,
+         filled_qty: None,
+         filled_money: None,
+         before_qty: 0,
+         before_price: 430,
+         user_def: "Test25",
+         last_time: "11:25:25.670",
+         details: None,
+         error_message: "單價輸入錯誤[4385715]",
+     }
+     ========
+
+     ```
+
+   * 函式回傳值 (return):
+
+     下單失敗，無委託單資料回傳
+
+     ```py
+     Result {
+         is_success: False,
+         message: 單價輸入錯誤[4385715],
+         data: None
+     }
+
+     ```
+
+#### 非阻塞 (async, unblock=True)[​](#非阻塞-async-unblocktrue "Direct link to 非阻塞 (async, unblock=True)")
+
+1. 下單成功
+
+   * 主動回報（三筆）:
+
+     第一筆為ACK，表示系統將執行請求（status 4），第二筆表示後台準備送單（status 8），此時皆無 order\_no（尚未確認下單成功），可用 seq\_no 進行後續比對；最後確認下單狀態（成功為 status 10）
+
+     ```py
+     ==下單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 0,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: None,
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: true,
+         status: 4,
+         after_price_type: Limit,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 0,
+         before_price: 43,
+         user_def: "Test70",
+         last_time: "11:25:54.188",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==下單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 10,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: None,
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 8,
+         after_price_type: Limit,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 0,
+         before_price: 43,
+         user_def: "Test70",
+         last_time: "11:25:54.189",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==下單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 10,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 10,
+         after_price_type: Limit,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 0,
+         before_price: 43,
+         user_def: "Test70",
+         last_time: "11:25:54.163",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+   * 函式回傳值 (return):
+
+     因使用非阻塞，函式收到 ACK 即回傳 (status 4)
+
+     ```py
+     Result {
+         is_success: True,
+         message: None,
+         data: OrderResult {
+             function_type: 0,
+             date: "2024/10/17",
+             seq_no: "00098000031",
+             branch_no: "20706",
+             account: "9809268",
+             order_no: None,
+             asset_type: 0,
+             market: "TAIEX",
+             market_type: Common,
+             stock_no: "1102",
+             buy_sell: Buy,
+             price_type: Limit,
+             price: 43,
+             quantity: 5000,
+             time_in_force: ROD,
+             order_type: Stock,
+             is_pre_order: true,
+             status: 4,
+             after_price_type: Limit,
+             after_price: 43,
+             unit: 1000,
+             after_qty: 5000,
+             filled_qty: 0,
+             filled_money: 0,
+             before_qty: 0,
+             before_price: 43,
+             user_def: "Test70",
+             last_time: "11:25:54.188",
+             details: None,
+             error_message: None,
+         }
+     }
+
+     ```
+
+2. 下單失敗
+
+   * 主動回報（三筆）:
+
+     第一筆為ACK，表示系統將執行請求（status 4），第二筆表示後台準備送單（status 8），此時皆無 order\_no（尚未確認下單成功），可用 seq\_no 進行後續比對；最後確認下單狀態（異常為 status 90）
+
+     ```py
+     ==下單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 0,
+         date: "2024/10/17",
+         seq_no: "00098000032",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: None,
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 20,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: true,
+         status: 4,
+         after_price_type: Limit,
+         after_price: 20,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 0,
+         before_price: 20,
+         user_def: "Test64",
+         last_time: "11:26:59.651",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==下單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 10,
+         date: "2024/10/17",
+         seq_no: "00098000032",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: None,
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 20,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 8,
+         after_price_type: Limit,
+         after_price: 20,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 0,
+         before_price: 20,
+         user_def: "Test64",
+         last_time: "11:26:59.652",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==下單主動回報==
+     Code [4385715]單價輸入錯誤[4385715]
+     內容 OrderResult {
+         function_type: 90,
+         date: "2024/10/17",
+         seq_no: "00098000032",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: None,
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 20,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 90,
+         after_price_type: Limit,
+         after_price: 20,
+         unit: 1000,
+         after_qty: 0,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 0,
+         before_price: 20,
+         user_def: "Test64",
+         last_time: "11:26:59.658",
+         details: None,
+         error_message: "單價輸入錯誤[4385715]",
+     }
+     ========
+
+     ```
+
+   * 函式回傳值 (return):
+
+     因使用非阻塞，函式收到 ACK 即回傳 (status 4)
+
+     ```py
+     Result {
+         is_success: True,
+         message: None,
+         data: OrderResult {
+             function_type: 0,
+             date: "2024/10/17",
+             seq_no: "00098000032",
+             branch_no: "20706",
+             account: "9809268",
+             order_no: None,
+             asset_type: 0,
+             market: "TAIEX",
+             market_type: Common,
+             stock_no: "1102",
+             buy_sell: Buy,
+             price_type: Limit,
+             price: 20,
+             quantity: 5000,
+             time_in_force: ROD,
+             order_type: Stock,
+             is_pre_order: true,
+             status: 4,
+             after_price_type: Limit,
+             after_price: 20,
+             unit: 1000,
+             after_qty: 5000,
+             filled_qty: 0,
+             filled_money: 0,
+             before_qty: 0,
+             before_price: 20,
+             user_def: "Test64",
+             last_time: "11:26:59.651",
+             details: None,
+             error_message: None,
+         }
+     }
+
+     ```
+
+### 修改委託單價格[​](#修改委託單價格 "Direct link to 修改委託單價格")
+
+info
+
+改單無論使用阻塞模式或非阻塞模式，若由系統擋單（例如改價同原委託價），無 status 4 回報（表示系統將執行請求）；若由後台擋單（例如超過漲跌停價），則有 status 4 回報
+
+阻塞模式與非阻塞模式差異為，若有 status 4 回報時（系統向後送單），非阻塞模式之函式收到該筆回報即回傳，而阻塞模式之函式將等到最終成功或失敗確認才回傳
+
+#### 阻塞[​](#阻塞 "Direct link to 阻塞")
+
+1. 改價成功
+
+   * 主動回報（兩筆）:
+
+     改價 function\_type 15，回報第一筆為系統將執行請求（status 4）；第二筆改價成功 status 10
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 15,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 4,
+         after_price_type: Limit,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: None,
+         before_price: 43,
+         user_def: "Test70",
+         last_time: "11:27:47.512",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 15,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 10,
+         after_price_type: Limit,
+         after_price: 42,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: None,
+         before_price: 43,
+         user_def: "Test70",
+         last_time: "11:27:47.407",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     ```py
+     Result {
+         is_success: True,
+         message: None,
+         data: OrderResult {
+             function_type: 15,
+             date: "2024/10/17",
+             seq_no: "00098000031",
+             branch_no: "20706",
+             account: "9809268",
+             order_no: "x0003",
+             asset_type: 0,
+             market: "TAIEX",
+             market_type: Common,
+             stock_no: "1102",
+             buy_sell: Buy,
+             price_type: Limit,
+             price: 43,
+             quantity: 5000,
+             time_in_force: ROD,
+             order_type: Stock,
+             is_pre_order: false,
+             status: 10,
+             after_price_type: Limit,
+             after_price: 42,
+             unit: 1000,
+             after_qty: 5000,
+             filled_qty: 0,
+             filled_money: 0,
+             before_qty: 5000,
+             before_price: 43,
+             user_def: "Test70",
+             last_time: "11:27:47.407",
+             details: None,
+             error_message: None,
+         }
+     }
+
+     ```
+
+2. 改價失敗
+
+   * 主動回報（兩筆，後台擋單）:
+
+     改價 function\_type 15，回報第一筆為系統將執行請求（status 4）；第二筆改價失敗 status 19
+
+     info
+
+     此案例由後台擋單，因此有第一筆回報 status 4
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 15,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 4,
+         after_price_type: Limit,
+         after_price: 42,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: None,
+         before_price: 42,
+         user_def: "Test70",
+         last_time: "11:28:46.753",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==改單主動回報==
+     Code [4385715]單價輸入錯誤[4385715]
+     內容 OrderResult {
+         function_type: 15,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 19,
+         after_price_type: Limit,
+         after_price: 42,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: None,
+         before_price: 42,
+         user_def: "Test70",
+         last_time: "11:28:46.754",
+         details: None,
+         error_message: "單價輸入錯誤[4385715]",
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     改價失敗，無委託單資料回傳
+
+     ```py
+     Result {
+         is_success: False,
+         message: 單價輸入錯誤[4385715],
+         data: None
+     }   
+
+     ```
+
+#### 非阻塞[​](#非阻塞 "Direct link to 非阻塞")
+
+1. 改價成功
+
+   * 主動回報（兩筆）:
+
+     改價 function\_type 15，回報第一筆為系統將執行請求（status 4）；第二筆改價成功 status 10
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 15,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 4,
+         after_price_type: Limit,
+         after_price: 42,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: None,
+         before_price: 42,
+         user_def: "Test70",
+         last_time: "11:29:43.593",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 15,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 10,
+         after_price_type: Limit,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: None,
+         before_price: 42,
+         user_def: "Test70",
+         last_time: "11:29:43.682",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     因使用非阻塞，函式收到 ACK 即回傳 (status 4)
+
+     ```py
+     Result {
+         is_success: True,
+         message: None,
+         data: OrderResult {
+             function_type: 15,
+             date: "2024/10/17",
+             seq_no: "00098000031",
+             branch_no: "20706",
+             account: "9809268",
+             order_no: "x0003",
+             asset_type: 0,
+             market: "TAIEX",
+             market_type: Common,
+             stock_no: "1102",
+             buy_sell: Buy,
+             price_type: Limit,
+             price: 43,
+             quantity: 5000,
+             time_in_force: ROD,
+             order_type: Stock,
+             is_pre_order: false,
+             status: 4,
+             after_price_type: Limit,
+             after_price: 42,
+             unit: 1000,
+             after_qty: 5000,
+             filled_qty: 0,
+             filled_money: 0,
+             before_qty: None,
+             before_price: 42,
+             user_def: "Test70",
+             last_time: "11:29:43.592",
+             details: None,
+             error_message: None,
+         }
+     }
+
+     ```
+
+2. 改價失敗
+
+   * 主動回報（一筆）:
+
+     改價 function\_type 15，改價失敗 status 19
+
+     info
+
+     此案例由系統擋單，因此**無** status 4 回報
+
+     ```py
+     ==改單主動回報==
+     Code [154]證券改價限價格格和原價格相同==>[00098000031]
+     內容 OrderResult {
+         function_type: 15,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 19,
+         after_price_type: Limit,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: None,
+         before_price: None,
+         user_def: "Test70",
+         last_time: "11:30:20.330",
+         details: None,
+         error_message: "證券改價限價格格和原價格相同==>[00098000031]",
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     改價失敗，無委託單資料回傳
+
+     ```py
+     response: Result {
+         is_success: False,
+         message: 證券改價限價格格和原價格相同==>[00098000031],
+         data: None
+     }
+
+     ```
+
+### 修改委託單數量[​](#修改委託單數量 "Direct link to 修改委託單數量")
+
+info
+
+改單無論使用阻塞模式或非阻塞模式，若由系統擋單（例如改價同原委託價），無 status 4 回報（表示系統將執行請求）；若由後台擋單（例如超過漲跌停價），則有 status 4 回報
+
+阻塞模式與非阻塞模式差異為，若有 status 4 回報時（系統向後送單），非阻塞模式之函式收到該筆回報即回傳，而阻塞模式之函式將等到最終成功或失敗確認才回傳
+
+#### 阻塞[​](#阻塞-1 "Direct link to 阻塞")
+
+1. 改量成功
+
+   * 主動回報（兩筆）:
+
+     改量 function\_type 20，回報第一筆為系統將執行請求（status 4）；第二筆改量成功 status 10
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 20,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 4,
+         after_price_type: None,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 5000,
+         before_price: None,
+         user_def: "Test70",
+         last_time: "11:31:00.211",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 20,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 10,
+         after_price_type: None,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 3000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 5000,
+         before_price: None,
+         user_def: "Test70",
+         last_time: "11:31:00.332",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     ```py
+     Result {
+         is_success: True,
+         message: None,
+         data: OrderResult {
+             function_type: 20,
+             date: "2024/10/17",
+             seq_no: "00098000031",
+             branch_no: "20706",
+             account: "9809268",
+             order_no: "x0003",
+             asset_type: 0,
+             market: "TAIEX",
+             market_type: Common,
+             stock_no: "1102",
+             buy_sell: Buy,
+             price_type: Limit,
+             price: 43,
+             quantity: 5000,
+             time_in_force: ROD,
+             order_type: Stock,
+             is_pre_order: false,
+             status: 10,
+             after_price_type: Limit,
+             after_price: 43,
+             unit: 1000,
+             after_qty: 3000,
+             filled_qty: 0,
+             filled_money: 0,
+             before_qty: 5000,
+             before_price: 43,
+             user_def: "Test70",
+             last_time: "11:31:00.332",
+             details: None,
+             error_message: None,
+         }
+     }
+
+     ```
+
+2. 改量失敗
+
+   * 主動回報（一筆）:
+
+     改量 function\_type 20，失敗回報 status 29（系統擋單，因此無 status 4 回報）
+
+     ```py
+     ==改單主動回報==
+     Code [164]證券減量使用剩餘數量大於有效單位數量==>[00098000031]
+     內容 OrderResult {
+         function_type: 20,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 29,
+         after_price_type: None,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 3000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: None,
+         before_price: None,
+         user_def: "Test70",
+         last_time: "11:31:51.980",
+         details: None,
+         error_message: "證券減量使用剩餘數量大於有效單位數量==>[00098000031]",
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     改量失敗，無委託單資料回傳
+
+     ```py
+     Result {
+         is_success: False,
+         message: 證券減量使用剩餘數量大於有效單位數量==>[00098000031],
+         data: None
+     }
+
+     ```
+
+#### 非阻塞[​](#非阻塞-1 "Direct link to 非阻塞")
+
+1. 改量成功
+
+   * 主動回報（兩筆）:
+
+     改量 function\_type 20，回報第一筆為系統將執行請求（status 4）；第二筆改量成功 status 10
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 20,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 4,
+         after_price_type: None,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 3000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 3000,
+         before_price: None,
+         user_def: "Test70",
+         last_time: "11:32:33.047",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 20,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 10,
+         after_price_type: None,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 1000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 3000,
+         before_price: None,
+         user_def: "Test70",
+         last_time: "11:32:33.215",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     因使用非阻塞，函式收到 ACK 即回傳 (status 4)
+
+     ```py
+     Result {
+     is_success: True,
+     message: None,
+     data: OrderResult {
+             function_type: 20,
+             date: "2024/10/17",
+             seq_no: "00098000031",
+             branch_no: "20706",
+             account: "9809268",
+             order_no: "x0003",
+             asset_type: 0,
+             market: "TAIEX",
+             market_type: Common,
+             stock_no: "1102",
+             buy_sell: Buy,
+             price_type: Limit,
+             price: 43,
+             quantity: 5000,
+             time_in_force: ROD,
+             order_type: Stock,
+             is_pre_order: false,
+             status: 4,
+             after_price_type: None,
+             after_price: 43,
+             unit: 1000,
+             after_qty: 3000,
+             filled_qty: 0,
+             filled_money: 0,
+             before_qty: 3000,
+             before_price: None,
+             user_def: "Test70",
+             last_time: "11:32:33.045",
+             details: None,
+             error_message: None,
+         }
+     }
+
+     ```
+
+2. 改量失敗
+
+   * 主動回報（一筆）:
+
+     改量 function\_type 20，失敗回報 status 29 （系統擋單，因此無 status 4 回報）
+
+     ```py
+     ==改單主動回報==
+     Code [164]證券減量使用剩餘數量大於有效單位數量==>[00098000031]
+     內容 OrderResult {
+         function_type: 20,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 29,
+         after_price_type: None,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 1000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: None,
+         before_price: None,
+         user_def: "Test70",
+         last_time: "11:33:18.679",
+         details: None,
+         error_message: "證券減量使用剩餘數量大於有效單位數量==>[00098000031]",
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     由系統擋單改量失敗，無委託單資料回傳
+
+     ```py
+     Result {
+         is_success: False,
+         message: 證券減量使用剩餘數量大於有效單位數量==>[00098000031],
+         data: None
+     }
+
+     ```
+
+### 刪除委託單[​](#刪除委託單 "Direct link to 刪除委託單")
+
+caution
+
+若委託單已**部分成交**, 刪單成功狀態代碼為 40, 其餘為 30
+
+info
+
+改單無論使用阻塞模式或非阻塞模式，若由系統擋單（例如改價同原委託價），無 status 4 回報（表示系統將執行請求）；若由後台擋單（例如超過漲跌停價），則有 status 4 回報
+
+阻塞模式與非阻塞模式差異為，若有 status 4 回報時（系統向後送單），非阻塞模式之函式收到 status 4 回報即回傳，而阻塞模式之函式將等到最終成功或失敗確認才回傳
+
+#### 阻塞[​](#阻塞-2 "Direct link to 阻塞")
+
+1. 刪單成功
+
+   * 主動回報（兩筆）:
+
+     刪單 function\_type 30，回報第一筆為系統將執行請求（status 4）；第二筆刪單成功 status 30 （若已有部分成交 status 40）
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 30,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 4,
+         after_price_type: None,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 1000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 1000,
+         before_price: None,
+         user_def: "Test70",
+         last_time: "11:36:14.561",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 30,
+         date: "2024/10/17",
+         seq_no: "00098000031",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0003",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 43,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 30,
+         after_price_type: None,
+         after_price: 43,
+         unit: 1000,
+         after_qty: 0,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 1000,
+         before_price: None,
+         user_def: "Test70",
+         last_time: "11:36:14.499",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     ```py
+     Result {
+     is_success: True,
+     message: None,
+     data: OrderResult {
+             function_type: 30,
+             date: "2024/10/17",
+             seq_no: "00098000031",
+             branch_no: "20706",
+             account: "9809268",
+             order_no: "x0003",
+             asset_type: 0,
+             market: "TAIEX",
+             market_type: Common,
+             stock_no: "1102",
+             buy_sell: Buy,
+             price_type: Limit,
+             price: 43,
+             quantity: 5000,
+             time_in_force: ROD,
+             order_type: Stock,
+             is_pre_order: false,
+             status: 30,
+             after_price_type: Limit,
+             after_price: 43,
+             unit: 1000,
+             after_qty: 0,
+             filled_qty: 0,
+             filled_money: 0,
+             before_qty: 1000,
+             before_price: 43,
+             user_def: "Test70",
+             last_time: "11:36:14.499",
+             details: None,
+             error_message: None,
+         }
+     }
+
+     ```
+
+2. 刪單失敗
+
+   * 主動回報（一筆）:
+
+     刪單 function\_type 30，刪單失敗 status 39（系統擋單，因此無 status 4 回報）
+
+     ```py
+     ==改單主動回報==
+     Code [115]證券委託目前狀態部分成交單已不允許取消交易
+     內容 OrderResult {
+         function_type: 30,
+         date: "2024/10/17",
+         seq_no: "00000394165",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0007",
+         asset_type: 1,
+         market: None,
+         market_type: UnSupported,
+         stock_no: "1102",
+         buy_sell: None,
+         price_type: None,
+         price: None,
+         quantity: None,
+         time_in_force: None,
+         order_type: None,
+         is_pre_order: false,
+         status: 39,
+         after_price_type: None,
+         after_price: None,
+         unit: None,
+         after_qty: None,
+         filled_qty: None,
+         filled_money: None,
+         before_qty: None,
+         before_price: None,
+         user_def: None,
+         last_time: "11:39:57.468",
+         details: None,
+         error_message: "證券委託目前狀態部分成交單已不允許取消交易",
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     系統擋單而刪單失敗，無委託單資料回傳
+
+     ```py
+     Result {
+         is_success: False,
+         message: 證券委託目前狀態部分成交單已不允許取消交易,
+         data: None
+     }
+
+     ```
+
+#### 非阻塞[​](#非阻塞-2 "Direct link to 非阻塞")
+
+1. 刪單成功
+
+   * 主動回報（兩筆）:
+
+     刪單 function\_type 30，回報第一筆為系統將執行請求（status 4）；第二筆刪單成功 status 30 （若已有部分成交 status 40）
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 30,
+         date: "2024/10/17",
+         seq_no: "00098000033",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0008",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 41,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 4,
+         after_price_type: None,
+         after_price: 41,
+         unit: 1000,
+         after_qty: 5000,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 5000,
+         before_price: None,
+         user_def: "Test4",
+         last_time: "11:42:24.961",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+     ```py
+     ==改單主動回報==
+     Code None
+     內容 OrderResult {
+         function_type: 30,
+         date: "2024/10/17",
+         seq_no: "00098000033",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0008",
+         asset_type: 0,
+         market: "TAIEX",
+         market_type: Common,
+         stock_no: "1102",
+         buy_sell: Buy,
+         price_type: Limit,
+         price: 41,
+         quantity: 5000,
+         time_in_force: ROD,
+         order_type: Stock,
+         is_pre_order: false,
+         status: 30,
+         after_price_type: None,
+         after_price: 41,
+         unit: 1000,
+         after_qty: 0,
+         filled_qty: 0,
+         filled_money: 0,
+         before_qty: 5000,
+         before_price: None,
+         user_def: "Test4",
+         last_time: "11:42:25.125",
+         details: None,
+         error_message: None,
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     因使用非阻塞，函式收到 ACK 即回傳 (status 4)
+
+     ```py
+     Result {
+         is_success: True,
+         message: None,
+         data: OrderResult {
+                 function_type: 30,
+                 date: "2024/10/17",
+                 seq_no: "00098000033",
+                 branch_no: "20706",
+                 account: "9809268",
+                 order_no: "x0008",
+                 asset_type: 0,
+                 market: "TAIEX",
+                 market_type: Common,
+                 stock_no: "1102",
+                 buy_sell: Buy,
+                 price_type: Limit,
+                 price: 41,
+                 quantity: 5000,
+                 time_in_force: ROD,
+                 order_type: Stock,
+                 is_pre_order: false,
+                 status: 4,
+                 after_price_type: None,
+                 after_price: 41,
+                 unit: 1000,
+                 after_qty: 5000,
+                 filled_qty: 0,
+                 filled_money: 0,
+                 before_qty: 5000,
+                 before_price: None,
+                 user_def: "Test4",
+                 last_time: "11:42:24.960",
+                 details: None,
+                 error_message: None,
+             }
+     }
+
+     ```
+
+2. 刪單失敗
+
+   * 主動回報（一筆）:
+
+     刪單 function\_type 30，回報刪單失敗 status 39 （由系統直接擋回請求，因此無 status 4）
+
+     ```py
+     ==改單主動回報==
+     Code [115]證券委託目前狀態取消單已不允許取消交易
+     內容 OrderResult {
+         function_type: 30,
+         date: "2024/10/17",
+         seq_no: "00098000033",
+         branch_no: "20706",
+         account: "9809268",
+         order_no: "x0008",
+         asset_type: 1,
+         market: None,
+         market_type: UnSupported,
+         stock_no: "1102",
+         buy_sell: None,
+         price_type: None,
+         price: None,
+         quantity: None,
+         time_in_force: None,
+         order_type: None,
+         is_pre_order: false,
+         status: 39,
+         after_price_type: None,
+         after_price: None,
+         unit: None,
+         after_qty: None,
+         filled_qty: None,
+         filled_money: None,
+         before_qty: None,
+         before_price: None,
+         user_def: None,
+         last_time: "11:48:06.850",
+         details: None,
+         error_message: "證券委託目前狀態取消單已不允許取消交易",
+     }
+     ========
+
+     ```
+
+   * 函式回傳 (return):
+
+     系統擋單而刪單失敗，無委託單資料回傳
+
+     ```py
+     Result {
+         is_success: False,
+         message: 證券委託目前狀態取消單已不允許取消交易,
+         data: None
+     }
+
+     ```
+
+## 批次下單[​](#批次下單 "Direct link to 批次下單")
+
+**批次功能由系統收到請求後以多線程 (threads) 方式運作**
+
+後續批次範例以下委託單列表為例:
+
+```py
+[Order {
+     buy_sell: Buy,
+     symbol: "1102",
+     price: "42",
+     quantity: 2000,
+     market_type: Common,
+     price_type: Limit,
+     time_in_force: ROD,
+     order_type: Stock,
+     user_def: "batch1",
+ },
+ Order {
+     buy_sell: Buy,
+     symbol: "1101",
+     price: "32",
+     quantity: 1000,
+     market_type: Common,
+     price_type: Limit,
+     time_in_force: ROD,
+     order_type: Stock,
+     user_def: "batch2",
+ },
+ Order {
+     buy_sell: Buy,
+     symbol: "2330",
+     price: None,
+     quantity: 1000,
+     market_type: Common,
+     price_type: Market,
+     time_in_force: ROD,
+     order_type: Stock,
+     user_def: "batch3",
+ }]
+
+```
+
+### 新委託單下單[​](#新委託單下單 "Direct link to 新委託單下單")
+
+* 主動回報（六筆）:
+
+  包含三筆後台準備送出委託單回報（status 8）；三筆下單成功確認（status 10）
+
+  ```py
+  ==下單主動回報==
+  內容 OrderResult {
+      function_type: 0,
+      date: "2024/10/17",
+      seq_no: "00098000041",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: None,
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1101",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 32,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: true,
+      status: 8,
+      after_price_type: Limit,
+      after_price: 32,
+      unit: 1000,
+      after_qty: 1000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 0,
+      before_price: 32,
+      user_def: "batch2",
+      last_time: "11:50:24.656",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==下單主動回報==
+  內容 OrderResult {
+      function_type: 0,
+      date: "2024/10/17",
+      seq_no: "00098000040",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: None,
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1102",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 42,
+      quantity: 2000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: true,
+      status: 8,
+      after_price_type: Limit,
+      after_price: 42,
+      unit: 1000,
+      after_qty: 2000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 0,
+      before_price: 42,
+      user_def: "batch1",
+      last_time: "11:50:24.656",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==下單主動回報==
+  內容 OrderResult {
+      function_type: 0,
+      date: "2024/10/17",
+      seq_no: "00098000042",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: None,
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "2330",
+      buy_sell: Buy,
+      price_type: Market,
+      price: None,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: true,
+      status: 8,
+      after_price_type: Market,
+      after_price: None,
+      unit: 1000,
+      after_qty: 1000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 0,
+      before_price: None,
+      user_def: "batch3",
+      last_time: "11:50:24.656",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==下單主動回報==
+  內容 OrderResult {
+      function_type: 10,
+      date: "2024/10/17",
+      seq_no: "00098000040",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0014",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1102",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 42,
+      quantity: 2000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 10,
+      after_price_type: Limit,
+      after_price: 42,
+      unit: 1000,
+      after_qty: 2000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 0,
+      before_price: 42,
+      user_def: "batch1",
+      last_time: "11:50:24.796",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==下單主動回報==
+  內容 OrderResult {
+      function_type: 10,
+      date: "2024/10/17",
+      seq_no: "00098000041",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0013",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1101",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 32,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 10,
+      after_price_type: Limit,
+      after_price: 32,
+      unit: 1000,
+      after_qty: 1000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 0,
+      before_price: 32,
+      user_def: "batch2",
+      last_time: "11:50:24.796",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==下單主動回報==
+  內容 OrderResult {
+      function_type: 10,
+      date: "2024/10/17",
+      seq_no: "00098000042",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0015",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "2330",
+      buy_sell: Buy,
+      price_type: Market,
+      price: 0,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 10,
+      after_price_type: Market,
+      after_price: 0,
+      unit: 1000,
+      after_qty: 1000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 0,
+      before_price: 0,
+      user_def: "batch3",
+      last_time: "11:50:24.806",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+* 函式回傳 (return):
+
+  批次委託新單，回傳值皆為 ACK (status 4)，並無委託書號 (order\_no)，後續可用流水號 (seq\_no) 進行比對
+
+  ```py
+  Result {
+      is_success: True,
+      message: None,
+      data: [OrderResult {
+              function_type: 0,
+              date: "2024/10/17",
+              seq_no: "00098000040",
+              branch_no: "20706",
+              account: "9809268",
+              order_no: None,
+              asset_type: 0,
+              market: "TAIEX",
+              market_type: Common,
+              stock_no: "1102",
+              buy_sell: Buy,
+              price_type: Limit,
+              price: 42,
+              quantity: 2000,
+              time_in_force: ROD,
+              order_type: Stock,
+              is_pre_order: true,
+              status: 4,
+              after_price_type: Limit,
+              after_price: 42,
+              unit: 1000,
+              after_qty: 2000,
+              filled_qty: 0,
+              filled_money: 0,
+              before_qty: 0,
+              before_price: 42,
+              user_def: "batch1",
+              last_time: "11:50:24.655",
+              details: None,
+              error_message: None,
+          }, OrderResult {
+              function_type: 0,
+              date: "2024/10/17",
+              seq_no: "00098000041",
+              branch_no: "20706",
+              account: "9809268",
+              order_no: None,
+              asset_type: None,
+              market: None,
+              market_type: Common,
+              stock_no: "1101",
+              buy_sell: Buy,
+              price_type: Limit,
+              price: 32,
+              quantity: 1000,
+              time_in_force: ROD,
+              order_type: Stock,
+              is_pre_order: true,
+              status: 4,
+              after_price_type: Limit,
+              after_price: 32,
+              unit: None,
+              after_qty: 1000,
+              filled_qty: 0,
+              filled_money: 0,
+              before_qty: 0,
+              before_price: 32,
+              user_def: "batch2",
+              last_time: "11:50:24.655",
+              details: None,
+              error_message: None,
+          }, OrderResult {
+              function_type: 0,
+              date: "2024/10/17",
+              seq_no: "00098000042",
+              branch_no: "20706",
+              account: "9809268",
+              order_no: None,
+              asset_type: None,
+              market: None,
+              market_type: Common,
+              stock_no: "2330",
+              buy_sell: Buy,
+              price_type: Market,
+              price: None,
+              quantity: 1000,
+              time_in_force: ROD,
+              order_type: Stock,
+              is_pre_order: true,
+              status: 4,
+              after_price_type: Market,
+              after_price: None,
+              unit: None,
+              after_qty: 1000,
+              filled_qty: 0,
+              filled_money: 0,
+              before_qty: 0,
+              before_price: None,
+              user_def: "batch3",
+              last_time: "11:50:24.655",
+              details: None,
+              error_message: None,
+          }]
+  }
+
+  ```
+
+### 修改委託單價格[​](#修改委託單價格-1 "Direct link to 修改委託單價格")
+
+**委託單列表中不可含市價單，若含市價單則整批請求不執行，並回傳錯誤訊息**
+
+* 主動回報（四筆，此處無納入市價委託單）:
+
+  兩筆 ACK （status 4）；兩筆確認 status 10
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 15,
+      date: "2024/10/17",
+      seq_no: "00098000041",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0013",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1101",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 32,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 4,
+      after_price_type: Limit,
+      after_price: 32,
+      unit: 1000,
+      after_qty: 1000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: None,
+      before_price: 32,
+      user_def: "batch2",
+      last_time: "11:52:24.985",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 15,
+      date: "2024/10/17",
+      seq_no: "00098000040",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0014",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1102",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 42,
+      quantity: 2000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 4,
+      after_price_type: Limit,
+      after_price: 42,
+      unit: 1000,
+      after_qty: 2000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: None,
+      before_price: 42,
+      user_def: "batch1",
+      last_time: "11:52:24.985",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 15,
+      date: "2024/10/17",
+      seq_no: "00098000041",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0013",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1101",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 32,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 10,
+      after_price_type: Limit,
+      after_price: 33,
+      unit: 1000,
+      after_qty: 1000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: None,
+      before_price: 32,
+      user_def: "batch2",
+      last_time: "11:52:25.156",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 15,
+      date: "2024/10/17",
+      seq_no: "00098000040",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0014",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1102",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 42,
+      quantity: 2000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 10,
+      after_price_type: Limit,
+      after_price: 43,
+      unit: 1000,
+      after_qty: 2000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: None,
+      before_price: 42,
+      user_def: "batch1",
+      last_time: "11:52:25.162",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+* 函式回傳 (return):
+
+  批次委託回傳值皆為 ACK (status 4)
+
+  ```py
+  Result {
+      is_success: True,
+      message: None,
+      data: [OrderResult {
+              function_type: 15,
+              date: "2024/10/17",
+              seq_no: "00098000041",
+              branch_no: "20706",
+              account: "9809268",
+              order_no: "x0013",
+              asset_type: 0,
+              market: "TAIEX",
+              market_type: Common,
+              stock_no: "1101",
+              buy_sell: Buy,
+              price_type: Limit,
+              price: 32,
+              quantity: 1000,
+              time_in_force: ROD,
+              order_type: Stock,
+              is_pre_order: false,
+              status: 4,
+              after_price_type: Limit,
+              after_price: 33,
+              unit: 1000,
+              after_qty: 1000,
+              filled_qty: 0,
+              filled_money: 0,
+              before_qty: None,
+              before_price: 32,
+              user_def: "batch2",
+              last_time: "11:52:24.984",
+              details: None,
+              error_message: None,
+          }, OrderResult {
+              function_type: 15,
+              date: "2024/10/17",
+              seq_no: "00098000040",
+              branch_no: "20706",
+              account: "9809268",
+              order_no: "x0014",
+              asset_type: 0,
+              market: "TAIEX",
+              market_type: Common,
+              stock_no: "1102",
+              buy_sell: Buy,
+              price_type: Limit,
+              price: 42,
+              quantity: 2000,
+              time_in_force: ROD,
+              order_type: Stock,
+              is_pre_order: false,
+              status: 4,
+              after_price_type: Limit,
+              after_price: 43,
+              unit: 1000,
+              after_qty: 2000,
+              filled_qty: 0,
+              filled_money: 0,
+              before_qty: None,
+              before_price: 42,
+              user_def: "batch1",
+              last_time: "11:52:24.984",
+              details: None,
+              error_message: None,
+          }]
+  }
+
+  ```
+
+### 修改數量及刪單[​](#修改數量及刪單 "Direct link to 修改數量及刪單")
+
+此處部分委託單改量為 0，視同刪單；若使用刪單功能，則主動回報及函式回傳值與改量為 0 同
+
+* 主動回報（六筆）:
+
+  三筆 ACK （status 4）；改量 function\_type 20, 改量成功 status 10; 刪單 function\_type 30, 刪單成功 status 30
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 30,
+      date: "2024/10/17",
+      seq_no: "00098000042",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0015",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "2330",
+      buy_sell: Buy,
+      price_type: Market,
+      price: 0,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 4,
+      after_price_type: None,
+      after_price: 0,
+      unit: 1000,
+      after_qty: 1000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 1000,
+      before_price: None,
+      user_def: "batch3",
+      last_time: "11:53:37.765",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 20,
+      date: "2024/10/17",
+      seq_no: "00098000040",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0014",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1102",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 42,
+      quantity: 2000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 4,
+      after_price_type: None,
+      after_price: 43,
+      unit: 1000,
+      after_qty: 2000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 2000,
+      before_price: None,
+      user_def: "batch1",
+      last_time: "11:53:37.765",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 30,
+      date: "2024/10/17",
+      seq_no: "00098000041",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0013",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1101",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 32,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 4,
+      after_price_type: None,
+      after_price: 33,
+      unit: 1000,
+      after_qty: 1000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 1000,
+      before_price: None,
+      user_def: "batch2",
+      last_time: "11:53:37.765",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 30,
+      date: "2024/10/17",
+      seq_no: "00098000042",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0015",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "2330",
+      buy_sell: Buy,
+      price_type: Market,
+      price: 0,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 30,
+      after_price_type: None,
+      after_price: 0,
+      unit: 1000,
+      after_qty: 0,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 1000,
+      before_price: None,
+      user_def: "batch3",
+      last_time: "11:53:37.790",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 30,
+      date: "2024/10/17",
+      seq_no: "00098000041",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0013",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1101",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 32,
+      quantity: 1000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 30,
+      after_price_type: None,
+      after_price: 33,
+      unit: 1000,
+      after_qty: 0,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 1000,
+      before_price: None,
+      user_def: "batch2",
+      last_time: "11:53:37.789",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+  ```py
+  ==改單主動回報==
+  Code None
+  內容 OrderResult {
+      function_type: 20,
+      date: "2024/10/17",
+      seq_no: "00098000040",
+      branch_no: "20706",
+      account: "9809268",
+      order_no: "x0014",
+      asset_type: 0,
+      market: "TAIEX",
+      market_type: Common,
+      stock_no: "1102",
+      buy_sell: Buy,
+      price_type: Limit,
+      price: 42,
+      quantity: 2000,
+      time_in_force: ROD,
+      order_type: Stock,
+      is_pre_order: false,
+      status: 10,
+      after_price_type: None,
+      after_price: 43,
+      unit: 1000,
+      after_qty: 1000,
+      filled_qty: 0,
+      filled_money: 0,
+      before_qty: 2000,
+      before_price: None,
+      user_def: "batch1",
+      last_time: "11:53:37.790",
+      details: None,
+      error_message: None,
+  }
+  ========
+
+  ```
+
+* 函式回傳 (return):
+
+  批次委託回傳值皆為 ACK (status 4)
+
+  ```py
+  Result {
+      is_success: True,
+      message: None,
+      data: [OrderResult {
+          function_type: 30,
+          date: "2024/10/17",
+          seq_no: "00098000042",
+          branch_no: "20706",
+          account: "9809268",
+          order_no: "x0015",
+          asset_type: 0,
+          market: "TAIEX",
+          market_type: Common,
+          stock_no: "2330",
+          buy_sell: Buy,
+          price_type: Market,
+          price: 0,
+          quantity: 1000,
+          time_in_force: ROD,
+          order_type: Stock,
+          is_pre_order: false,
+          status: 4,
+          after_price_type: None,
+          after_price: 0,
+          unit: 1000,
+          after_qty: 0,
+          filled_qty: 0,
+          filled_money: 0,
+          before_qty: 1000,
+          before_price: None,
+          user_def: "batch3",
+          last_time: "11:53:37.763",
+          details: None,
+          error_message: None,
+      }, OrderResult {
+          function_type: 30,
+          date: "2024/10/17",
+          seq_no: "00098000041",
+          branch_no: "20706",
+          account: "9809268",
+          order_no: "x0013",
+          asset_type: 0,
+          market: "TAIEX",
+          market_type: Common,
+          stock_no: "1101",
+          buy_sell: Buy,
+          price_type: Limit,
+          price: 32,
+          quantity: 1000,
+          time_in_force: ROD,
+          order_type: Stock,
+          is_pre_order: false,
+          status: 4,
+          after_price_type: None,
+          after_price: 33,
+          unit: 1000,
+          after_qty: 0,
+          filled_qty: 0,
+          filled_money: 0,
+          before_qty: 1000,
+          before_price: None,
+          user_def: "batch2",
+          last_time: "11:53:37.763",
+          details: None,
+          error_message: None,
+      }, OrderResult {
+          function_type: 20,
+          date: "2024/10/17",
+          seq_no: "00098000040",
+          branch_no: "20706",
+          account: "9809268",
+          order_no: "x0014",
+          asset_type: 0,
+          market: "TAIEX",
+          market_type: Common,
+          stock_no: "1102",
+          buy_sell: Buy,
+          price_type: Limit,
+          price: 42,
+          quantity: 2000,
+          time_in_force: ROD,
+          order_type: Stock,
+          is_pre_order: false,
+          status: 4,
+          after_price_type: None,
+          after_price: 43,
+          unit: 1000,
+          after_qty: 1000,
+          filled_qty: 0,
+          filled_money: 0,
+          before_qty: 2000,
+          before_price: None,
+          user_def: "batch1",
+          last_time: "11:53:37.763",
+          details: None,
+          error_message: None,
+      }]
+  }
+
+  ```
+
+## 成交主動回報[​](#成交主動回報 "Direct link to 成交主動回報")
+
+成交主動回報包含委託書號 (order\_no) 及流水號 (seq\_no) 以供比對
+
+```py
+==成交主動回報==
+Code None
+FilledData {
+    date: "2024/10/17",
+    branch_no: "20706",
+    account: "9809268",
+    order_no: "x0007",
+    stock_no: "1102",
+    buy_sell: Sell,
+    order_type: Stock,
+    seq_no: "00000394165",
+    filled_no: "00000000061",
+    filled_avg_price: 43.0,
+    filled_qty: 2000,
+    filled_price: 43.0,
+    filled_time: "11:38:08.535",
+    user_def: None,
+}
+========
+
+```

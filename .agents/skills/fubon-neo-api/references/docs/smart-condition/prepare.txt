@@ -1,0 +1,60 @@
+# 事前準備
+
+本頁重點
+
+* 使用條件單前，需先閱讀使用說明並完成簽署。
+* SDK 版本需升級至 v1.3 以上。
+* 支援 Python / Node.js 條件單套件引入。
+
+| 項目     | 說明                                     |
+| -------- | ---------------------------------------- |
+| 產品     | 富邦新一代 API 條件單                    |
+| 必要前置 | 閱讀使用說明、簽署條件單同意書、升級 SDK |
+| 支援語言 | Python / C# / JavaScript (Node.js)       |
+| 套件引入 | 僅 Python / JS 需額外引入套件            |
+
+caution
+
+在開始富邦新一代 API 條件單前，請先詳細閱讀 [**使用說明**](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/Agreements.txt) 並完成簽署條件單使用同意書
+
+## 簽署條件單使用同意書[​](#簽署條件單使用同意書 "Direct link to 簽署條件單使用同意書")
+
+使用您的富邦證券帳戶
+
+1. 開啟您的富邦Online手機APP ，點選更多<br />![線上簽署1](/TradeAPI/assets/images/signagree1-344762a81c78861fa652f3bd8d11d735.png)
+
+2. 點選 `M櫃台`<br />![線上簽署2](/TradeAPI/assets/images/signagree2-f228860054133c73f3f12e482545cc55.png)
+
+3. 點選條件單同意書<br />![線上簽署3](/TradeAPI/assets/images/signagree3-ea03b7b52731323e65fe28d393dd2432.png)
+
+## 升級您的SDK 版本至v1.3以上[​](#升級您的sdk-版本至v13以上 "Direct link to 升級您的SDK 版本至v1.3以上")
+
+SDK 最新版本 : [下載連結](https://www.fbs.com.tw/TradeAPI/docs/download/download-sdk.txt)
+
+## 引入套件 ( 僅Python、JS需要，C#不需額外操作)[​](#引入套件--僅pythonjs需要c不需額外操作 "Direct link to 引入套件 ( 僅Python、JS需要，C#不需額外操作)")
+
+引入條件單相關套件
+
+* Python
+* Node.js
+
+```py
+from fubon_neo.sdk import FubonSDK, Condition, ConditionDayTrade, ConditionOrder
+from fubon_neo.constant import ( 
+    TriggerContent, TradingType, Operator, TPSLOrder, TPSLWrapper, SplitDescription,
+    StopSign, TimeSliceOrderType, ConditionMarketType, ConditionPriceType, ConditionOrderType, TrailOrder, Direction, ConditionStatus, HistoryStatus
+)
+
+
+```
+
+```js
+const { FubonSDK, TriggerContent, TradingType, Operator, TPSLOrder, TPSLWrapper, SplitDescription,
+    StopSign, TimeSliceOrderType, ConditionMarketType, ConditionPriceType, ConditionOrderType, TrailOrder, Direction, ConditionStatus, HistoryStatus } = require('fubon-neo');
+
+
+```
+
+info
+
+條件單目前不支援期權商品與現貨商品混用

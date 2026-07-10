@@ -1,0 +1,134 @@
+# 維持率查詢
+
+Maintenance
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                     | 說明 |
+| ------- | ---------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/go/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別              | 說明                              |
+| --------- | ----------------- | --------------------------------- |
+| IsSuccess | bool              | 是否成功                          |
+| Data      | \*MaintenanceData | 回傳維持率資訊                    |
+| Message   | \*string          | 當 IsSuccess = false 回傳錯誤訊息 |
+
+### 維持率 MaintenanceData 欄位[​](#維持率-maintenancedata-欄位 "Direct link to 維持率 MaintenanceData 欄位")
+
+| 參數                  | 類別                   | 說明                                                                                                                                        |
+| --------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Date                  | \*string               | 查詢日                                                                                                                                      |
+| BranchNo              | \*string               | 分公司代號                                                                                                                                  |
+| Account               | \*string               | 帳號                                                                                                                                        |
+| MaintenanceSummary    | \*MaintenanceSummary   | 整戶維持率彙總                                                                                                                              |
+| >> MarginValue        | \*int64                | 整戶融資市值                                                                                                                                |
+| >> ShortsellValue     | \*int64                | 整戶融券市值                                                                                                                                |
+| >> ShortsellMargin    | \*int64                | 整戶融券保證金額                                                                                                                            |
+| >> Collateral         | \*int64                | 擔保品                                                                                                                                      |
+| >> MarginLoanAmt      | \*int64                | 整戶融資金額                                                                                                                                |
+| >> MaintenanceRatio   | \*string               | 整戶維持率 (%)                                                                                                                              |
+| MaintenanceDetail     | \*\[]MaintenanceDetail | 個股維持率明細                                                                                                                              |
+| >> StockNo            | \*string               | 股票代碼                                                                                                                                    |
+| >> OrderNo            | \*string               | 委託書號                                                                                                                                    |
+| >> OrderType          | OrderType              | 委託單類型 : `OrderTypeStock` 現股 、 `OrderTypeMargin` 融資 、 `OrderTypeShort` 融券 、 `OrderTypeDayTrade` 現股當沖 、`OrderTypeSbl` 借券 |
+| >> Quantity           | \*int64                | 持有股數                                                                                                                                    |
+| >> Price              | \*string               | 計算價                                                                                                                                      |
+| >> CostPrice          | \*string               | 成本價                                                                                                                                      |
+| >> ShortsellMargin    | \*int64                | 融券保證金                                                                                                                                  |
+| >> Collateral         | \*int64                | 擔保品                                                                                                                                      |
+| >> MarginLoanAmt      | \*int64                | 融資金                                                                                                                                      |
+| >> MaintenanceRatio   | \*string               | 維持率 (%)                                                                                                                                  |
+| >> CollateralInterest | \*string               | 擔保品利息                                                                                                                                  |
+| >> MarginInterest     | \*string               | 融資金利息                                                                                                                                  |
+| >> ShortsellInterest  | \*string               | 融券保證金利息                                                                                                                              |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```go
+package main
+
+import (
+    "fmt"
+    "fubon"
+)
+
+func main() {
+    sdk := fubon.NewSDK()
+    // ... 登入、連線等初始化步驟 ...
+    
+    // 查詢維持率
+    maintenance, err := sdk.Accounting.Maintenance(account)
+    if err != nil {
+        fmt.Printf("❌ Maintenance Format/Parser Error: %v\n", err)
+        return
+    }
+    
+    if maintenance.IsSuccess && maintenance.Data != nil {
+        fmt.Println("✅ Maintenance Data:")
+        
+        // 整戶維持率
+        if maintenance.Data.MaintenanceSummary != nil {
+            summary := maintenance.Data.MaintenanceSummary
+            fmt.Printf("\n整戶維持率: %s%%\n", *summary.MaintenanceRatio)
+            fmt.Printf("融資市值: %d\n", *summary.MarginValue)
+            fmt.Printf("融資金額: %d\n", *summary.MarginLoanAmt)
+            fmt.Printf("擔保品: %d\n", *summary.Collateral)
+        }
+        
+        // 個股明細
+        if maintenance.Data.MaintenanceDetail != nil {
+            fmt.Printf("\n個股明細 (%d 筆):\n", len(*maintenance.Data.MaintenanceDetail))
+            for i, detail := range *maintenance.Data.MaintenanceDetail {
+                fmt.Printf("\n[%d] %s\n", i+1, *detail.StockNo)
+                fmt.Printf("  持有: %d 股\n", *detail.Quantity)
+                fmt.Printf("  成本價: %s, 計算價: %s\n", *detail.CostPrice, *detail.Price)
+                fmt.Printf("  維持率: %s%%\n", *detail.MaintenanceRatio)
+            }
+        }
+    }
+}
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```go
+Result{
+    IsSuccess: true,
+    Message:   nil,
+    Data: &MaintenanceData{
+        Date:     "2024/02/27",
+        BranchNo: "6460",
+        Account:  "26",
+        MaintenanceSummary: &MaintenanceSummary{
+            MarginValue:      3135000,
+            ShortsellValue:   0,
+            ShortsellMargin:  0,
+            Collateral:       0,
+            MarginLoanAmt:    1494000,
+            MaintenanceRatio: "209.83",
+        },
+        MaintenanceDetail: &[]MaintenanceDetail{
+            {
+                StockNo:            "2603",
+                OrderNo:            "x4580",
+                OrderType:          OrderTypeStock,
+                Quantity:           10000,
+                Price:              "152.5",
+                CostPrice:          "119",
+                ShortsellMargin:    0,
+                Collateral:         0,
+                MarginLoanAmt:      0,
+                MaintenanceRatio:   "213.58",
+                CollateralInterest: "0",
+                MarginInterest:     "20818",
+                ShortsellInterest:  "0",
+            },
+        },
+    },
+}
+
+```

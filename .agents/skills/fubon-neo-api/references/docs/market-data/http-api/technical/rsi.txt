@@ -1,0 +1,159 @@
+# Technical RSI
+
+取得特定股票在指定時間範圍內的相對強弱指標 (RSI)
+
+```text
+technical/rsi/{symbol}
+
+```
+
+版本資訊
+
+v2.2.6 起新增功能
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name          | Type   | Description                                                                                                           |
+| ------------- | ------ | --------------------------------------------------------------------------------------------------------------------- |
+| `symbol`\*    | string | 股票代碼                                                                                                              |
+| `from`\*      | string | 開始日期（格式：`yyyy-MM-dd`）                                                                                        |
+| `to`\*        | string | 結束日期（格式：`yyyy-MM-dd`）                                                                                        |
+| `timeframe`\* | string | Ｋ線週期，可選 `1` 1分Ｋ；`5` 5分Ｋ；`10` 10分Ｋ；`15` 15分Ｋ；`30` 30分Ｋ；`60` 60分Ｋ；`D` 日Ｋ；`W` 週Ｋ；`M` 月Ｋ |
+| `period`\*    | number | RSI 週期                                                                                                              |
+
+caution
+
+目前分Ｋ無法指定開始日期（from） 與 結束日期（to），一律回傳近 30 日資料。
+
+## Response[​](#response "Direct link to Response")
+
+| Name              | Type   | Description |
+| ----------------- | ------ | ----------- |
+| `symbol`\*        | string | 股票代號    |
+| `from`\*          | string | 開始日期    |
+| `to`\*            | string | 結束日期    |
+| `timeframe`\*     | string | Ｋ線週期    |
+| `period`\*        | string | RSI 週期    |
+| `data`            | Object | RSI 資料    |
+| >> `data[0].date` | string | 資料日期    |
+| >> `data[0].rsi`  | number | RSI         |
+
+info
+
+'\*' 表示必揭示欄位。
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+
+reststock = sdk.marketdata.rest_client.stock
+
+## 2.2.6 及以後版本使用更簡化 (使用 Exception 進行例外處理)
+from fubon_neo.sdk import FugleAPIError
+
+try:  
+  reststock.technical.rsi(**{"symbol": "2330", "from": "2024-08-01", "to": "2024-08-10","timeframe":"D", "period": 6})
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"}     
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+client.stock.technical.rsi({ symbol: '2330', from: '2024-08-01', to: '2024-08-10', timeframe: 'D', period: 6 })
+  .then(data => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+using FugleMarketData.QueryModels.Stock.History;   //引入 HistoryTimeFrame
+using FugleMarketData.QueryModels;                 //引入 FieldsType
+
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.Stock;
+
+DateTime fromDate = new DateTime(2024, 8, 1);
+DateTime toDate = new DateTime(2024, 8, 10);
+
+var rsi = await rest.Technical.Rsi("2330" ,new(6, fromDate, toDate, HistoryTimeFrame.Day)); 
+//RsiRequest 參數  (period, DateTime, DateTime, HistoryTimeFrame)
+
+var rsi_con = rsi.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(rsi_con);
+
+
+```
+
+Response Body：
+
+```json
+{
+  "symbol": "2330",
+  "from": "2024-08-01",
+  "to": "2024-08-10",
+  "timeframe": "D",
+  "period": 6,
+  "data": [
+    {
+      "date": "2024-08-01",
+      "rsi": 41.44144144144145
+    },
+    {
+      "date": "2024-08-02",
+      "rsi": 25.641025641025635
+    },
+    {
+      "date": "2024-08-05",
+      "rsi": 15.026786880961723
+    },
+    {
+      "date": "2024-08-06",
+      "rsi": 37.83577095879935
+    },
+    {
+      "date": "2024-08-07",
+      "rsi": 48.119604933543954
+    },
+    {
+      "date": "2024-08-08",
+      "rsi": 42.99811400274545
+    },
+    {
+      "date": "2024-08-09",
+      "rsi": 52.58621466649552
+    }
+  ]
+}
+
+```

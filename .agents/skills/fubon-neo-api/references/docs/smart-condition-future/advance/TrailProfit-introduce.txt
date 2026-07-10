@@ -1,0 +1,77 @@
+# 移動鎖利條件單
+
+富邦新一代 API 支援移動鎖利單，
+
+移動鎖利運作機制 : 當基準條件觸發後，若設定的回檔幅度未達到，則不會觸發，當後續股價持續往上，則會使用新的價格作為基準，若此時回檔幅度到達設定值，則送出委託
+
+![trailProfit](/TradeAPI/assets/images/TrailProfit-62f309ff8f8104114c69c2fc69bb96d1.png)
+
+### 程式範例[​](#程式範例 "Direct link to 程式範例")
+
+* Python
+* Node.js
+* C#
+
+```py
+# 設計條件內容
+trail = FutOptTrailOrder(
+    symbol = "TXFL4",
+    price = "22000",
+    direction = Direction.Down ,
+    tick_num = 5,  # 漲跌 tick 數
+    buy_sell = BSAction.Sell,
+    lot = 2,
+    price_type = FutOptConditionPriceType.MatchedPrice,
+    diff = 1,     # 向上 or 向下追買 tick數 (向下為負值)
+    time_in_force = TimeInForce.ROD,
+    order_type = FutOptConditionOrderType.Close
+)
+
+
+sdk.futopt.trail_profit(target_account, "20240427","20240516", StopSign.Full, trail)
+
+
+```
+
+```js
+// 設計條件內容
+const trail = {
+    symbol: "TXO20000E4",
+    price: "1050",
+    direction: Direction.Down,
+    tickNum: 5,  
+    buysell: BSAction.Sell,
+    lot: 2,
+    priceType: FutOptConditionPriceType.MatchedPrice,
+    diff: 1,
+    timeInForce: TimeInForce.ROD,
+    orderType: FutOptConditionOrderType.Close
+    
+};
+
+
+sdk.futopt.trailProfit(target_account, "20240427","20240516", StopSign.Full, trail)
+
+
+```
+
+```cs
+// 設計條件內容
+var trail = new FutOptTrailOrder(
+    "TXO20000E4",
+    "1050",
+    Direction.Up ,
+    5,  // 漲跌 tick 數
+    BSAction.Buy,
+    2,
+    FutOptConditionPriceType.MatchedPrice,
+    1, // 向上 or 向下追買 tick數 (向下為負值)
+    TimeInForce.Rod,
+    FutOptConditionOrderType.Close
+);
+
+
+sdk.FutOpt.TrailProfit(target_account, "20240427","20240516", StopSign.Full, trail);
+
+
+```

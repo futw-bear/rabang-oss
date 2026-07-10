@@ -1,0 +1,203 @@
+# 批次修改委託價格
+
+batchModifyPrice
+
+### 先使用makeModifyPriceObj 建立 ModifyPriceObj 物件[​](#先使用makemodifypriceobj-建立-modifypriceobj-物件 "Direct link to 先使用makeModifyPriceObj 建立 ModifyPriceObj 物件")
+
+| 參數        | 類別                                                                                                 | 說明                                                          |
+| ----------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| orderResult | [OrderResult](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#orderresult) | 預計修改的委託單                                              |
+| price       | string ?                                                                                             | 修改後的價格                                                  |
+| priceType   | [PriceType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#pricetype)?    | 修改後的價格旗標 (***註***: 輕量風控版**已**開放使用價格旗標) |
+
+將回傳的物件放入 BatchModifyPrice 的方法中
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數           | 類別                                                                                                                       | 說明               |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| account        | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#account)                               | 帳號               |
+| ModifyPriceObj | [ModifyPriceObj](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#modifypriceobj)(list of object) | 批次修改委託單內容 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | Object              | 回傳修改資訊                     |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 修改資訊 OrderResult 欄位[​](#修改資訊-orderresult-欄位 "Direct link to 修改資訊 OrderResult 欄位")
+
+Return type : Object
+
+| Parameter      | Type                                                                                                                                | Meaning                                                                                                                  |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| functionType   | number                                                                                                                              | 功能別 : `0` 新單 、 `10` 新單執行 、 `15` 改價 、 `20` 改量 、 `30` 刪單 、 `90` 失敗                                   |
+| date           | string                                                                                                                              | 交易日期                                                                                                                 |
+| seqNo          | string                                                                                                                              | 委託單流水序號                                                                                                           |
+| branchNo       | string                                                                                                                              | 分公司代號                                                                                                               |
+| account        | string                                                                                                                              | 帳號                                                                                                                     |
+| orderNo        | string                                                                                                                              | 委託書號                                                                                                                 |
+| assetType      | number                                                                                                                              | 資產類別 : `0` 證券                                                                                                      |
+| market         | string                                                                                                                              | 市場類型 : `TAIEX` 上市股票 、 `TAISDAQ` 上櫃股票 、 `TAIEMG` 興櫃股票                                                   |
+| marketType     | js<!-- -->:string<!-- --> / ts:[MarketType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#markettype)   | 盤別種類 : `Common` 整股 、 `Fixing` 定盤 、 `IntradayOdd` 盤中零股 、 `Odd` 盤後零股 、 `Emg` 興櫃 、 `EmgOdd` 興櫃零股 |
+| stockNo        | string                                                                                                                              | 股票代號                                                                                                                 |
+| buySell        | js<!-- -->:string<!-- --> / ts:[BSAction](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#bsaction)       | 買賣別 : `Buy` 買 、 `Sell` 賣                                                                                           |
+| priceType      | js<!-- -->:string<!-- --> / ts:[PriceType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#pricetype)     | 原始委託價格別 : `Limit` 限價 、 `LimitUp` 漲停 、 `LimitDown` 跌停 、 `Market` 市價 、 `Reference` 參考價               |
+| price          | number                                                                                                                              | 價格                                                                                                                     |
+| quantity       | number                                                                                                                              | 原始委託股數                                                                                                             |
+| timeInForce    | js<!-- -->:string<!-- --> / ts:[TimeInForce](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#timeinforce) | 委託條件別 : `ROD` ROD 、 `FOK` FOK 、 `IOC` IOC                                                                         |
+| orderType      | js<!-- -->:string<!-- --> / ts:[OrderType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#ordertype)     | 委託單類型 : `Stock` 現股 、 `Margin` 融資 、 `Short` 融券 、 `DayTrade` 現沖先賣 、 `SBL`借券                           |
+| isPreOrder     | bool                                                                                                                                | 是否為預約單                                                                                                             |
+| status         | number                                                                                                                              | 委託單狀態，詳細列表請參考 [STATUS](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#status)    |
+| afterPriceType | js<!-- -->:string<!-- --> / ts:[PriceType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#pricetype)     | 有效委託價格別 : `Limit` 限價 、 `LimitUp` 漲停 、 `LimitDown` 跌停 、 `Market` 市價 、 `Reference` 參考價               |
+| afterPrice     | number                                                                                                                              | 有效委託價格                                                                                                             |
+| unit           | number                                                                                                                              | 單位數                                                                                                                   |
+| afterQty       | number                                                                                                                              | 有效委託股數（包含已成交部分）                                                                                           |
+| filledQty      | number                                                                                                                              | 成交股數                                                                                                                 |
+| filledMoney    | number                                                                                                                              | 成交價金                                                                                                                 |
+| beforeQty      | number                                                                                                                              | 改單前有效量                                                                                                             |
+| beforePrice    | number                                                                                                                              | 改單前有效價                                                                                                             |
+| user\_def      | string                                                                                                                              | 自訂欄位                                                                                                                 |
+| lastTime       | string                                                                                                                              | 最後異動時間                                                                                                             |
+| details        | list                                                                                                                                | 委託歷程 (查詢order\_result\_detail or order\_history才有值)                                                             |
+| errorMessage   | string                                                                                                                              | 錯誤訊息                                                                                                                 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+// 批次改價 ( 利用 batch detail 回傳的內容改單)
+modify_orders = [ 
+    sdk.stock.makeModifyPriceObj(batch_res.data[0], "41.1"),
+    sdk.stock.makeModifyPriceObj(batch_res.data[1], "41.1")
+]
+
+sdk.stock.batchModifyPrice(account, modify_orders);
+
+
+// 批次改價 ( 利用不同的單筆委託改單 )
+modify_orders = [ 
+    sdk.stock.makeModifyPriceObj(orderResult.data[20], "41.1"),
+    sdk.stock.makeModifyPriceObj(orderResult.data[21], "41.1"),
+    sdk.stock.makeModifyPriceObj(orderResult.data[28], "41.1")
+]
+
+sdk.stock.batchModifyPrice(account, modify_orders);
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+{
+  isSuccess: true,
+  data: [ // 批次改價 ( 利用 batch detail 回傳的內容改單) 
+    {
+      functionType: 15,           // 功能別 (number)
+      date: '2023/11/22',         // 交易日期 (string)
+      seqNo: '00000322356',       // 委託單流水序號 (string)
+      branchNo: '6460',           // 分公司代號 (string)
+      account: '26',              // 帳號 (string)
+      orderNo: 'x0018',           // 委託書號 (string)
+      assetType: 0,               // 資產類別 (number)
+      market: 'TAIEX',            // 市場類型 (string)
+      marketType: 'Common',       // 盤別種類 (string)
+      stockNo: '1101',            // 股票代號 (string)
+      buySell: 'Sell',            // 買賣別 (string)
+      priceType: 'Limit',         // 原始委託價格別 (string)
+      price: 41.2,                // 價格 (number)
+      quantity: 5000,             // 原始委託股數 (number)
+      timeInForce: 'ROD',         // 委託條件別 (string)
+      orderType: 'Stock',         // 委託單類型 (OrderType)
+      isPreOrder: false,          // 是否為預約單 (bool)
+      status: 10,                 // 委託單狀態 (number)
+      afterPriceType: 'Limit',    // 有效委託價格別 (string)
+      afterPrice: 41.1,           // 有效委託價格 (number)
+      unit: 1000,                 // 單位數 (number)
+      afterQty: 2000,             // 有效委託股數 (number)
+      filledQty: 0,               // 成交股數 (number)
+      filledMoney: 0,             // 成交價金 (number)
+      beforePrice: 41.3,          // 改單前有效價 (number)
+      userDef: '12345678',        // 自訂欄位 (string)
+      lastTime: '13:56:57.713',   // 最後異動時間 (string)
+    },
+    {
+      functionType: 15,           // 功能別 (number)
+      date: '2023/11/22',         // 交易日期 (string)
+      seqNo: '00000322355',       // 委託單流水序號 (string)
+      branchNo: '6460',           // 分公司代號 (string)
+      account: '26',              // 帳號 (string)
+      orderNo: 'x0017',           // 委託書號 (string)
+      assetType: 0,               // 資產類別 (number)
+      market: 'TAIEX',            // 市場類型 (string)
+      marketType: 'Common',       // 盤別種類 (string)
+      stockNo: '1101',            // 股票代號 (string)
+      buySell: 'Sell',            // 買賣別 (string)
+      priceType: 'Limit',         // 原始委託價格別 (string)
+      price: 41.2,                // 價格 (number)
+      quantity: 5000,             // 原始委託股數 (number)
+      timeInForce: 'ROD',         // 委託條件別 (string)
+      orderType: 'Stock',         // 委託單類型 (OrderType)
+      isPreOrder: false,          // 是否為預約單 (bool)
+      status: 10,                 // 委託單狀態 (number)
+      ...
+    }
+  ]
+}
+
+以下擷取data內容
+
+[ // 批次改價 ( 利用不同的單筆委託改單 )
+  {
+    date: '2023/11/22',          // 交易日期 (string)
+    seqNo: '00000322388',        // 委託單流水序號 (string)
+    branchNo: '6460',            // 分公司代號 (string)
+    account: '26',               // 帳號 (string)
+    orderNo: 'x0033',            // 委託書號 (string)
+    assetType: 0,                // 資產類別 (number)
+    market: 'TAIEX',             // 市場類型 (string)
+    marketType: 'Common',        // 盤別種類 (string)
+    stockNo: '1101',             // 股票代號 (string)
+    buySell: 'Sell',             // 買賣別 (string)
+    priceType: 'Limit',          // 原始委託價格別 (string)
+    price: 41.2,                 // 價格 (number)
+    quantity: 5000,              // 原始委託股數 (number)
+    timeInForce: 'ROD',          // 委託條件別 (string)
+    orderType: 'Stock',          // 委託單類型 (string)
+    isPreOrder: false,           // 是否為預約單 (bool)
+    status: 10,                  // 委託單狀態 (number)
+    afterPriceType: 'Limit',     // 有效委託價格別 (string)
+    afterPrice: 41.1,            // 有效委託價格 (number)
+    unit: 1000,                  // 單位數 (number)
+    afterQty: 2000,              // 有效委託股數 (number)
+    filledQty: 0,                // 成交股數 (number)
+    filledMoney: 0,              // 成交價金 (number)
+    beforePrice: 41.3,           // 改單前有效價 (number)
+    userDef: '12345678',         // 自訂欄位 (string)
+    lastTime: '10:56:57.713',    // 最後異動時間 (string)
+  },
+  {
+    date: '2023/11/22',          // 交易日期 (string)
+    seqNo: '00000322386',        // 委託單流水序號 (string)
+    branchNo: '6460',            // 分公司代號 (string)
+    account: '26',               // 帳號 (string)
+    orderNo: 'x0031',            // 委託書號 (string)
+    assetType: 0,                // 資產類別 (number)
+    market: 'TAIEX',             // 市場類型 (string)
+    marketType: 'Common',        // 盤別種類 (string)
+    stockNo: '1101',             // 股票代號 (string)
+    buySell: 'Sell',             // 買賣別 (string)
+    priceType: 'Limit',          // 原始委託價格別 (string)
+    price: 41.2,                 // 價格 (number)
+    quantity: 5000,              // 原始委託股數 (number)
+    timeInForce: 'ROD',          // 委託條件別 (string)
+    orderType: 'Stock',          // 委託單類型 (OrderType)
+    isPreOrder: false,           // 是否為預約單 (bool)
+    status: 10,                  // 委託單狀態 (number)
+    ...
+  },
+    ...
+]
+
+```

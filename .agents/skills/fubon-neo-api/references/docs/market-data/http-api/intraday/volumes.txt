@@ -1,0 +1,181 @@
+# Intraday Volumes
+
+股票分價量表（依代碼查詢）
+
+```text
+intraday/volumes/{symbol}
+
+```
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name       | Type   | Description                  |
+| ---------- | ------ | ---------------------------- |
+| `symbol`\* | string | 股票代碼                     |
+| `type`     | string | 類型，可選 `oddlot` 盤中零股 |
+
+## Response[​](#response "Direct link to Response")
+
+| Name             | Type      | Description          |
+| ---------------- | --------- | -------------------- |
+| `date`\*         | string    | 日期                 |
+| `type`\*         | string    | Ticker 類型          |
+| `exchange`\*     | string    | 交易所               |
+| `market`         | string    | 市場別               |
+| `symbol`\*       | string    | 股票代號             |
+| `data`           | object\[] | 分價量表             |
+| >> `price`       | number    | 成交價               |
+| >> `volume`      | number    | 該成交價之累計成交量 |
+| >> `volumeAtBid` | number    | 委買成筆             |
+| >> `volumeAtAsk` | number    | 委賣成筆             |
+
+info
+
+'\*' 表示必揭示欄位。
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+
+reststock = sdk.marketdata.rest_client.stock  
+# reststock.intraday.volumes(symbol='2330')  # 2.2.3 及以前版本
+
+## 2.2.4 及以後版本 (使用 Exception 進行例外處理)
+from fubon_neo.fugle_marketdata.rest.base_rest import FugleAPIError
+
+try:  
+  reststock.intraday.volumes(symbol='2330') 
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"}
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+client.stock.intraday.volumes({ symbol: '2330' })
+  .then(data => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime(); // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.Stock;
+
+var volume = await rest.Intraday.Volume("2330");
+// var volume = await rest.Intraday.Volume("2330", , new(){Type=FugleMarketData.QueryModels.TickerType.OddLot});  // 零股
+var volume_cont = volume.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(volume_cont);
+
+```
+
+Response Body：
+
+```json
+{
+  "date": "2023-05-29",
+  "type": "EQUITY",
+  "exchange": "TWSE",
+  "market": "TSE",
+  "symbol": "2330",
+  "data": [
+    {
+      "price": 574,
+      "volume": 7309,
+      "volumeAtBid": 0,
+      "volumeAtAsk": 524
+    },
+    {
+      "price": 573,
+      "volume": 771,
+      "volumeAtBid": 657,
+      "volumeAtAsk": 114
+    },
+    {
+      "price": 572,
+      "volume": 3364,
+      "volumeAtBid": 843,
+      "volumeAtAsk": 2521
+    },
+    {
+      "price": 571,
+      "volume": 3723,
+      "volumeAtBid": 1026,
+      "volumeAtAsk": 2697
+    },
+    {
+      "price": 570,
+      "volume": 5541,
+      "volumeAtBid": 3019,
+      "volumeAtAsk": 2522
+    },
+    {
+      "price": 569,
+      "volume": 1952,
+      "volumeAtBid": 1318,
+      "volumeAtAsk": 634
+    },
+    {
+      "price": 568,
+      "volume": 7906,
+      "volumeAtBid": 1422,
+      "volumeAtAsk": 6484
+    },
+    {
+      "price": 567,
+      "volume": 10498,
+      "volumeAtBid": 2816,
+      "volumeAtAsk": 7682
+    },
+    {
+      "price": 566,
+      "volume": 8206,
+      "volumeAtBid": 5988,
+      "volumeAtAsk": 2218
+    },
+    {
+      "price": 565,
+      "volume": 4833,
+      "volumeAtBid": 2329,
+      "volumeAtAsk": 2504
+    },
+    {
+      "price": 564,
+      "volume": 435,
+      "volumeAtBid": 435,
+      "volumeAtAsk": 0
+    }
+  ]
+}
+
+```

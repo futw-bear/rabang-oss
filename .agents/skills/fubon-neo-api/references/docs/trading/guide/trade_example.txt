@@ -1,0 +1,386 @@
+# 交易
+
+***
+
+<!-- -->
+
+此篇教學將示範如何進行一個完整的買賣流程
+
+## 買入股票[​](#買入股票 "Direct link to 買入股票")
+
+假設今天開盤後，我們想以66.00元買進2張富邦金，我們可以這樣撰寫程式並執行：
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+from fubon_neo.constant import TimeInForce, OrderType, PriceType, MarketType, BSAction
+
+sdk = FubonSDK()
+   
+accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證位置", "您的憑證密碼") #若有歸戶，則會回傳多筆帳號資訊
+  
+#建立委託單內容
+order = Order(
+    buy_sell = BSAction.Buy,
+    symbol = "2881",
+    price = "66",
+    quantity =  2000,
+    market_type = MarketType.Common,
+    price_type = PriceType.Limit,
+    time_in_force= TimeInForce.ROD,
+    order_type = OrderType.Stock,
+    user_def = "FromPy" # optional field
+) 
+
+
+sdk.stock.place_order(accounts.data[0], order)  #下單委託
+
+```
+
+info
+
+整股與零股之委託，請參考各語言Libary [Python Libary](https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/EnumMatrix.txt#markettype)
+
+```js
+const { FubonSDK, BSAction, TimeInForce, OrderType, PriceType, MarketType } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證路徑" ,"您的憑證密碼");
+
+
+
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "2881",
+  price: "66",
+  quantity: 2000,
+  marketType: MarketType.Common,
+  priceType: PriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: OrderType.Stock,
+  userDef: "fromJs"
+};
+
+sdk.stock.placeOrder(accounts.data[0],order);
+
+```
+
+info
+
+整股與零股之委託，請參考各語言Libary [Node.Js Libary](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#markettype)
+
+```cs
+
+    
+using FubonNeo.Sdk;
+
+var sdk = new FubonSDK();
+
+var accounts = sdk.Login("您的身分證字號", "您的登入密碼", "您的憑證路徑", "您的憑證密碼"); // 若有歸戶，則會回傳多筆帳號資訊
+
+var order = new Order(
+    BsAction.Buy,
+    "2881",
+    "66",
+    2000,
+    MarketType.Common,
+    PriceType.Limit,
+    TimeInForce.Rod,
+    OrderType.Stock,
+    null
+);
+
+sdk.Stock.PlaceOrder(accounts.data[0],order); // 使用阻塞委託下單
+
+```
+
+info
+
+整股與零股之委託，請參考各語言Libary [C# Libary](https://www.fbs.com.tw/TradeAPI/docs/trading/library/csharp/EnumMatrix.txt#markettype)
+
+## 確認委託與成交回報[​](#確認委託與成交回報 "Direct link to 確認委託與成交回報")
+
+若要確定該筆的狀態，可以依照下方範例查詢指定的委託單:
+
+* Python
+* Node.js
+* C#
+
+```python
+orderResults = sdk.stock.get_order_results(accounts.data[0])
+print(orderResults)
+
+```
+
+```js
+const orderResults = sdk.stock.getOrderResults(accounts.data[0])
+console.log(orderResults)
+
+```
+
+```cs
+var orderResults = sdk.Stock.GetOrderResults(accounts.data[0]);
+Console.WriteLine(orderResults);
+foreach (var results in orderResults)
+{
+  Console.WriteLine(results);
+}
+
+```
+
+根據回報的結果，我們可以判斷此筆委託是否成交，成交了多少數量：
+
+* Python
+* Node.js
+* C#
+
+```py
+Result {  
+  is_success: true,   
+  message: None,  
+  data : [
+      OrderResult{
+        ...
+        buy_sell: Buy,   #買賣別 (BSAction)
+        price: 66,       #原始委託價格 (float)
+        quantity: 2000,  #原始委託數量 (int)
+        after_price: 66, #有效委託價格 (float)
+        after_qty: 2000, #有效委託數量 (int)
+        filled_qty: 0,   #已成交數量 (int)
+        filled_money: 0, #成交價金 (int)
+        symbol: "2881",  #股票代號 (string)
+        order_no: "bA888", #委託書號 (string)
+        last_time: "10:10:10.123", #最後異動時間 (string)
+        ...
+      }
+   ]
+}
+
+
+```
+
+```js
+{ 
+  isSuccess: true,  
+  data:[
+    {
+      ...
+      buySell: 'Buy', //買賣別 (string)
+      price: 66,      //原始委託價格 (number)
+      quantity: 2000, //原始委託數量 (number)
+      afterPrice: 66, //有效委託價格 (number)
+      afterQty: 2000, //有效委託數量 (number)
+      filledQty: 0,   //已成交數量 (number)
+      filledMoney: 0, //成交價金 (number)
+      symbol: '2881', //股票代號 (string)
+      orderNo: 'bA888', //委託書號 (string)
+      lastTime: '10:10:10.123', //最後異動時間 (string)
+      ...
+    }
+  ]
+}
+
+
+```
+
+```cs
+{ 
+  isSuccess = True, 
+  message = , 
+  data = [
+      OrderResult{
+        ...
+        buySell = Buy,     //買賣別 (BsAction)
+        price = 66,      //原始委託價格 (double)
+        quantity = 2000, //原始委託數量 (int)
+        afterPrice = 66, //有效委託價格 (double)
+        afterQty = 2000, //有效委託數量 (int)
+        filledQty = 0,   //已成交數量 (int)
+        filledMoney = 0, //成交價金 (int)
+        symbol = 2881,   //股票代號 (string)
+        orderNo = bA888, //委託書號 (string)
+        lastTime = 10:10:10.123, //最後異動時間 (string)
+        ...
+      }
+   ]
+}
+
+
+```
+
+## 修改委託價格[​](#修改委託價格 "Direct link to 修改委託價格")
+
+由於原先的價格一直無法成交，我們調整原先的委託價格，改用66.50元的價格買入：
+
+* Python
+* Node.js
+* C#
+
+```python
+orderResults = sdk.stock.get_order_results(accounts.data[0])
+
+modified_pirce = sdk.stock.make_modify_price_obj(orderResults.data[0],"66.5")
+sdk.stock.modify_price(accounts.data[0], modified_pirce)
+
+```
+
+```js
+orderResults = sdk.stock.getOrderResults(accounts.data[0])
+
+const modified_pirce = sdk.stock.makeModifyPriceObj(orderResults.data[0],"66.5")
+sdk.stock.modifyPrice(accounts.data[0],modified_pirce)
+
+```
+
+```cs
+orderResults = sdk.Stock.GetOrderResults(accounts.data[0]);
+
+var modified_pirce =  sdk.Stock.MakeModifyPriceObj(orderResults.data[0],"66.5",null);  //將價格調整成66.5元
+sdk.Stock.ModifyPrice(accounts.data[0],modified_pirce);  
+
+```
+
+幾分鐘後，我們再查詢一次委託狀態，發現成交了：
+
+* Python
+* Node.js
+* C#
+
+```python
+orderResults = sdk.stock.get_order_results(accounts.data[0])
+print(orderResults.data[0])
+
+```
+
+```py
+[
+  {
+    ...
+    buy_sell: Buy,     #買賣別 (BSAction)
+    price: 66,         #原始委託價格 (float)
+    quantity: 2000,    #原始委託數量 (int)
+    after_price: 66.5, #有效委託價格 (float)
+    after_qty: 1000,   #有效委託數量 (int)
+    filled_qty: 1000,  #已成交數量 (int)
+    filled_money: 66000, #成交價金 (int)
+    symbol: "2881",    #股票代號 (string)
+    order_no: "bA888", #委託書號 (string)
+    last_time: "10:13:12.123", #最後異動時間 (string)
+    ...
+  }
+]
+
+```
+
+```js
+orderResults = sdk.stock.getOrderResults(accounts.data[0])
+console.log(orderResults.data[0])
+
+```
+
+```json
+{
+    ...
+    "buySell" : "Buy",     //買賣別 (string)
+    "price" : 66,         //原始委託價格 (number)
+    "quantity" :  2000,    //原始委託數量 (number)
+    "afterPrice" : 66.5,  //有效委託價格 (number)
+    "afterQty" :  1000,    //有效委託數量 (number)
+    "filledQty" : 1000,   //已成交數量 (number)
+    "filledMoney" : 66000, //成交價金 (number)
+    "stockNo" : "2881",    //股票代號 (string)
+    "orderNo" : "bA888",  //委託書號 (string)
+    "lastTime" : "10:13:12.123", //最後異動時間 (string)
+    ...
+}
+
+```
+
+```cs
+orderResults = sdk.Stock.GetOrderResults(accounts.data[0]);
+Console.WriteLine(orderResults.data[0]);
+
+```
+
+```cs
+{
+    ...
+    buySell = Buy,    //買賣別 (BsAction)
+    price = 66,         //原始委託價格 (double)
+    quantity =  2000,    //原始委託數量 (int)
+    afterPrice = 66.5,  //有效委託價格 (double)
+    afterQty =  1000,    //有效委託數量 (int)
+    filledQty = 1000,   //已成交數量 (int)
+    filledMoney = 66000, //成交價金 (int)
+    stockNo = "2881",    //股票代號 (string)
+    orderNo = "bA888",  //委託書號 (string)
+    lastTime = "10:13:12.123", //最後異動時間 (string)
+    ...
+}
+
+```
+
+## 賣出股票[​](#賣出股票 "Direct link to 賣出股票")
+
+最後決定在收盤前，賣出一張富邦金：
+
+* Python
+* Node.js
+* C#
+
+```python
+#建立委託單內容
+order = Order(
+    buy_sell = BSAction.Sell,
+    symbol = "2881",
+    price = "67",
+    quantity =  1000,
+    market_type = MarketType.Common,
+    price_type = PriceType.Limit,
+    time_in_force= TimeInForce.ROD,
+    order_type = OrderType.Stock,
+    user_def = "FromPy" # optional field
+) 
+
+
+sdk.stock.place_order(accounts.data[0], order)  #下單委託
+
+```
+
+```js
+order = {
+  buySell: BSAction.Sell,
+  symbol: "2881",
+  price: "66",
+  quantity: 1000,
+  marketType: MarketType.Common,
+  priceType: PriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: OrderType.Stock,
+  userDef: "fromJs"
+};
+
+sdk.stock.placeOrder(accounts.data[0],order)
+
+```
+
+```cs
+order = new Order(
+        BsAction.Sell,
+        "2881",
+        "66",
+         1000,
+        MarketType.Common,
+        PriceType.Limit,
+        TimeInForce.Rod,
+        OrderType.Stock,
+        null
+);
+
+sdk.Stock.PlaceOrder(accounts.data[0],order); 
+
+```

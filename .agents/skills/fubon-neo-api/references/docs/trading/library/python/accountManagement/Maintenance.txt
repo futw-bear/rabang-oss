@@ -1,0 +1,95 @@
+# 維持率查詢
+
+maintenance
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                         | 說明 |
+| ------- | -------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數        | 類別            | 說明                               |
+| ----------- | --------------- | ---------------------------------- |
+| is\_success | bool            | 是否成功                           |
+| data        | MaintenanceData | 回傳維持率資訊                     |
+| message     | string          | 當is\_success = false 回傳錯誤訊息 |
+
+### MaintenanceData 欄位[​](#maintenancedata-欄位 "Direct link to MaintenanceData 欄位")
+
+Return type : Object
+
+| 參數                     | 類別                                                                                             | 說明                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| > date                   | string                                                                                           | 查詢日                                                                                         |
+| > branch\_no             | string                                                                                           | 分公司代號                                                                                     |
+| > account                | string                                                                                           | 帳號                                                                                           |
+| > maintenance\_summary   | list                                                                                             | Object                                                                                         |
+| >> margin\_value         | int                                                                                              | 整戶融資市值                                                                                   |
+| >> shortsell\_value      | int                                                                                              | 整戶融券市值                                                                                   |
+| >> shortsell\_margin     | int                                                                                              | 整戶融券保證金額                                                                               |
+| >> collateral            | int                                                                                              | 擔保品                                                                                         |
+| >> margin\_loan\_amt     | int                                                                                              | 整戶融資金額                                                                                   |
+| >> maintenance\_ratio    | float                                                                                            | 整戶維持率                                                                                     |
+| >> maintenance\_detail   | list                                                                                             | Object                                                                                         |
+| >>> stock\_no            | string                                                                                           | 股票代號                                                                                       |
+| >>> order\_no            | string                                                                                           | 委託書號                                                                                       |
+| >>> order\_type          | [OrderType](https://www.fbs.com.tw/TradeAPI/docs/trading/library/python/EnumMatrix.txt#ordertype) | 委託單類型 : `Stock` 現股 、 `Margin` 融資 、 `Short` 融券 、 `DayTrade` 現沖先賣 、 `SBL`借券 |
+| >>> quantity             | int                                                                                              | 持有股數                                                                                       |
+| >>> price                | float                                                                                            | 計算價                                                                                         |
+| >>> cost\_price          | float                                                                                            | 成本價                                                                                         |
+| >>> shortsell\_margin    | int                                                                                              | 融券保證金                                                                                     |
+| >>> collateral           | int                                                                                              | 擔保品                                                                                         |
+| >>> margin\_loan\_amt    | int                                                                                              | 融資金                                                                                         |
+| >>> maintenance\_ratio   | float                                                                                            | 維持率                                                                                         |
+| >>> collateral\_interest | float                                                                                            | 擔保品利息                                                                                     |
+| >>> margin\_interest     | float                                                                                            | 融資金利息                                                                                     |
+| >>> shortsell\_interest  | float                                                                                            | 融券保證金利息                                                                                 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```py
+sdk.accounting.maintenance(account)
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```py
+Result {
+    is_success: True,
+    message: None,
+    data: MaintenanceData {
+        date: "2024/02/27",                        # 日期 (string)
+        branch_no: "6460",                         # 分公司代號 (string)
+        account: "26",                             # 帳號 (string)
+        maintenance_summary: MaintenanceSummary {  # 整戶概況
+            margin_value: 3135000,                 # 整戶融資市值 (int)
+            shortsell_value: 0,                    # 整戶融券市值 (int)
+            shortsell_margin: 0,                   # 整戶融券保證金額 (int)
+            collateral: 0,                         # 擔保品 (int)
+            margin_loan_amt: 1494000,              # 整戶融資金額 (int)
+            maintenance_ratio: 209.83,             # 整戶維持率 (float)
+        },
+        maintenance_detail: [                      # 個股概況
+            MaintenanceSummary {
+                stock_no: "2603",                  # 股票代號 (string)
+                order_no: "x4580",                 # 委託書號 (string)
+                order_type: Stock,                 # 委託單類型 (OrderType)
+                quantity: 10000,                   # 持有股數 (int)
+                price: 152.5,                      # 計算價 (float)
+                cost_price: 119,                   # 成本價 (float)
+                shortsell_margin: 0,               # 融券保證金 (int)
+                collateral: 0,                     # 擔保品 (int)
+                margin_loan_amt: 0,                # 融資金 (int)
+                maintenance_ratio: 213.58,         # 維持率  (float)
+                collateral_interest: 0,            # 擔保品利息 (float)
+                margin_interest: 20818,            # 融資金利息 (float)
+                shortsell_interest: 0,             # 融券保證金利息 (float)
+            }
+        ],
+    }
+}
+
+```

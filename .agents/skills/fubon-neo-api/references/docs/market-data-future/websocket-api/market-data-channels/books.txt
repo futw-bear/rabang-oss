@@ -1,0 +1,174 @@
+# Books
+
+接收訂閱期權商品最新最佳五檔委買委賣資訊
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name           | Type   | Description                                                   |
+| -------------- | ------ | ------------------------------------------------------------- |
+| `channel`\*    | string | 訂閱頻道：`trades`, `books`, `aggregates`, `candles`          |
+| `symbol`\*     | string | 契約代碼                                                      |
+| `afterHours`\* | bool   | 訂閱夜盤行情 true : 夜盤行情 false : 日盤行情 default : false |
+
+## Response[​](#response "Direct link to Response")
+
+| Name         | Type      | Description      |
+| ------------ | --------- | ---------------- |
+| `symbol`\*   | string    | 期權代碼         |
+| `type`\*     | string    | Ticker 類型      |
+| `exchange`\* | string    | 交易所           |
+| `market`     | string    | 市場別           |
+| `time`\*     | number    | 時間             |
+| `bids`       | object\[] | 最佳五檔委買     |
+| >> `price`   | number    | 最佳五檔委買價格 |
+| >> `size`    | number    | 最佳五檔委買數量 |
+| `asks`       | object\[] | 最佳五檔委賣     |
+| >> `price`   | number    | 最佳五檔委賣價格 |
+| >> `size`    | number    | 最佳五檔委賣數量 |
+
+info
+
+'\*' 表示必揭示欄位。
+
+## Example[​](#example "Direct link to Example")
+
+### Subscribe channel[​](#subscribe-channel "Direct link to Subscribe channel")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+def handle_message(message):
+    print(f'market data message: {message}')
+
+sdk = FubonSDK()
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+
+futopt = sdk.marketdata.websocket_client.futopt
+futopt.on('message', handle_message)
+futopt.connect()
+futopt.subscribe({ 
+    'channel': 'books', 
+    'symbol': 'TXFA4'
+    #'afterHours' : True   # 夜盤行情
+})
+
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const futopt = sdk.marketdata.webSocketClient.futopt;
+
+futopt.connect().then(() => {
+  futopt.subscribe({ 
+                     channel: "books", 
+                     symbol: "TXFA4" 
+                     // afterHours: true    //夜盤行情 
+                   });
+});
+
+futopt.on("message", (message) => {
+  const data = JSON.parse(message);
+  console.log(data);
+});
+
+```
+
+```cs
+using FubonNeo.Sdk;
+
+var sdk = new FubonSDK();
+
+var result = sdk.Login("Your ID", "Your password", "Your cert path", "Your cert password");
+
+sdk.InitRealtime();  // 建立行情連線
+
+var futopt = sdk.MarketData.WebSocketClient.FutureOption;
+
+futopt.OnMessage += (msg) => Console.WriteLine($"receive: { msg }");
+
+await futopt.Connect();
+
+await futopt.Subscribe(FugleMarketData.WebsocketModels.FutureOptionChannel.Books, "TXFA4");
+
+// await futopt.Subscribe(FugleMarketData.WebsocketModels.FutureOptionChannel.Books,  new FutureOptionParams { Symbol = "TXFC4", AfterHours = true });  // 夜盤行情
+
+```
+
+訂閱多檔商品
+
+同時訂閱多檔商品方式，請參考 [訂閱頻道](https://www.fbs.com.tw/TradeAPI/docs/market-data-future/websocket-api/getting-started.txt#%E8%A8%82%E9%96%B1%E9%A0%BB%E9%81%93)
+
+### Receive data[​](#receive-data "Direct link to Receive data")
+
+```json
+{
+    "event": "data",
+    "data": {
+        "symbol": "TXFA4",
+        "type": "FUTURE",
+        "exchange": "TAIFEX",
+        "bids": [
+          {
+            "price": 17539,
+            "size": 2
+          }, 
+          {
+            "price": 17538,
+            "size": 4
+          }, 
+          {
+            "price": 17537,
+            "size": 3
+          }, 
+          {
+            "price": 17536,
+            "size": 10
+          }, 
+          {
+            "price": 17535,
+            "size": 10
+          }
+        ],
+        "asks": [
+          {
+            "price": 17541,
+            "size": 2
+          }, 
+          {
+            "price": 17542,
+            "size": 15
+          }, 
+          {
+            "price": 17543,
+            "size": 3
+          }, 
+          {
+            "price": 17544,
+            "size": 5
+          }, 
+          {
+            "price": 17545,
+            "size": 4
+          }
+        ],
+        "time": 1702956500113000
+    },
+    "id": "<CHANNEL_ID>",
+    "channel": "books"
+}
+
+```

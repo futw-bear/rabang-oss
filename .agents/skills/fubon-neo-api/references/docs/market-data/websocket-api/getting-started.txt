@@ -1,0 +1,468 @@
+# 開始使用
+
+本頁重點
+
+* 富邦行情 WebSocket API（富邦新一代 API 行情服務）提供台股即時行情訂閱。
+* 支援 `Speed` / `Normal` 兩種行情模式。
+* 需登入後建立行情連線並訂閱頻道。
+* 下一步可前往各頻道說明頁。
+
+| 項目     | 說明                  |
+| -------- | --------------------- |
+| 介面     | WebSocket API         |
+| 市場     | 台股                  |
+| 模式     | Speed / Normal        |
+| SDK      | Python / Node.js / C# |
+| 訂閱方式 | 連線後訂閱頻道        |
+
+富邦行情 WebSocket API 提供台股即時行情服務。透過 WebSocket API 可以滿足您想要接收即時行情的需求。
+
+## 使用 SDK[​](#使用-sdk "Direct link to 使用 SDK")
+
+富邦行情 WebSocket API 提供 Python 、 Node.js 與 C# SDK。您可以透過以下方式存取 WebSocket API、並透過行情Mode模式切換要訂閱的行情：
+
+訂閱WebSocket Callback 方法獲得下方Callback訊息。
+
+info
+
+行情Mode提供Low Latency `Speed` Mode 以及完整資訊的 `Normal` Mode
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK,Mode
+
+def handle_message(message):
+    print(message)
+
+sdk = FubonSDK()
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+# 可指定行情連線的Mode ， Default 為Speed 
+# sdk.init_realtime(Mode.Speed) or sdk.init_realtime(Mode.Normal)
+stock = sdk.marketdata.websocket_client.stock
+stock.on('message', handle_message)
+stock.connect()
+
+```
+
+```js
+const { FubonSDK, Mode } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password");
+
+sdk.initRealtime(); // 建立行情連線
+// 可指定行情連線的Mode ， Default 為Speed 
+// sdk.initRealtime(Mode.Speed) or sdk.initRealtime(Mode.Normal)
+
+const stock = sdk.marketdata.webSocketClient.stock;
+
+stock.on("message", (message) => {
+  const data = JSON.parse(message);
+  console.log(data);
+});
+
+(async () => {
+    await stock.connect();
+
+    stock.subscribe({
+        'channel': 'trades',
+        'symbol': '2881'
+    });
+})()
+
+
+```
+
+```cs
+using FubonNeo.Sdk;
+using FugleMarketData.WebsocketModels;
+
+var sdk = new FubonSDK();
+
+var result = sdk.Login("Your ID", "Your password", "Your cert path", "Your cert password");
+
+sdk.InitRealtime(); // 建立行情連線
+// 可指定行情連線的Mode ， Default 為Speed 
+// sdk.InitRealtime(Mode.Speed) or sdk.InitRealtime(Mode.Normal)
+
+var stock = sdk.MarketData.WebSocketClient.Stock;
+
+stock.OnMessage += (msg) => Console.WriteLine($"receive: {msg}");
+
+await stock.Connect();
+
+```
+
+## 身份驗證[​](#身份驗證 "Direct link to 身份驗證")
+
+當驗證成功後，會收到以下訊息：
+
+```json
+{
+  "event": "authenticated",
+  "data": {
+    "message": "Authenticated successfully"
+  }
+}
+
+```
+
+若驗證失敗，則收到以下訊息：
+
+```json
+{
+  "event": "error",
+  "data": {
+    "message": "Invalid authentication credentials"
+  }
+}
+
+```
+
+## Heartbeat[​](#heartbeat "Direct link to Heartbeat")
+
+每隔 30 秒 WebSocket server 會送出一個 heartbeat 訊息：
+
+```json
+{
+  "event": "heartbeat",
+  "data": {
+    "time": "<Timestamp>"
+  }
+}
+
+```
+
+## Ping/Pong[​](#pingpong "Direct link to Ping/Pong")
+
+SDK每五秒，將自動發送ping到server中， 也可自行發送ping ，另外額外自訂 `state` (state 為optioanal參數) ：
+
+* Python
+* Node.js
+* C#
+
+```python
+stock.ping({
+  'state' : '<ANY>'
+})
+
+```
+
+```js
+stock.ping({state:'<ANY>'});
+
+```
+
+```cs
+stock.ping("<ANY>");
+
+```
+
+WebSocket Server 會回應以下訊息 (若 ping 未送 `state` 則不會有該欄位)：
+
+```json
+{
+  "event": "pong",
+  "data": {
+    "time": "<TIMESTAMP>",
+    "state": "<ANY>"
+  }
+}
+
+```
+
+## Channels[​](#channels "Direct link to Channels")
+
+富邦行情 WebSocket API 目前提供以下可訂閱頻道：
+
+* `trades` - [接收訂閱股票最新成交資訊](https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/market-data-channels/trades.txt)
+* `books` - [接收訂閱股票最新最佳五檔委買委賣資訊](https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/market-data-channels/books.txt)
+* `indices` - [接收訂閱股票最新指數行情資料](https://www.fbs.com.tw/TradeAPI/docs/market-data/websocket-api/market-data-channels/indices.txt)
+
+### 訂閱頻道[​](#訂閱頻道 "Direct link to 訂閱頻道")
+
+要訂閱一個頻道可用下方範例進行訂閱：
+
+* Python
+* Node.js
+* C#
+
+```python
+stock.subscribe({
+  "channel" : "<CHANNEL_NAME>",
+  "symbol" : "<SYMBOL_ID>"
+  #"intradayOddLot": True  若要訂閱盤中零股，可再額外加入此參數
+})
+
+```
+
+```js
+stock.subscribe({ 
+  channel: '<CHANNEL_NAME>', 
+  symbol: '<SYMBOL_ID>',
+  //intradayOddLot: true  若要訂閱盤中零股，可再額外加入此參數
+});
+
+```
+
+```cs
+stock.Subscribe(StockChannel.<CHANNEL_NAME>,"<SYMBOL_ID>");
+//stock.Subscribe(StockChannel.Trades,new StockSubscribeParams{Symbol="<SYMBOL_ID>", IntradayOddLot=true});   訂閱盤中零股
+
+```
+
+訂閱成功後，會收到以下事件回應：
+
+```json
+{
+  "event": "subscribed",
+  "data": {
+    "id": "<CHANNEL_ID>",
+    "channel": "<CHANNEL_NAME>",
+    "symbol": "<SYMBOL_ID>"
+  }
+}
+
+```
+
+支援訂閱同頻道的多檔股票：
+
+* Python
+* Node.js
+* C#
+
+```python
+stock.subscribe({
+  "channel" : "<CHANNEL_NAME>",
+  "symbols" : ["<SYMBOL_ID>","<SYMBOL_ID>"]
+  #"intradayOddLot": True  若要訂閱盤中零股，可再額外加入此參數
+})
+
+```
+
+```js
+stock.subscribe({ 
+  channel: '<CHANNEL_NAME>', 
+  symbols: ['<SYMBOL_ID>','<SYMBOL_ID>']
+  //intradayOddLot: true  若要訂閱盤中零股，可再額外加入此參數
+});
+
+```
+
+```cs
+stock.Subscribe(StockChannel.<CHANNEL_NAME>,"<SYMBOL_ID>","<SYMBOL_ID>");
+//stock.Subscribe(StockChannel.Trades, new StockSubscribeParams{Symbols = new List<string>{"<SYMBOL_ID>", "<SYMBOL_ID>"}, IntradayOddLot=true});    訂閱多檔盤中零股
+
+```
+
+訂閱成功後，會收到以下事件回應：
+
+```json
+{
+  "event": "subscribed",
+  "data": [
+    {
+      "id": "<CHANNEL_ID>",
+      "channel": "<CHANNEL_NAME>",
+      "symbol": "<SYMBOL_ID_1>"
+    },
+    {
+      "id": "<CHANNEL_ID>",
+      "channel": "<CHANNEL_NAME>",
+      "symbol": "<SYMBOL_ID_2>"
+    }
+  ]
+}
+
+```
+
+### 取消訂閱[​](#取消訂閱 "Direct link to 取消訂閱")
+
+要取消頻道可用下方範例進行取消：
+
+* Python
+* Node.js
+* C#
+
+```python
+stock.unsubscribe({
+    'id':'<CHANNEL_ID>'
+})
+
+```
+
+```js
+stock.unsubscribe({ 
+  id : '<CHANNEL_ID>'
+});
+
+```
+
+```cs
+stock.Unsubscribe("<CHANNEL_ID>");
+
+```
+
+取消訂閱成功後，會收到以下事件回應：
+
+```json
+{
+  "event": "unsubscribed",
+  "data": {
+    "id": "<CHANNEL_ID>",
+    "channel" : "<CHANNEL_NAME>",
+    "symbol" : "<SYMBOL_ID>"
+  }
+}
+
+```
+
+支援取消訂閱多個頻道：
+
+* Python
+* Node.js
+* C#
+
+```python
+stock.unsubscribe({
+    'ids':['<CHANNEL_ID>','<CHANNEL_ID>']
+})
+
+```
+
+```js
+stock.unsubscribe({ 
+  ids : ['<CHANNEL_ID>','<CHANNEL_ID>']
+});
+
+```
+
+```cs
+stock.Unsubscribe("<CHANNEL_ID>","<CHANNEL_ID>");
+
+```
+
+取消訂閱成功後，會收到以下事件回應：
+
+```json
+{
+  "event": "unsubscribed",
+  "data": [
+    {
+      "id": "<CHANNEL_ID_1>",
+      "channel" : "<CHANNEL_NAME>",
+      "symbol" : "<SYMBOL_ID>"
+    },
+    {
+      "id": "<CHANNEL_ID_2>",
+      "channel" : "<CHANNEL_NAME>",
+      "symbol" : "<SYMBOL_ID>"
+    }
+  ]
+}
+
+```
+
+## 錯誤處理[​](#錯誤處理 "Direct link to 錯誤處理")
+
+當您所訂閱或處理的WebSocket Callback有異常時，您可補充處理錯誤訊息如下 ：
+
+* Python
+* Node.js
+* C#
+
+```python
+def handle_connect():
+    print('market data connected')
+
+
+def handle_disconnect(code, message):
+    print(f'market data disconnect: {code}, {message}')
+
+
+def handle_error(error):
+    print(f'market data error: {error}')
+
+stock.on("connect", handle_connect)
+stock.on("disconnect", handle_disconnect)
+stock.on("error", handle_error)
+
+```
+
+```js
+stock.on("connect", (message) => {
+  const connect_msg = JSON.parse(message);
+  console.log(connect_msg);
+});
+
+stock.on("disconnect", (message) => {
+  console.log(message);
+});
+
+stock.on("error", (message) => {
+  const err_msg = JSON.parse(message);
+  console.log(err_msg);
+});
+
+
+```
+
+```cs
+stock.OnError += (errmsg) => Console.WriteLine($"handle error: {errmsg}");
+stock.OnConnected += (connmsg) => Console.WriteLine($"Connect: {connmsg}");
+stock.OnDisconnected += (disconmsg) => Console.WriteLine($"Disconnect: {disconmsg}");
+
+```
+
+### 斷線重連[​](#斷線重連 "Direct link to 斷線重連")
+
+以下將用簡單範例，利用上述定義之錯誤處理方法，接收到斷線事件，程式自動進行連線
+
+* Python
+* Node.js
+* C#
+
+```python
+def handle_disconnect(code, message):
+    print(f'market data disconnect: {code}, {message}')
+    stock.connect()
+    print("Reconnected Succuess")
+    print("Resubscribe")
+    stock.subscribe({    # 重新訂閱您已訂閱過的Channel與Symbol
+        'channel': '<CHANNEL_NAME>', 
+        'symbol': '<SYMBOL_ID>'
+    })
+
+```
+
+```js
+stock.on("disconnect", (message) => {
+  console.log(message);
+  stock.connect()
+  console.log("Reconnected Succuess");
+  stock.subscribe({ channel: '<CHANNEL_NAME>', symbol: '<SYMBOL_ID>' });  //重新訂閱您已訂閱過的Channel與Symbol
+});
+
+
+```
+
+```cs
+stock.OnDisconnected += async (msg) =>
+{
+    Console.WriteLine($"disconnected at {DateTime.Now}");
+    await Task.Delay(10);
+    Console.WriteLine("Try Reconnected");
+    await stock.Connect();
+    Console.WriteLine("Reconnected Success");
+    Console.WriteLine("Resubscribe...");
+    await stock.Subscribe(StockChannel.<CHANNEL_NAME>, "<SYMBOL_ID>"); //重新訂閱您已訂閱過的Channel與Symbol
+    Console.WriteLine("Resubscribe Success");
+};
+
+```

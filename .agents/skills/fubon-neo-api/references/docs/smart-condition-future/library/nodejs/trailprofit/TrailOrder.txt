@@ -1,0 +1,73 @@
+# 移動鎖利條件單
+
+caution
+
+僅支援日盤交易
+
+trailProfit
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數             | 類別                                                                                                                          | 說明                                                                              |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| account          | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/nodejs/EnumMatrix.txt#account)                           | 帳號                                                                              |
+| startDate        | string                                                                                                                        | 條件開始監控時間                                                                  |
+| endDate          | string                                                                                                                        | 條件結束監控時間                                                                  |
+| stopSign         | [StopSign](https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/EnumMatrix.txt#stopsign)                 | 條件停止條件 : `Full` 全部成交為止、`Partial`部分成交為止、`UntilEnd`效期結束為止 |
+| futoptTrailOrder | [FutOptTrailOrder](https://www.fbs.com.tw/TradeAPI/docs/smart-condition-future/library/nodejs/EnumMatrix.txt#futopttrailorder) | 移動鎖利條件                                                                      |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | Object              | 條件單回傳資訊                   |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionOrderResult 欄位[​](#委託資訊-conditionorderresult-欄位 "Direct link to 委託資訊 ConditionOrderResult 欄位")
+
+Return type : Object
+
+| 參數        | 類別   | 說明         |
+| ----------- | ------ | ------------ |
+| guid        | string | 條件單號     |
+| reply\_code | string | 回覆狀態代號 |
+| advisory    | string | 回覆狀態內容 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+// 設計條件內容
+const trail = {
+    symbol: "TXO20000E4",
+    price: "100",
+    direction: Direction.Down,
+    tickNum: 5,  
+    buySell: BSAction.Sell,
+    lot: 2,
+    priceType: FutOptConditionPriceType.MatchedPrice,
+    diff: 5,
+    timeInForce: TimeInForce.ROD,
+    orderType: FutOptConditionOrderType.Close
+    
+};
+
+
+sdk.futopt.trailProfit(target_account, "20240427","20240516", StopSign.Full, trail)
+
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+
+{
+    isSuccess: true,
+    data : {
+            guid : "44150047-8977-40b1-953c-ce2XXXXXX"
+    }
+}
+
+
+```

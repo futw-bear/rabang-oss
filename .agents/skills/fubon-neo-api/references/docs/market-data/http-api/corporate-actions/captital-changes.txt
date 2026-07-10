@@ -1,0 +1,313 @@
+# 資本變動資料
+
+取得上市櫃股票及 ETF 之資本變動資料（面額變更、減資、分割）
+
+```text
+GET /corporate-actions/capital-changes/
+
+```
+
+版本資訊
+
+v2.2.8 起新增功能
+
+## Parameters[​](#parameters "Direct link to Parameters")
+
+| Name         | Type   | Description                                                  |
+| ------------ | ------ | ------------------------------------------------------------ |
+| `start_date` | string | 開始日期（格式：`yyyy-MM-dd`）                               |
+| `end_date`   | string | 結束日期（格式：`yyyy-MM-dd`）可輸入未來日期取得未來預告資訊 |
+| `sort`       | string | 排序方式（`asc`、`desc`）                                    |
+
+## Response[​](#response "Direct link to Response")
+
+| Name                              | Type      | Description                                                                                                 |
+| --------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------- |
+| `data`\*                          | object\[] | 資本變動資料                                                                                                |
+| `data.symbol`                     | string    | 股票代號                                                                                                    |
+| `data.name`                       | string    | 股票名稱                                                                                                    |
+| `data.actionType`                 | string    | 事件類型：`etf_split_or_merge` ETF 分割或反分割、`par_value_change` 股票面額變更 、`capital_reduction` 減資 |
+| `data.effectiveDate`              | string    | 恢復買賣日期 (YYYY-MM-DD)                                                                                   |
+| `data.adjustmentFactor`           | number    | 調整係數                                                                                                    |
+| `data.haltDate`                   | string    | 停止買賣日期 (YYYY-MM-DD)                                                                                   |
+| `data.resumeDate`                 | string    | 恢復買賣日期 (YYYY-MM-DD)                                                                                   |
+| `data.raw`                        | object    | 原始資料                                                                                                    |
+| `data.raw.exchangeRatio`          | number    | 換股比例 (面額變更、減資時才有值)                                                                           |
+| `data.raw.parValueBefore`         | number    | 變更前面額 (面額變更時才有值)                                                                               |
+| `data.raw.parValueAfter`          | number    | 變更後面額 (面額變更時才有值)                                                                               |
+| `data.raw.lastClosePrice`         | number    | 停止買賣前收盤價                                                                                            |
+| `data.raw.referencePrice`         | number    | 恢復買賣參考價                                                                                              |
+| `data.raw.limitUpPrice`           | number    | 漲停價格                                                                                                    |
+| `data.raw.limitDownPrice`         | number    | 跌停價格                                                                                                    |
+| `data.raw.openingReferencePrice`  | number    | 開盤競價基準                                                                                                |
+| `data.raw.splitType`              | string    | 分割類型：`分割`、`反分割`                                                                                  |
+| `data.raw.reductionReason`        | string    | 減資原因 (減資時才有值)                                                                                     |
+| `data.raw.refundPerShare`         | number    | 每股退還股款 (元) (減資時才有值)                                                                            |
+| `data.raw.rightsOfferingRatio`    | number    | 減資後現金增資配股率 (減資時才有值)                                                                         |
+| `data.raw.rightsOfferingPrice`    | number    | 現金增資認購價 (元) (減資時才有值)                                                                          |
+| `data.raw.exRightsReferencePrice` | number    | 除權參考價 (減資時才有值)                                                                                   |
+
+## Example[​](#example "Direct link to Example")
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, Order
+
+sdk = FubonSDK()
+
+accounts = sdk.login("Your ID", "Your password", "Your cert path", "Your cert password")  # 需登入後，才能取得行情權限
+
+sdk.init_realtime() # 建立行情連線
+
+reststock = sdk.marketdata.rest_client.stock
+
+## 2.2.6 及以後版本使用更簡化 (使用 Exception 進行例外處理)
+from fubon_neo.sdk import FugleAPIError
+
+try:  
+  response = reststock.corporate_actions.capital_changes(**{"start_date": "2025-12-06", "end_date": "2026-01-08"})
+except FugleAPIError as e:
+  print(f"Error: {e}")
+  print("------------")
+  print(f"Status Code: {e.status_code}")  # 例: 429
+  print(f"Response Text: {e.response_text}")  # 例: {"statusCode":429,"message":"Rate limit exceeded"}   
+
+print(response)
+
+
+```
+
+```js
+const { FubonSDK } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.initRealtime(); // 建立行情連線
+
+const client = sdk.marketdata.restClient
+
+client.stock.corporateActions.capitalChanges({ start_date: '2025-12-06', end_date: '2026-01-08' })
+  .then(data => console.log(data));
+
+```
+
+```cs
+
+using FubonNeo.Sdk;
+using FugleMarketData.QueryModels.Stock.CorporateActions;
+
+
+var sdk = new FubonSDK();
+var result = sdk.Login("Your ID", "Your Password", "Your Cert Path", "Your Cert Password");
+
+sdk.InitRealtime();  // 建立行情連線
+
+var rest = sdk.MarketData.RestClient.Stock;
+
+var dividend = await rest.CorporateActions.CapitalChanges(new()
+{
+    StartDate = fromDate,
+    EndDate = toDate,
+    Sort = SortType.Desc // Optional
+});
+
+var dividend_cont = dividend.Content.ReadAsStringAsync().Result;
+
+Console.WriteLine(dividend_cont);
+
+```
+
+Response Body：
+
+```json
+{
+    "start_date": "2025-01-01",
+    "end_date": "2026-01-09",
+    "sort": "desc",
+    "data": [
+        {
+            "symbol": "4530",
+            "name": "宏易",
+            "actionType": "capital_reduction",
+            "resumeDate": "2025-12-29",
+            "haltDate": "2025-12-18",
+            "exchange": "TPEx",
+            "raw": {
+                "exrightReferencePrice": 0,
+                "limitDownPrice": 28.2,
+                "limitUpPrice": 34.45,
+                "openingReferencePrice": 31.3,
+                "previousClose": 12.3,
+                "reason": "彌補虧損",
+                "referencePrice": 31.32,
+                "refundPerShare": 0,
+                "sharesPerThousand": 392.72795
+            }
+        },
+        {
+            "symbol": "3593",
+            "name": "力銘",
+            "actionType": "capital_reduction",
+            "resumeDate": "2025-12-22",
+            "haltDate": "2025-12-11",
+            "exchange": "TWSE",
+            "raw": {
+                "limitDownPrice": 12.15,
+                "limitUpPrice": 14.85,
+                "openingReferencePrice": 13.5,
+                "previousClose": 8.1,
+                "reason": "彌補虧損",
+                "referencePrice": 13.5,
+                "refundPerShare": 0,
+                "sharesPerThousand": 599.9999936
+            }
+        },
+        {
+            "symbol": "00715L",
+            "name": "期街口布蘭特正2",
+            "actionType": "etf_split_or_merge",
+            "resumeDate": "2025-12-10",
+            "haltDate": "2025-12-03",
+            "exchange": "TWSE",
+            "raw": {
+                "limitDownPrice": 0.01,
+                "limitUpPrice": 9999.95,
+                "openingReferencePrice": 20.86,
+                "previousClose": 10.43,
+                "referencePrice": 20.86,
+                "splitRatio": 0.5,
+                "splitType": "反分割"
+            }
+        },
+        {
+            "symbol": "8103",
+            "name": "瀚荃",
+            "actionType": "capital_reduction",
+            "resumeDate": "2025-12-08",
+            "haltDate": "2025-11-27",
+            "exchange": "TWSE",
+            "raw": {
+                "limitDownPrice": 77.5,
+                "limitUpPrice": 94.7,
+                "openingReferencePrice": 86.1,
+                "previousClose": 74.7,
+                "reason": "退還股款",
+                "referencePrice": 86.11,
+                "refundPerShare": 1.5,
+                "sharesPerThousand": 850
+            }
+        },
+        {
+            "symbol": "0052",
+            "name": "富邦科技",
+            "actionType": "etf_split_or_merge",
+            "resumeDate": "2025-11-26",
+            "exchange": "TWSE",
+            "raw": {
+                "limitDownPrice": 31.54,
+                "limitUpPrice": 38.54,
+                "openingReferencePrice": 35.04,
+                "previousClose": 245.3,
+                "referencePrice": 35.04,
+                "splitType": "分割"
+            }
+        },
+        {
+            "symbol": "1808",
+            "name": "潤隆",
+            "actionType": "capital_reduction",
+            "resumeDate": "2025-11-24",
+            "haltDate": "2025-11-13",
+            "exchange": "TWSE",
+            "raw": {
+                "limitDownPrice": 33.45,
+                "limitUpPrice": 40.85,
+                "openingReferencePrice": 37.15,
+                "previousClose": 34.45,
+                "reason": "退還股款",
+                "referencePrice": 37.16,
+                "refundPerShare": 1,
+                "sharesPerThousand": 900
+            }
+        },
+        {
+            "symbol": "6465",
+            "name": "威潤",
+            "actionType": "capital_reduction",
+            "resumeDate": "2025-11-24",
+            "haltDate": "2025-11-13",
+            "exchange": "TPEx",
+            "raw": {
+                "exrightReferencePrice": 0,
+                "limitDownPrice": 15.55,
+                "limitUpPrice": 18.95,
+                "openingReferencePrice": 17.25,
+                "previousClose": 15.65,
+                "reason": "彌補虧損",
+                "referencePrice": 17.25,
+                "refundPerShare": 0,
+                "sharesPerThousand": 907.01186
+            }
+        },
+        {
+            "symbol": "9927",
+            "name": "泰銘",
+            "actionType": "capital_reduction",
+            "resumeDate": "2025-11-24",
+            "haltDate": "2025-11-13",
+            "exchange": "TWSE",
+            "raw": {
+                "limitDownPrice": 62.2,
+                "limitUpPrice": 76,
+                "openingReferencePrice": 69.1,
+                "previousClose": 52.4,
+                "reason": "退還股款",
+                "referencePrice": 69.11,
+                "refundPerShare": 2.82805,
+                "sharesPerThousand": 717.194904
+            }
+        },
+        {
+            "symbol": "8422",
+            "name": "可寧衛",
+            "actionType": "par_value_change",
+            "resumeDate": "2025-11-17",
+            "haltDate": "2025-11-06",
+            "exchange": "TWSE",
+            "raw": {
+                "limitDownPrice": 22.5,
+                "limitUpPrice": 27.5,
+                "openingReferencePrice": 25,
+                "previousClose": 250,
+                "referencePrice": 25
+            }
+        },
+        {
+            "symbol": "5301",
+            "name": "寶得利",
+            "actionType": "capital_reduction",
+            "resumeDate": "2025-11-12",
+            "haltDate": "2025-11-05",
+            "exchange": "TPEx",
+            "raw": {
+                "exrightReferencePrice": 0,
+                "limitDownPrice": 12.55,
+                "limitUpPrice": 15.25,
+                "openingReferencePrice": 13.9,
+                "previousClose": 6.41,
+                "reason": "彌補虧損",
+                "referencePrice": 13.89,
+                "refundPerShare": 0,
+                "sharesPerThousand": 461.57
+            }
+        },
+        ...
+    ]
+}
+
+```

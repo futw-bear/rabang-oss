@@ -1,0 +1,71 @@
+# 模式切換
+
+**適用版本 v1.3.1 及以上**
+
+## 行情WebSocket模式切換[​](#行情websocket模式切換 "Direct link to 行情WebSocket模式切換")
+
+新版本功能中，提供 Low Latency 行情與多資訊的 Socket 行情切換
+
+### 引入套件 (僅 Python 、 NodeJs需要， C#不需額外操作)[​](#引入套件-僅-python--nodejs需要-c不需額外操作 "Direct link to 引入套件 (僅 Python 、 NodeJs需要， C#不需額外操作)")
+
+* Python
+* Node.js
+
+```py
+# 引入Mode 套件模組
+from fubon_neo.sdk import FubonSDK, Mode 
+
+```
+
+```js
+const { FubonSDK, Mode } = require('fubon-neo');
+
+```
+
+* Python
+* Node.js
+* C#
+
+```python
+sdk.init_realtime(Mode.Speed) # 提供Speed / Normal選擇 (default 為Speed)
+#sdk.init_realtime(Mode.Speed) or sdk.init_realtime(Mode.Normal)
+futopt = sdk.marketdata.websocket_client.futopt
+futopt.on('message', handle_message)
+futopt.connect()
+
+```
+
+```js
+sdk.initRealtime(Mode.Speed); // 提供Speed / Normal選擇 (default 為Speed)
+// sdk.initRealtime(Mode.Speed) or sdk.initRealtime(Mode.Normal)
+const futopt = sdk.marketdata.webSocketClient.futopt;
+
+futopt.connect().then(() => {
+  futopt.subscribe({ 
+      channel: "trades",
+      symbol: "TXFA4"
+      // afterHours: true    //夜盤行情 
+    });
+});
+
+futopt.on("message", (message) => {
+  const data = JSON.parse(message);
+  console.log(data);
+});
+
+```
+
+```cs
+using FubonNeo.Sdk;
+using FugleMarketData.WebsocketModels; // 新增 "Mode"
+
+sdk.InitRealtime(Mode.Speed); // 提供Speed / Normal選擇 (default 為Speed)
+// sdk.initRealtime(Mode.Speed) or sdk.initRealtime(Mode.Normal)
+
+var futopt = sdk.MarketData.WebSocketClient.FutureOption;
+
+futopt.OnMessage += (msg) => Console.WriteLine($"receive: { msg }");
+
+await futopt.Connect();
+
+```

@@ -1,0 +1,378 @@
+# 交易
+
+***
+
+<!-- -->
+
+此篇教學將示範如何進行一個完整的買賣流程
+
+## 買入部位[​](#買入部位 "Direct link to 買入部位")
+
+假設今天開盤後，我們想買進2口台指期20000點，我們可以這樣撰寫程式並執行：
+
+* Python
+* Node.js
+* C#
+
+```python
+from fubon_neo.sdk import FubonSDK, FutOptOrder
+from fubon_neo.constant import TimeInForce, FutOptOrderType, FutOptPriceType, FutOptMarketType, BSAction
+
+sdk = FubonSDK()
+   
+accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證位置", "您的憑證密碼") #若有歸戶，則會回傳多筆帳號資訊
+  
+#建立委託單內容
+order = FutOptOrder(
+    buy_sell = BSAction.Buy,
+    symbol = "TXFD4",
+    price = "20000",
+    lot =  2,
+    market_type = FutOptMarketType.Future,
+    price_type = FutOptPriceType.Limit,
+    time_in_force= TimeInForce.ROD,
+    order_type = FutOptOrderType.Auto,
+    user_def = "FromPy" # optional field
+) 
+
+
+sdk.futopt.place_order(accounts.data[0], order)  #下單委託
+
+```
+
+```js
+const { FubonSDK, BSAction, TimeInForce, FutOptMarketType, FutOptPriceType, FutOptOrderType } = require('fubon-neo');
+
+const sdk = new FubonSDK();
+
+const accounts = sdk.login("您的身分證字號", "您的登入密碼", "您的憑證路徑" ,"您的憑證密碼");
+
+
+
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "TXFD4",
+  price: "20000",
+  lot: 2,
+  marketType: FutOptMarketType.Future,
+  priceType: FutOptPriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: FutOptOrderType.Auto,
+  userDef: "fromJs"
+};
+
+sdk.futopt.placeOrder(accounts.data[0],order);
+
+```
+
+```cs
+
+    
+using FubonNeo.Sdk;
+
+var sdk = new FubonSDK();
+
+var accounts = sdk.Login("您的身分證字號", "您的登入密碼", "您的憑證路徑", "您的憑證密碼"); // 若有歸戶，則會回傳多筆帳號資訊
+
+var order = new FutOptOrder(
+    BsAction.Buy,
+    "TXFD4",
+    null,     // 複式單第二隻腳買賣別
+    null,     // 複式單第二隻腳商品
+    "20000",
+    2,
+    FutOptMarketType.Future,
+    FutOptPriceType.Limit,
+    TimeInForce.Rod,
+    FutOptOrderType.Auto,
+    null
+);
+
+sdk.FutOpt.PlaceOrder(accounts.data[0],order); 
+
+```
+
+## 確認委託與成交回報[​](#確認委託與成交回報 "Direct link to 確認委託與成交回報")
+
+若要確定該筆的狀態，可以依照下方範例查詢指定的委託單 ( 需指定查詢的市場別 : 期貨, 選擇權, 期貨夜盤, 選擇權夜盤 ):
+
+* Python
+* Node.js
+* C#
+
+```python
+orderResults = sdk.futopt.get_order_results(accounts.data[0])
+print(orderResults)
+
+```
+
+```js
+const orderResults = sdk.futopt.getOrderResults(accounts.data[0])
+console.log(orderResults)
+
+```
+
+```cs
+var orderResults = sdk.FutOpt.GetOrderResults(accounts.data[0]);
+Console.WriteLine(orderResults);
+foreach (var results in orderResults)
+{
+  Console.WriteLine(results);
+}
+
+```
+
+根據回報的結果，我們可以判斷此筆委託是否成交，成交了多少數量：
+
+* Python
+* Node.js
+* C#
+
+```py
+Result {  
+  is_success: true,   
+  message: None,  
+  data : [
+      FutOptOrderResult{
+        ...
+        buy_sell: Buy,      #買賣別 (BSAction)
+        price: 20000,       #原始委託價格 (float)
+        lot: 2,             #原始委託數量 (int)
+        after_price: 20000, #有效委託價格 (float)
+        after_lot: 2,       #有效委託數量 (int)
+        filled_lot: 0,      #已成交數量 (int)
+        filled_money: 0,    #成交價金 (float)
+        symbol: "FITX",     #商品代號 (string)
+        order_no: "bA888",  #委託書號 (string)
+        last_time: "10:10:10.123", #最後異動時間 (string)
+        ...
+      }
+   ]
+}
+
+
+```
+
+```js
+{ 
+  isSuccess: true,  
+  data:[
+    {
+      ...
+      buySell: 'Buy',      //買賣別 (string)
+      price: 20000,        //原始委託價格 (number)
+      lot: 2,              //原始委託數量 (number)
+      afterPrice: 20000,   //有效委託價格 (number)
+      afterLot: 2,         //有效委託數量 (number)
+      filledLot: 0,        //已成交數量 (number)
+      filledMoney: 0,      //成交價金 (number)
+      symbol: 'FITX',      //商品代號 (string)
+      orderNo: 'bA888',    //委託書號 (string)
+      lastTime: '10:10:10.123', //最後異動時間 (string)
+      ...
+    }
+  ]
+}
+
+
+```
+
+```cs
+{ 
+  isSuccess = True, 
+  message = , 
+  data = [
+      FutOptOrderResult{
+        ...
+        buySell = Buy,       //買賣別 (BsAction)
+        price = 20000,       //原始委託價格 (double)
+        lot = 2,             //原始委託數量 (int)
+        afterPrice = 20000,  //有效委託價格 (double)
+        afterLot = 2,        //有效委託數量 (int)
+        filledLot = 0,       //已成交數量 (int)
+        filledMoney = 0,     //成交價金 (double)
+        symbol = FITX,       //商品代號 (string)
+        orderNo = bA888,     //委託書號 (string)
+        lastTime = 10:10:10.123, //最後異動時間 (string)
+        ...
+      }
+   ]
+}
+
+
+```
+
+## 修改委託價格[​](#修改委託價格 "Direct link to 修改委託價格")
+
+由於原先的價格一直無法成交，我們調整原先的委託價格，改用20100的點數價格買入：
+
+* Python
+* Node.js
+* C#
+
+```python
+orderResults = sdk.futopt.get_order_results(accounts.data[0])
+
+modified_pirce = sdk.futopt.make_modify_price_obj(orderResults.data[0],"20100")
+sdk.futopt.modify_price(accounts.data[0], modified_pirce)
+
+```
+
+```js
+orderResults = sdk.futopt.getOrderResults(accounts.data[0])
+
+const modified_pirce = sdk.futopt.makeModifyPriceObj(orderResults.data[0],"20100")
+sdk.futopt.modifyPrice(accounts.data[0],modified_pirce)
+
+```
+
+```cs
+orderResults = sdk.FutOpt.GetOrderResults(accounts.data[0]);
+
+var modified_pirce =  sdk.FutOpt.MakeModifyPriceObj(orderResults.data[0],"20100",null);  //將價格調整成20100點
+sdk.FutOpt.ModifyPrice(accounts.data[0],modified_pirce);  
+
+```
+
+幾分鐘後，我們再查詢一次委託狀態，發現成交了：
+
+* Python
+* Node.js
+* C#
+
+```python
+orderResults = sdk.futopt.get_order_results(accounts.data[0])
+print(orderResults.data[0])
+
+```
+
+```py
+[
+  {
+    ...
+    buy_sell: Buy,        #買賣別 (BSAction)
+    price: 20000,         #原始委託價格 (float)
+    lot: 2,               #原始委託數量 (int)
+    after_price: 20100,   #有效委託價格 (float)
+    after_lot: 2,         #有效委託數量 (int)
+    filled_lot: 1,        #已成交數量 (int)
+    filled_money: 0,      #成交價金 (float)
+    symbol: "FITX",       #商品代號 (string)
+    order_no: "bA888",    #委託書號 (string)
+    last_time: "10:13:12.123", #最後異動時間 (string)
+    ...
+  }
+]
+
+```
+
+```js
+orderResults = sdk.futopt.getOrderResults(accounts.data[0])
+console.log(orderResults.data[0])
+
+```
+
+```json
+{
+    ...
+    "buySell" : "Buy",       //買賣別 (string)
+    "price" : 20000,         //原始委託價格 (number)
+    "lot" :  2,              //原始委託數量 (number)
+    "afterPrice" : 20100,    //有效委託價格 (number)
+    "afterLot" :  2,         //有效委託數量 (number)
+    "filledQty" : 1,         //已成交數量 (number)
+    "filledMoney" : 20100,   //成交價金 (number)
+    "futoptNo" : "FITX ",    //商品代號 (string)
+    "orderNo" : "bA888",     //委託書號 (string)
+    "lastTime" : "10:13:12.123", //最後異動時間 (string)
+    ...
+}
+
+```
+
+```cs
+orderResults = sdk.FutOpt.GetOrderResults(accounts.data[0]);
+Console.WriteLine(orderResults.data[0]);
+
+```
+
+```cs
+{
+    ...
+    buySell = Buy,       //買賣別 (BsAction)
+    price = 66,          //原始委託價格 (double)
+    lot =  2,            //原始委託數量 (int)
+    afterPrice = 20100,  //有效委託價格 (double)
+    afterLot =  1,       //有效委託數量 (int)
+    filledLot = 1,    //已成交數量 (int)
+    filledMoney = 20100, //成交價金 (double)
+    symbol = "FITX",     //商品代號 (string)
+    orderNo = "bA888",   //委託書號 (string)
+    lastTime = "10:13:12.123", //最後異動時間 (string)
+    ...
+}
+
+```
+
+## 賣出部位[​](#賣出部位 "Direct link to 賣出部位")
+
+最後決定在收盤前，賣出一口：
+
+* Python
+* Node.js
+* C#
+
+```python
+#建立委託單內容
+order = Order(
+    buy_sell = BSAction.Sell,
+    symbol = "TXFD4",
+    price = "20100",
+    lot =  1,
+    market_type = FutOptMarketType.Future,
+    price_type = FutOptPriceType.Limit,
+    time_in_force= TimeInForce.ROD,
+    order_type = FutOptOrderType.Auto,
+    user_def = "FromPy" # optional field
+) 
+
+
+sdk.futopt.place_order(accounts.data[0], order)  #下單委託
+
+```
+
+```js
+order = {
+  buySell: BSAction.Sell,
+  symbol: "TXFD4",
+  price: "20100",
+  lot: 1,
+  marketType: FutOptMarketType.Future,
+  priceType: FuturePriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: FutureOrderType.Auto,
+  userDef: "fromJs"
+};
+
+sdk.futopt.placeOrder(accounts.data[0],order)
+
+```
+
+```cs
+order = new Order(
+        BsAction.Sell,
+        "TXFD4",
+        null,     // 複式單第二隻腳買賣別
+        null,     // 複式單第二隻腳商品
+        "20100",
+         1,
+        FutOptMarketType.Future,
+        FutOptPriceType.Limit,
+        TimeInForce.Rod,
+        FutOptOrderType.Auto,
+        null
+);
+
+sdk.FutOpt.PlaceOrder(accounts.data[0],order); 
+
+```

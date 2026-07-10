@@ -1,0 +1,80 @@
+# 多條件單
+
+multiCondition
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數                  | 類別                                                                                                                             | 說明                                                                             |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| account               | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading/library/nodejs/EnumMatrix.txt#account)                                     | 帳號                                                                             |
+| start\_date           | string                                                                                                                           | 條件開始監控時間                                                                 |
+| end\_date             | string                                                                                                                           | 條件結束監控時間                                                                 |
+| stop\_sign            | [StopSign](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/EnumMatrix.txt#stopsign)                           | 條件停止條件 :`Full` 全部成交為止、`Partial`部分成交為止、`UntilEnd`效期結束為止 |
+| MultiCondition        | [Condition List](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/EnumMatrix.txt#condition-object)             | 觸發條件                                                                         |
+| ConditionOrder Object | [ConditionOrder Object](https://www.fbs.com.tw/TradeAPI/docs/smart-condition/library/nodejs/EnumMatrix.txt#conditionorder-object) | 委託內容                                                                         |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別                | 說明                             |
+| --------- | ------------------- | -------------------------------- |
+| isSuccess | bool                | 是否成功                         |
+| data      | Object              | 條件單回傳資訊                   |
+| message   | string ? (optional) | 當isSuccess = false 回傳錯誤訊息 |
+
+### 委託資訊 ConditionOrderResult 欄位[​](#委託資訊-conditionorderresult-欄位 "Direct link to 委託資訊 ConditionOrderResult 欄位")
+
+Return type : Object
+
+| 參數 | 類別   | 說明     |
+| ---- | ------ | -------- |
+| guid | string | 條件單號 |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```js
+// 設計條件內容
+const condition = {
+    marketType: TradingType.Reference,
+    symbol: "2881",
+    trigger: TriggerContent.MatchedPrice,
+    triggerValue: "80",
+    comparison: Operator.LessThan
+}
+
+const condition2 = {
+    marketType: TradingType.Reference,
+    symbol: "2881",
+    trigger: TriggerContent.TotalQuantity,
+    triggerValue: "8000",
+    comparison: Operator.GreaterThan
+}
+
+const order = {
+  buySell: BSAction.Buy,
+  symbol: "2881",
+  price: "66",
+  quantity: 2000,
+  marketType: ConditionMarketType.Common,
+  priceType: ConditionPriceType.Limit,
+  timeInForce: TimeInForce.ROD,
+  orderType: ConditionOrderType.Stock
+};
+
+sdk.stock.multiCondition(account, "20240426", "20240430", StopSign.Full, [condition,condition2], order)
+
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```js
+
+{
+    isSuccess: true,
+    data : {
+            guid : "44150047-8977-40b1-953c-ce2XXXXXX"
+    }
+}
+
+
+```

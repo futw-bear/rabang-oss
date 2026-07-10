@@ -1,0 +1,285 @@
+# 混合部位查詢
+
+QueryHybridPPosition
+
+## 輸入參數[​](#輸入參數 "Direct link to 輸入參數")
+
+| 參數    | 類別                                                                                                | 說明 |
+| ------- | --------------------------------------------------------------------------------------------------- | ---- |
+| account | [Account](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#account) | 帳號 |
+
+## Result 回傳[​](#result-回傳 "Direct link to Result 回傳")
+
+| 參數      | 類別   | 說明                             |
+| --------- | ------ | -------------------------------- |
+| isSuccess | bool   | 是否成功                         |
+| data      | List   | 回傳部位資訊                     |
+| message   | string | 當isSuccess = False 回傳錯誤訊息 |
+
+### 部位 HybridPosition 欄位[​](#部位-hybridposition-欄位 "Direct link to 部位 HybridPosition 欄位")
+
+Return type : Object
+
+| 參數                 | 類別                                                                                                                | 說明                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| > date               | string                                                                                                              | 部位建立日期                                      |
+| > branchNo           | string                                                                                                              | 分公司代號                                        |
+| > account            | string                                                                                                              | 帳號                                              |
+| > isSpread           | bool                                                                                                                | 是否為複式部位                                    |
+| > positionKind       | int                                                                                                                 | 部位種類 : `1` 期貨 、`2` 選擇權                  |
+| > symbol             | string                                                                                                              | 商品代號                                          |
+| > expiryDate         | string                                                                                                              | 履約日                                            |
+| > strikePrice        | double                                                                                                              | 履約價                                            |
+| > callPut            | [CallPut](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#callput)                 | 權利別 : `Call` Call 、`Put` Put                  |
+| > buySell            | [BsAction](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#bsaction)               | 買賣別 : `Buy` 買、`Sell` 賣                      |
+| > price              | double                                                                                                              | 成交價                                            |
+| > origLots           | int                                                                                                                 | 原始口數                                          |
+| > tradableLots       | int                                                                                                                 | 可交易口數                                        |
+| > orderType          | [FutOptOrderType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#futoptordertype) | 委託別 : `New` 新倉、`Close`平倉、`FdayTrade`當沖 |
+| > currency           | string                                                                                                              | 幣別                                              |
+| > marketPrice        | string                                                                                                              | 即時價                                            |
+| > initialMargin      | double                                                                                                              | 原始保證金                                        |
+| > maintenanceMargin  | double                                                                                                              | 維持保證金                                        |
+| > clearingMargin     | double                                                                                                              | 結算保證金                                        |
+| > optValue           | double                                                                                                              | 選擇權市值                                        |
+| > optLongValue       | double                                                                                                              | 選擇權買進市值                                    |
+| > optShortValue      | double                                                                                                              | 選擇權賣出市值                                    |
+| > profitOrLoss       | double                                                                                                              | 部位損益                                          |
+| > premium            | double                                                                                                              | 權利金                                            |
+| >> spread            | object                                                                                                              | 複式部位解析                                      |
+| >> date              | string                                                                                                              | 部位建立日期                                      |
+| >> branchNo          | string                                                                                                              | 分公司代號                                        |
+| >> account           | string                                                                                                              | 帳號                                              |
+| >> isSpread          | bool                                                                                                                | 是否為複式部位                                    |
+| >> positionKind      | int                                                                                                                 | 部位種類 : `1` 期貨 、`2` 選擇權                  |
+| >> symbol            | string                                                                                                              | 商品代號                                          |
+| >> expiryDate        | string                                                                                                              | 履約日                                            |
+| >> strikePrice       | double                                                                                                              | 履約價                                            |
+| >> callPut           | [CallPut](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#callput)                 | 權利別 : `Call` Call 、`Put` Put                  |
+| >> buySell           | [BsAction](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#bsaction)               | 買賣別 : `Buy` 買、`Sell` 賣                      |
+| >> price             | double                                                                                                              | 成交價                                            |
+| >> origLots          | int                                                                                                                 | 原始口數                                          |
+| >> tradableLots      | int                                                                                                                 | 可交易口數                                        |
+| >> orderType         | [FutOptOrderType](https://www.fbs.com.tw/TradeAPI/docs/trading-future/library/csharp/EnumMatrix.txt#futoptordertype) | 委託別 : `New` 新倉、`Close`平倉、`FdayTrade`當沖 |
+| >> currency          | string                                                                                                              | 幣別                                              |
+| >> marketPrice       | string                                                                                                              | 即時價                                            |
+| >> initialMargin     | double                                                                                                              | 原始保證金                                        |
+| >> maintenanceMargin | double                                                                                                              | 維持保證金                                        |
+| >> clearingMargin    | double                                                                                                              | 結算保證金                                        |
+| >> optValue          | double                                                                                                              | 選擇權市值                                        |
+| >> optLongValue      | double                                                                                                              | 選擇權買進市值                                    |
+| >> optShortValue     | double                                                                                                              | 選擇權賣出市值                                    |
+| >> profitOrLoss      | double                                                                                                              | 部位損益                                          |
+| >> premium           | double                                                                                                              | 權利金                                            |
+
+## 請求範例[​](#請求範例 "Direct link to 請求範例")
+
+```cs
+Console.WriteLine(sdk.FutOptAccounting.QueryHybridPosition(account));
+
+```
+
+## 回傳範例[​](#回傳範例 "Direct link to 回傳範例")
+
+```cs
+{
+    isSuccess  = True,
+    message  = ,
+    data  = [
+          HybridPosition {
+              date = 2024/04/08,                       // 部位建立日期 (string)
+              branchNo = 15901,                         // 分公司代號 (string)
+              account = 1234567,                        // 帳號 (string)
+              isSpread = false,                         // 是否為複式部位 (boolean)
+              positionKind = 1,                         // 部位種類 : `1` 期貨、`2` 選擇權 (int)
+              symbol = FITX,                            // 商品代號 (string)
+              expiryDate = 202404,                      // 履約日 (string)
+              strikePrice = ,                           // 履約價 (double)
+              callPut = ,                               // 權利別 (CallPut)
+              buySell = Buy,                            // 買賣別 (BsAction)
+              price = 20325.3333,                       // 成交價 (double)
+              origLots = 3,                             // 原始口數 (int)
+              tradableLot = 3,                          // 可交易口數 (int)
+              orderType = New,                          // 委託別 (FutOptOrderType)
+              currency = TWD,                           // 幣別 (string)
+              marketPrice = 20351,                      // 即時價 (string)
+              initialMargin = 0.0,                      // 原始保證金 (double)
+              maintenanceMargin = 0.0,                  // 維持保證金 (double)
+              clearingMargin = 0.0,                     // 結算保證金 (double)
+              initialMarginAllSingle = 0.0,             // 原始保證金 (double)
+              optValue = 0.0,                           // 選擇權市值 (double)
+              optLongValue = 0.0,                       // 選擇權買進市值 (double)
+              optShortValue = 0.0,                      // 選擇權賣出市值 (double)
+              profitOrLoss = 0.0,                       // 部位損益 (double)
+              premium = 0.0,                            // 權利金 (double)
+              spreads = ,                               // 複式部位 (SpreadPosition[])
+          },
+          HybridPosition {
+              date = 2024/04/08,                       // 部位建立日期 (string)
+              branchNo = 15901,                         // 分公司代號 (string)
+              account = 1234567,                        // 帳號 (string)
+              isSpread = false,                         // 是否為複式部位 (boolean)
+              positionKind = 2,                         // 部位種類 : `1` 期貨、`2` 選擇權 (int)
+              symbol = TX1,                             // 商品代號 (string)
+              expiryDate = 202404,                      // 履約日 (string)
+              strikePrice = 20600,                      // 履約價 (double)
+              callPut = Call,                           // 權利別 (CallPut)
+              buySell = Buy,                            // 買賣別 (BsAction)
+              price = 10,                               // 成交價 (double)
+              origLots = 4,                             // 原始口數 (int)
+              tradableLot = 4,                          // 可交易口數 (int)
+              orderType = New,                          // 委託別 (FutOptOrderType)
+              currency = TWD,                           // 幣別 (string)
+              marketPrice = 4.6,                        // 即時價 (string)
+              initialMargin = 0.0,                      // 原始保證金 (double)
+              maintenanceMargin = 0.0,                  // 維持保證金 (double)
+              clearingMargin = 0.0,                     // 結算保證金 (double)
+              initialMarginAllSingle = 0.0,             // 原始保證金 (double)
+              optValue = 920.0,                         // 選擇權市值 (double)
+              optLongValue = 920.0,                     // 選擇權買進市值 (double)
+              optShortValue = 0.0,                      // 選擇權賣出市值 (double)
+              profitOrLoss = -1080.0,                   // 部位損益 (double)
+              premium = 0.0,                            // 權利金 (double)
+              spreads = ,                               // 複式部位 (SpreadPosition[])
+          },
+          HybridPosition {
+              date = 2024/04/08,                        // 部位建立日期 (string)
+              branchNo = 15901,                         // 分公司代號 (string)
+              account = 1234567,                        // 帳號 (string)
+              isSpread = false,                         // 是否為複式部位 (boolean)
+              positionKind = 2,                         // 部位種類 : `1` 期貨、`2` 選擇權 (int)
+              symbol = TXO,                             // 商品代號 (string)
+              expiryDate = 202404,                      // 履約日 (string)
+              strikePrice = 20000,                     // 履約價 (double)
+              callPut = Call,                           // 權利別 (CallPut)
+              buySell = Buy,                            // 買賣別 (BsAction)
+              price = 500,                              // 成交價 (double)
+              origLots = 2,                             // 原始口數 (int)
+              tradableLot = 2,                          // 可交易口數 (int)
+              orderType = New,                          // 委託別 (FutOptOrderType)
+              currency = TWD,                           // 幣別 (string)
+              marketPrice = 430,                        // 即時價 (string)
+              initialMargin = 0.0,                      // 原始保證金 (double)
+              maintenanceMargin = 0.0,                  // 維持保證金 (double)
+              clearingMargin = 0.0,                     // 結算保證金 (double)
+              initialMarginAllSingle = 0.0,             // 原始保證金 (double)
+              optValue = 43000.0,                       // 選擇權市值 (double)
+              optLongValue = 43000.0,                   // 選擇權買進市值 (double)
+              optShortValue = 0.0,                      // 選擇權賣出市值 (double)
+              profitOrLoss = -7000.0,                   // 部位損益 (double)
+              premium = 0.0,                            // 權利金 (double)
+              spreads = ,                           // 複式部位 (SpreadPosition[])
+          },
+          HybridPosition {
+              date = 2024/04/08,                       // 部位建立日期 (string)
+              branchNo = 15901,                         // 分公司代號 (string)
+              account = 1234567,                        // 帳號 (string)
+              isSpread = false,                         // 是否為複式部位 (boolean)
+              positionKind = 2,                         // 部位種類 (int)
+              symbol = TXO,                             // 商品代號 (string)
+              expiryDate = 202404,                      // 履約日 (string)
+              strikePrice = 20000,                     // 履約價 (double)
+              callPut = Put,                            // 權利別 (CallPut)
+              buySell = Buy,                            // 買賣別 (BsAction)
+              price = 344,                              // 成交價 (double)
+              origLots = 2,                             // 原始口數 (int)
+              tradableLot = 2,                          // 可交易口數 (int)
+              orderType = New,                          // 委託別 (FutOptOrderType)
+              currency = TWD,                           // 幣別 (string)
+              marketPrice = 82,                         // 即時價 (string)
+              initialMargin = 0.0,                      // 原始保證金 (double)
+              maintenanceMargin = 0.0,                  // 維持保證金 (double)
+              clearingMargin = 0.0,                     // 結算保證金 (double)
+              initialMarginAllSingle = 0.0,             // 原始保證金 (double)
+              optValue = 8200.0,                        // 選擇權市值 (double)
+              optLongValue = 8200.0,                    // 選擇權買進市值 (double)
+              optShortValue = 0.0,                      // 選擇權賣出市值 (double)
+              profitOrLoss = -26200.0,                  // 部位損益 (double)
+              premium = 0.0,                            // 權利金 (double)
+              spreads = ,                                // 複式部位 (SpreadPosition[])
+          },
+          HybridPosition {
+              date = 2024/04/08,                       // 部位建立日期 (string)
+              branchNo = 15901,                         // 分公司代號 (string)
+              account = 1234567,                        // 帳號 (string)
+              isSpread = true,                          // 是否為複式部位 (boolean)
+              positionKind = 2,                         // 部位種類 (int)
+              symbol = TXO20100D4:20000P4,              // 商品代號 (string)
+              expiryDate = 1,                           // 履約日 (string)
+              strikePrice = 1,                          // 履約價 (double)
+              callPut = ,                           // 權利別 (CallPut)
+              buySell = Buy,                            // 買賣別 (BsAction)
+              price = ,                             // 成交價 (double)
+              origLots = 2,                             // 原始口數 (int)
+              tradableLot = 2,                          // 可交易口數 (int)
+              orderType = New,                          // 委託別 (FutOptOrderType)
+              currency = TWD,                           // 幣別 (string)
+              marketPrice = 0.0,                        // 即時價 (string)
+              initialMargin = 0.0,                      // 原始保證金 (double)
+              maintenanceMargin = 0.0,                  // 維持保證金 (double)
+              clearingMargin = 0.0,                     // 結算保證金 (double)
+              initialMarginAllSingle = 0.0,             // 原始保證金 (double)
+              optValue = 0.0,                           // 選擇權市值 (double)
+              optLongValue = 0.0,                       // 選擇權買進市值 (double)
+              optShortValue = 0.0,                      // 選擇權賣出市值 (double)
+              profitOrLoss = 0.0,                       // 部位損益 (double)
+              premium = 0.0,                            // 權利金 (double)
+              spreads = [                               // 複式部位 (SpreadPosition[])
+                  SpreadPosition {
+                      date = 2024/04/08,             // 部位建立日期 (string)
+                      branchNo = 15901,               // 分公司代號 (string)
+                      account = 1234567,              // 帳號 (string)
+                      positionKind = 2,                // 部位種類 (int)
+                      symbol = TXO,                    // 商品代號 (string)
+                      expiryDate = 202404,             // 履約日 (string)
+                      strikePrice = 20100,            // 履約價 (double)
+                      callPut = Call,                  // 權利別 (CallPut)
+                      buySell = Buy,                   // 買賣別 (BsAction)
+                      price = 185,                     // 成交價 (double)
+                      origLots = 2,                    // 原始口數 (int)
+                      tradableLot = 2,                 // 可交易口數 (int)
+                      orderType = ,                // 委託別 (FutOptOrderType)
+                      currency = TWD,                  // 幣別 (string)
+                      marketPrice = 365,               // 即時價 (string)
+                      initialMargin = 0.0,             // 原始保證金 (double)
+                      maintenanceMargin = 0.0,         // 維持保證金 (double)
+                      clearingMargin = 0.0,            // 結算保證金 (double)
+                      initialMarginAllSingle = 0.0,    // 原始保證金 (double)
+                      optValue = 36500.0,              // 選擇權市值 (double)
+                      optLongValue = 36500.0,          // 選擇權買進市值 (double)
+                      optShortValue = 0.0,             // 選擇權賣出市值 (double)
+                      profitOrLoss = 18000.0,          // 部位損益 (double)
+                      premium = 0.0,                   // 權利金 (double)
+                  },
+                  SpreadPosition {
+                      date = 2024/04/08,               // 部位建立日期 (string)
+                      branchNo = 15901,                // 分公司代號 (string)
+                      account = 1234567,               // 帳號 (string)
+                      positionKind = 2,                // 部位種類 (int)
+                      symbol = TXO,                    // 商品代號 (string)
+                      expiryDate = 202404,             // 履約日 (string)
+                      strikePrice = 20000,            // 履約價 (double)
+                      callPut = Put,                   // 權利別 (CallPut)
+                      buySell = Buy,                   // 買賣別 (BsAction)
+                      price = 354,                     // 成交價 (double)
+                      origLots = 2,                    // 原始口數 (int)
+                      tradableLot = 2,                 // 可交易口數 (int)
+                      orderType = ,                // 委託別 (FutOptOrderType)
+                      currency = TWD,                  // 幣別 (string)
+                      marketPrice = 82,                // 即時價 (string)
+                      initialMargin = 0.0,             // 原始保證金 (double)
+                      maintenanceMargin = 0.0,         // 維持保證金 (double)
+                      clearingMargin = 0.0,            // 結算保證金 (double)
+                      initialMarginAllSingle = 0.0,    // 原始保證金 (double)
+                      optValue = 8200.0,               // 選擇權市值 (double)
+                      optLongValue = 8200.0,           // 選擇權買進市值 (double)
+                      optShortValue = 0.0,             // 選擇權賣出市值 (double)
+                      profitOrLoss = -27200.0,         // 部位損益 (double)
+                      premium = 0.0,                   // 權利金 (double)
+                  },
+              ],
+          }
+      ]
+}
+
+```
