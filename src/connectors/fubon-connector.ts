@@ -22,6 +22,7 @@ const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
 type GatewayEventListener = (event: FubonGatewayEvent) => void;
 type GatewayExitListener = (error: Error) => void;
 type DisconnectListener = () => void;
+type Logger = Pick<Console, "info">;
 
 export interface FubonGateway {
   readonly isRunning: boolean;
@@ -269,6 +270,7 @@ export class FubonConnector implements Connector {
   constructor(
     private readonly credentials: FubonCredentials,
     private readonly gateway: FubonGateway = new FubonGatewayClient(),
+    private readonly logger: Logger = console,
   ) {
     this.gateway.onExit(() => this.markDisconnected());
     this.gateway.onEvent((event) => {
@@ -292,7 +294,7 @@ export class FubonConnector implements Connector {
     }
 
     await this.gateway.start();
-    const result = await this.gateway.request("login", {
+    await this.gateway.request("login", {
       credentials: this.credentials,
     });
 
@@ -300,8 +302,10 @@ export class FubonConnector implements Connector {
       throw new Error("Fubon gateway exited during login");
     }
 
-    this.#accounts = result.accounts;
+    const accountResult = await this.gateway.request("getAccounts", {});
+    this.#accounts = accountResult.accounts;
     this.#status = "connected";
+    this.logger.info("Fubon accounts available", this.#accounts);
   }
 
   request<M extends Exclude<FubonGatewayMethod, "login" | "logout">>(

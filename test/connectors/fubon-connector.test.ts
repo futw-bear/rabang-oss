@@ -21,10 +21,15 @@ const credentials: FubonCredentials = {
   certPassword: "cert-password",
 };
 
+const noOpLogger = { info: () => {} };
+
 describe("FubonConnector", () => {
   test("logs in through the gateway and stores the accounts", async () => {
     const gateway = new FakeGateway();
-    const connector = new FubonConnector(credentials, gateway);
+    const infoLogs: unknown[][] = [];
+    const connector = new FubonConnector(credentials, gateway, {
+      info: (...arguments_) => infoLogs.push(arguments_),
+    });
 
     expect(connector.status).toBe("attempting");
 
@@ -40,12 +45,16 @@ describe("FubonConnector", () => {
       },
     ]);
     expect(gateway.loginCredentials).toEqual(credentials);
+    expect(gateway.requestedMethods).toEqual(["login", "getAccounts"]);
+    expect(infoLogs).toEqual([
+      ["Fubon accounts available", [...connector.accounts]],
+    ]);
   });
 
   test("remains attempting after a failed gateway login", async () => {
     const gateway = new FakeGateway();
     gateway.loginError = new Error("Login failed");
-    const connector = new FubonConnector(credentials, gateway);
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
 
     await expect(connector.connect()).rejects.toThrow("Login failed");
     expect(connector.status).toBe("attempting");
@@ -53,7 +62,7 @@ describe("FubonConnector", () => {
 
   test("forwards typed requests after connecting", async () => {
     const gateway = new FakeGateway();
-    const connector = new FubonConnector(credentials, gateway);
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
     await connector.connect();
 
     const result = await connector.request("getAccounts", {});
@@ -63,7 +72,7 @@ describe("FubonConnector", () => {
 
   test("returns to attempting when the gateway exits", async () => {
     const gateway = new FakeGateway();
-    const connector = new FubonConnector(credentials, gateway);
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
     let disconnects = 0;
     connector.onDisconnect(() => {
       disconnects += 1;
@@ -140,6 +149,7 @@ class FakeGateway implements FubonGateway {
   isRunning = true;
   loginCredentials: FubonCredentials | undefined;
   loginError: Error | undefined;
+  requestedMethods: FubonGatewayMethod[] = [];
   readonly accounts = [
     {
       name: "Test Account",
@@ -157,6 +167,8 @@ class FakeGateway implements FubonGateway {
     method: M,
     payload: FubonGatewayCommandMap[M]["request"],
   ): Promise<FubonGatewayCommandMap[M]["response"]> {
+    this.requestedMethods.push(method);
+
     if (method === "login") {
       this.loginCredentials = (
         payload as FubonGatewayCommandMap["login"]["request"]
