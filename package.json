@@ -3,6 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "dependencies": {
+    "fubon-neo": "file:./libs/fubon-neo-2.2.8.tgz"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
