@@ -11,12 +11,14 @@ interface OrderedProxyEndpoint {
   parameterNames: readonly string[];
   requiredParameterCount: number;
   argumentStyle: "ordered";
+  pathParameterNames?: never;
 }
 
 interface ObjectProxyEndpoint {
   httpMethod: "GET";
   target: FubonProxyTarget;
   argumentStyle: "object";
+  pathParameterNames?: readonly string[];
 }
 
 export type FubonProxyEndpoint =
@@ -68,9 +70,47 @@ function marketData(
       httpMethod: QUERY,
       target: target(service, group.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase()), sdkMethod),
       argumentStyle: "object",
+      pathParameterNames: marketDataPathParameterNames(
+        product,
+        group,
+        routeName,
+      ),
     },
   ];
 }
+
+function marketDataPathParameterNames(
+  product: "market-data" | "market-data-future",
+  group: string,
+  routeName: string,
+): readonly string[] | undefined {
+  return MARKET_DATA_PATH_PARAMETERS.get(
+    `${product}/${group}/${routeName}`,
+  );
+}
+
+const MARKET_DATA_PATH_PARAMETERS: ReadonlyMap<string, readonly string[]> =
+  new Map([
+    ["market-data/intraday/ticker", ["symbol"]],
+    ["market-data/intraday/quote", ["symbol"]],
+    ["market-data/intraday/candles", ["symbol"]],
+    ["market-data/intraday/trades", ["symbol"]],
+    ["market-data/intraday/volumes", ["symbol"]],
+    ["market-data/historical/candles", ["symbol"]],
+    ["market-data/historical/stats", ["symbol"]],
+    ["market-data/snapshot/quotes", ["market"]],
+    ["market-data/snapshot/movers", ["market"]],
+    ["market-data/snapshot/actives", ["market"]],
+    ["market-data/technical/bb", ["symbol"]],
+    ["market-data/technical/kdj", ["symbol"]],
+    ["market-data/technical/macd", ["symbol"]],
+    ["market-data/technical/rsi", ["symbol"]],
+    ["market-data/technical/sma", ["symbol"]],
+    ["market-data-future/intraday/quote", ["symbol"]],
+    ["market-data-future/intraday/candles", ["symbol"]],
+    ["market-data-future/intraday/trades", ["symbol"]],
+    ["market-data-future/intraday/volumes", ["symbol"]],
+  ]);
 
 const endpointEntries: EndpointEntry[] = [
   marketData("market-data", "marketDataStock", "intraday", "tickers"),
@@ -88,7 +128,7 @@ const endpointEntries: EndpointEntry[] = [
   marketData("market-data", "marketDataStock", "technical", "rsi"),
   marketData("market-data", "marketDataStock", "technical", "kdj"),
   marketData("market-data", "marketDataStock", "technical", "macd"),
-  marketData("market-data", "marketDataStock", "technical", "bbands", "bb"),
+  marketData("market-data", "marketDataStock", "technical", "bb", "bb"),
   marketData("market-data", "marketDataStock", "corporate-actions", "capital-changes", "capitalChanges"),
   marketData("market-data", "marketDataStock", "corporate-actions", "dividends"),
   marketData("market-data", "marketDataStock", "corporate-actions", "listing-applicants", "listingApplicants"),
@@ -188,3 +228,46 @@ endpointEntries.push(
 
 export const FUBON_PROXY_ENDPOINTS: ReadonlyMap<string, FubonProxyEndpoint> =
   new Map(endpointEntries);
+
+export interface MatchedFubonProxyEndpoint {
+  endpoint: FubonProxyEndpoint;
+  pathParameters: Record<string, string>;
+}
+
+export function matchFubonProxyEndpoint(
+  pathname: string,
+): MatchedFubonProxyEndpoint | undefined {
+  const exactEndpoint = FUBON_PROXY_ENDPOINTS.get(pathname);
+  if (exactEndpoint) {
+    return { endpoint: exactEndpoint, pathParameters: {} };
+  }
+
+  const pathnameSegments = pathname.split("/").filter(Boolean);
+
+  for (const [basePath, endpoint] of FUBON_PROXY_ENDPOINTS) {
+    if (!endpoint.pathParameterNames) {
+      continue;
+    }
+
+    const basePathSegments = basePath.split("/").filter(Boolean);
+    if (
+      pathnameSegments.length !==
+        basePathSegments.length + endpoint.pathParameterNames.length ||
+      !basePathSegments.every(
+        (segment, index) => pathnameSegments[index] === segment,
+      )
+    ) {
+      continue;
+    }
+
+    const pathParameters = Object.fromEntries(
+      endpoint.pathParameterNames.map((name, index) => [
+        name,
+        decodeURIComponent(pathnameSegments[basePathSegments.length + index] ?? ""),
+      ]),
+    );
+    return { endpoint, pathParameters };
+  }
+
+  return undefined;
+}

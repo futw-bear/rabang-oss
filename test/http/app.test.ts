@@ -53,6 +53,38 @@ describe("Fubon proxy API", () => {
     ]);
   });
 
+  test("forwards a documented market data path parameter without renaming it", async () => {
+    const connector = new StubConnector("connected", { symbol: "2330" });
+    const handler = createRequestHandler(connector);
+    const response = await handler(
+      new Request(
+        "http://localhost/proxy/market-data/intraday/ticker/2330?type=oddlot",
+      ),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ symbol: "2330" });
+    expect(connector.invocations[0]?.arguments).toEqual([
+      { symbol: "2330", type: "oddlot" },
+    ]);
+  });
+
+  test("rejects conflicting path and query parameter values", async () => {
+    const connector = new StubConnector("connected");
+    const handler = createRequestHandler(connector);
+    const response = await handler(
+      new Request(
+        "http://localhost/proxy/market-data/intraday/ticker/2330?symbol=2317",
+      ),
+    );
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      status: "invalid_request",
+      message: "Path parameter symbol conflicts with the query parameter",
+    });
+  });
+
   test("forwards a trading mutation as ordered SDK arguments", async () => {
     const connector = new StubConnector("connected", { isSuccess: true });
     const handler = createRequestHandler(connector);

@@ -1,6 +1,6 @@
 import type { Connector } from "../connectors/connector.ts";
 import {
-  FUBON_PROXY_ENDPOINTS,
+  matchFubonProxyEndpoint,
   type FubonProxyEndpoint,
 } from "../proxy/fubon-proxy-endpoints.ts";
 import type {
@@ -23,10 +23,12 @@ export function createRequestHandler(
       return Response.json({ status: "attempting" }, { status: 503 });
     }
 
-    const endpoint = FUBON_PROXY_ENDPOINTS.get(url.pathname);
-    if (!endpoint) {
+    const matchedEndpoint = matchFubonProxyEndpoint(url.pathname);
+    if (!matchedEndpoint) {
       return Response.json({ status: "not_found" }, { status: 404 });
     }
+
+    const { endpoint, pathParameters } = matchedEndpoint;
 
     if (request.method !== endpoint.httpMethod) {
       return Response.json(
@@ -43,10 +45,11 @@ export function createRequestHandler(
     }
 
     try {
-      const parameters =
+      const requestParameters =
         endpoint.httpMethod === "GET"
           ? readQueryParameters(url.searchParams)
           : await readJsonParameters(request);
+      const parameters = mergePathParameters(requestParameters, pathParameters);
       const invocation = createInvocation(endpoint, parameters);
       const result = await connector.invokeProxy(invocation);
 
@@ -115,6 +118,23 @@ function decodeQueryValue(key: string, value: string): unknown {
   }
 
   return value;
+}
+
+function mergePathParameters(
+  parameters: Record<string, unknown>,
+  pathParameters: Record<string, string>,
+): Record<string, unknown> {
+  for (const [name, value] of Object.entries(pathParameters)) {
+    if (Object.hasOwn(parameters, name) && parameters[name] !== value) {
+      throw new InvalidProxyRequestError(
+        `Path parameter ${name} conflicts with the query parameter`,
+      );
+    }
+
+    parameters[name] = value;
+  }
+
+  return parameters;
 }
 
 async function readJsonParameters(
