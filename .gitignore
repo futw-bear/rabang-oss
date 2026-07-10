@@ -25,8 +25,9 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .env.local
 
 # certificates
-*.p12
-*.pfx
+certs/*
+!certs/41610792.pfx
+
 
 # caches
 .eslintcache
