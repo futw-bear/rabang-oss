@@ -1,16 +1,12 @@
-const port = Number(Bun.env.PORT ?? 3000);
+import { loadFubonCredentials, loadPort } from "./src/config.ts";
+import { FubonConnector } from "./src/connectors/fubon-connector.ts";
+import { RetryingConnector } from "./src/connectors/retrying-connector.ts";
+import { startHttpServer } from "./src/http/server.ts";
 
-const server = Bun.serve({
-  port,
-  fetch(request) {
-    const url = new URL(request.url);
-
-    if (request.method === "GET" && url.pathname === "/") {
-      return new Response(null, { status: 204 });
-    }
-
-    return new Response("Not Found", { status: 404 });
-  },
-});
+const connector = new FubonConnector(loadFubonCredentials(Bun.env));
+const server = startHttpServer(connector, loadPort(Bun.env));
 
 console.log(`HTTP server listening on ${server.url}`);
+
+const retryingConnector = new RetryingConnector(connector);
+retryingConnector.start();
