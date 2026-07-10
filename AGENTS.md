@@ -14,4 +14,5 @@ Rabang OSS is an open-source aggregator for securities APIs and SDKs provided by
 - Name every branch using the `FUTW-{code}/{feature_name} format.
 - Follow the Conventional Commits for all Git commit messages.
 - Write all project code, including comments, documentations, in English.
+- Write pull request title formats `[FUTW-{code}] {feature_name}` in English, and descriptions in Traditional Chinese.
 - Do not update `README.md` or `AGENTS.md` unless the change is necessary for user-facing project documentation.
