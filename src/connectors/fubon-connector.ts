@@ -1,4 +1,5 @@
 import type { Connector, ConnectorStatus } from "./connector.ts";
+import type { FubonProxyInvocation } from "../proxy/fubon-proxy-types.ts";
 import {
   isFubonGatewayMessage,
   type FubonAccount,
@@ -317,6 +318,10 @@ export class FubonConnector implements Connector {
     }
 
     return this.gateway.request(method, payload);
+  }
+
+  invokeProxy(invocation: FubonProxyInvocation): Promise<unknown> {
+    return this.request("invoke", invocation);
   }
 
   onDisconnect(listener: DisconnectListener): () => void {

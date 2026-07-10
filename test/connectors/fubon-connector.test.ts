@@ -70,6 +70,28 @@ describe("FubonConnector", () => {
     expect(result.accounts).toEqual([...connector.accounts]);
   });
 
+  test("forwards proxy invocations after connecting", async () => {
+    const gateway = new FakeGateway();
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
+    await connector.connect();
+
+    const invocation = {
+      target: {
+        service: "marketDataStock" as const,
+        methodPath: ["intraday", "ticker"],
+      },
+      arguments: [{ symbol: "2330" }],
+    };
+    await connector.invokeProxy(invocation);
+
+    expect(gateway.proxyInvocation).toEqual(invocation);
+    expect(gateway.requestedMethods).toEqual([
+      "login",
+      "getAccounts",
+      "invoke",
+    ]);
+  });
+
   test("returns to attempting when the gateway exits", async () => {
     const gateway = new FakeGateway();
     const connector = new FubonConnector(credentials, gateway, noOpLogger);
@@ -149,6 +171,7 @@ class FakeGateway implements FubonGateway {
   isRunning = true;
   loginCredentials: FubonCredentials | undefined;
   loginError: Error | undefined;
+  proxyInvocation: FubonGatewayCommandMap["invoke"]["request"] | undefined;
   requestedMethods: FubonGatewayMethod[] = [];
   readonly accounts = [
     {
@@ -181,6 +204,11 @@ class FakeGateway implements FubonGateway {
 
     if (method === "logout") {
       return { success: true } as FubonGatewayCommandMap[M]["response"];
+    }
+
+    if (method === "invoke") {
+      this.proxyInvocation = payload as FubonGatewayCommandMap["invoke"]["request"];
+      return { ok: true } as FubonGatewayCommandMap[M]["response"];
     }
 
     return { accounts: this.accounts } as FubonGatewayCommandMap[M]["response"];

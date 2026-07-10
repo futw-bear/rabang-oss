@@ -1,3 +1,5 @@
+import type { FubonProxyInvocation } from "../proxy/fubon-proxy-types.ts";
+
 export interface FubonAccount {
   name: string;
   branchNo: string;
@@ -38,6 +40,10 @@ export interface FubonGatewayCommandMap {
   logout: {
     request: Record<string, never>;
     response: { success: boolean };
+  };
+  invoke: {
+    request: FubonProxyInvocation;
+    response: unknown;
   };
 }
 
@@ -100,7 +106,8 @@ export function isFubonGatewayRequest(
     typeof request.id === "string" &&
     (request.method === "login" ||
       request.method === "getAccounts" ||
-      request.method === "logout") &&
+      request.method === "logout" ||
+      request.method === "invoke") &&
     typeof request.payload === "object" &&
     request.payload !== null
   );

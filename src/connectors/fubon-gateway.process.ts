@@ -6,6 +6,7 @@ import {
   type FubonGatewayEvent,
   type FubonGatewayResponse,
 } from "./fubon-gateway-protocol.ts";
+import type { FubonProxyTarget } from "../proxy/fubon-proxy-types.ts";
 
 let sdk: FubonSDK | undefined;
 let accounts: Account[] = [];
@@ -17,13 +18,13 @@ process.on("message", (message: unknown) => {
     return;
   }
 
-  handleRequest(message);
+  void handleRequest(message);
 });
 process.on("disconnect", shutdown);
 
 process.send?.({ type: "ready" });
 
-function handleRequest(request: AnyFubonGatewayRequest): void {
+async function handleRequest(request: AnyFubonGatewayRequest): Promise<void> {
   try {
     switch (request.method) {
       case "login":
@@ -35,6 +36,15 @@ function handleRequest(request: AnyFubonGatewayRequest): void {
         return;
       case "logout":
         sendSuccess(request.id, { success: logout() });
+        return;
+      case "invoke":
+        sendSuccess(
+          request.id,
+          await invokeProxy(
+            request.payload.target,
+            request.payload.arguments,
+          ),
+        );
         return;
     }
   } catch (error) {
@@ -69,6 +79,7 @@ function login(credentials: FubonCredentials): { accounts: Account[] } {
   }
 
   accounts = result.data ?? [];
+  sdk.initRealtime();
   sdk.setOnEvent((code, message) => {
     const event: FubonGatewayEvent = {
       type: "event",
@@ -79,6 +90,67 @@ function login(credentials: FubonCredentials): { accounts: Account[] } {
   });
 
   return { accounts };
+}
+
+async function invokeProxy(
+  target: FubonProxyTarget,
+  arguments_: unknown[],
+): Promise<unknown> {
+  ensureConnected();
+
+  if (!sdk) {
+    throw new Error("Fubon SDK is not connected");
+  }
+
+  let receiver: unknown;
+
+  switch (target.service) {
+    case "stock":
+      receiver = sdk.stock;
+      break;
+    case "accounting":
+      receiver = sdk.accounting;
+      break;
+    case "futopt":
+      receiver = sdk.futopt;
+      break;
+    case "futoptAccounting":
+      receiver = sdk.futoptAccounting;
+      break;
+    case "marketDataStock":
+      receiver = sdk.marketdata.restClient.stock;
+      break;
+    case "marketDataFutopt":
+      receiver = sdk.marketdata.restClient.futopt;
+      break;
+  }
+
+  for (const segment of target.methodPath.slice(0, -1)) {
+    receiver = readProperty(receiver, segment);
+  }
+
+  const methodName = target.methodPath.at(-1);
+  if (!methodName) {
+    throw new Error("Fubon proxy target has no method");
+  }
+
+  const method = readProperty(receiver, methodName);
+  if (typeof method !== "function") {
+    throw new Error(`Fubon proxy target is not callable: ${methodName}`);
+  }
+
+  return await method.apply(receiver, arguments_);
+}
+
+function readProperty(value: unknown, property: string): unknown {
+  if (
+    (typeof value !== "object" && typeof value !== "function") ||
+    value === null
+  ) {
+    throw new Error(`Fubon proxy target is unavailable: ${property}`);
+  }
+
+  return Reflect.get(value, property);
 }
 
 function logout(): boolean {
