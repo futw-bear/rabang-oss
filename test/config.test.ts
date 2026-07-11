@@ -114,14 +114,14 @@ describe("loadFubonOfflineRecoveryStrategy", () => {
   test("defaults to retrying a login in the existing gateway", () => {
     expect(loadFubonOfflineRecoveryStrategy({})).toBe("relogin");
     expect(
-      loadFubonOfflineRecoveryStrategy({ FUBON_GATEWAY_RECOVERY: "relogin" }),
+      loadFubonOfflineRecoveryStrategy({ SERVER_GATEWAY_RECOVERY: "relogin" }),
     ).toBe("relogin");
   });
 
   test("supports restarting the gateway process", () => {
     expect(
       loadFubonOfflineRecoveryStrategy({
-        FUBON_GATEWAY_RECOVERY: "restart-gateway",
+        SERVER_GATEWAY_RECOVERY: "restart-gateway",
       }),
     ).toBe("restartGateway");
   });
@@ -129,8 +129,8 @@ describe("loadFubonOfflineRecoveryStrategy", () => {
   test("rejects unsupported strategies", () => {
     expect(() =>
       loadFubonOfflineRecoveryStrategy({
-        FUBON_GATEWAY_RECOVERY: "unsupported",
+        SERVER_GATEWAY_RECOVERY: "unsupported",
       }),
-    ).toThrow("Invalid FUBON_GATEWAY_RECOVERY");
+    ).toThrow("Invalid SERVER_GATEWAY_RECOVERY");
   });
 });

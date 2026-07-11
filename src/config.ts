@@ -70,7 +70,7 @@ export function loadPort(environment: Environment): number {
 export function loadFubonOfflineRecoveryStrategy(
   environment: Environment,
 ): FubonOfflineRecoveryStrategy {
-  const strategy = environment.FUBON_GATEWAY_RECOVERY ?? "relogin";
+  const strategy = environment.SERVER_GATEWAY_RECOVERY ?? "relogin";
 
   if (strategy === "relogin") {
     return "relogin";
@@ -81,7 +81,7 @@ export function loadFubonOfflineRecoveryStrategy(
   }
 
   throw new Error(
-    `Invalid FUBON_GATEWAY_RECOVERY: ${strategy}; expected relogin or restart-gateway`,
+    `Invalid SERVER_GATEWAY_RECOVERY: ${strategy}; expected relogin or restart-gateway`,
   );
 }
 
