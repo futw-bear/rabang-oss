@@ -107,6 +107,67 @@ describe("FubonConnector", () => {
     expect(connector.accounts).toEqual([]);
     expect(disconnects).toBe(1);
   });
+
+  test("uses RetryingConnector login recovery after a heartbeat timeout by default", async () => {
+    const gateway = new FakeGateway();
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
+    let disconnects = 0;
+    connector.onDisconnect(() => {
+      disconnects += 1;
+    });
+    await connector.connect();
+
+    gateway.emitEvent({
+      type: "event",
+      event: "marketDataHeartbeatTimeout",
+      data: { timeoutMs: 60_000 },
+    });
+    await Bun.sleep(0);
+
+    expect(connector.status).toBe("attempting");
+    expect(disconnects).toBe(1);
+    expect(gateway.closeCalls).toBe(0);
+  });
+
+  test("restarts the gateway process after a heartbeat timeout when configured", async () => {
+    const gateway = new FakeGateway();
+    const connector = new FubonConnector(
+      credentials,
+      gateway,
+      noOpLogger,
+      "restartGateway",
+    );
+    let disconnects = 0;
+    connector.onDisconnect(() => {
+      disconnects += 1;
+    });
+    await connector.connect();
+
+    gateway.emitEvent({
+      type: "event",
+      event: "marketDataHeartbeatTimeout",
+      data: { timeoutMs: 60_000 },
+    });
+    await Bun.sleep(0);
+
+    expect(gateway.closeCalls).toBe(1);
+    expect(connector.status).toBe("attempting");
+    expect(disconnects).toBe(1);
+  });
+
+  test("does not use trading socket events for offline detection", async () => {
+    const gateway = new FakeGateway();
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
+    await connector.connect();
+
+    gateway.emitEvent({
+      type: "event",
+      event: "sdk",
+      data: { code: "300", message: "Trading socket disconnected" },
+    });
+
+    expect(connector.status).toBe("connected");
+  });
 });
 
 describe("FubonGatewayClient", () => {
@@ -169,6 +230,7 @@ describe("FubonGatewayClient", () => {
 
 class FakeGateway implements FubonGateway {
   isRunning = true;
+  closeCalls = 0;
   loginCredentials: FubonCredentials | undefined;
   loginError: Error | undefined;
   proxyInvocation: FubonGatewayCommandMap["invoke"]["request"] | undefined;
@@ -224,7 +286,16 @@ class FakeGateway implements FubonGateway {
     return () => this.#exitListeners.delete(listener);
   }
 
-  async close(): Promise<void> {}
+  async close(): Promise<void> {
+    this.closeCalls += 1;
+    this.isRunning = false;
+  }
+
+  emitEvent(event: FubonGatewayEvent): void {
+    for (const listener of this.#eventListeners) {
+      listener(event);
+    }
+  }
 
   emitExit(error: Error): void {
     for (const listener of this.#exitListeners) {

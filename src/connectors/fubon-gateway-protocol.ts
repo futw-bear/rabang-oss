@@ -103,6 +103,11 @@ export type FubonGatewayEvent =
       type: "event";
       event: "marketDataWebSocket";
       data: MarketDataWebSocketMessage;
+    }
+  | {
+      type: "event";
+      event: "marketDataHeartbeatTimeout";
+      data: { timeoutMs: number };
     };
 
 export type FubonGatewayReady = { type: "ready" };
@@ -161,12 +166,24 @@ export function isFubonGatewayMessage(
 
   if (message.type === "event") {
     const event = message as FubonGatewayEvent;
-    return event.event === "sdk"
-      ? typeof event.data?.code === "string" &&
-          typeof event.data.message === "string"
-      : event.event === "marketDataWebSocket" &&
-          typeof event.data?.id === "string" &&
-          typeof event.data.message === "string";
+    if (event.event === "sdk") {
+      return (
+        typeof event.data?.code === "string" &&
+        typeof event.data.message === "string"
+      );
+    }
+
+    if (event.event === "marketDataWebSocket") {
+      return (
+        typeof event.data?.id === "string" &&
+        typeof event.data.message === "string"
+      );
+    }
+
+    return (
+      event.event === "marketDataHeartbeatTimeout" &&
+      typeof event.data?.timeoutMs === "number"
+    );
   }
 
   return false;

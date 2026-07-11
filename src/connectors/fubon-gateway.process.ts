@@ -8,10 +8,16 @@ import {
 } from "./fubon-gateway-protocol.ts";
 import type { FubonProxyTarget } from "../proxy/fubon-proxy-types.ts";
 import type { MarketDataWebSocketMode } from "../proxy/fubon-proxy-types.ts";
+import {
+  isMarketDataHeartbeat,
+  MARKET_DATA_HEARTBEAT_TIMEOUT_MS,
+  MarketDataHeartbeatWatchdog,
+} from "./market-data-heartbeat.ts";
 
 let sdk: FubonSDK | undefined;
 let accounts: Account[] = [];
 const marketDataWebSockets = new Map<string, MarketDataWebSocketSession>();
+let heartbeatSession: MarketDataHeartbeatSession | undefined;
 
 const TEST_ENVIRONMENT_URL = "wss://neoapitest.fbs.com.tw/TASP/XCPXWS";
 
@@ -30,7 +36,7 @@ async function handleRequest(request: AnyFubonGatewayRequest): Promise<void> {
   try {
     switch (request.method) {
       case "login":
-        sendSuccess(request.id, login(request.payload.credentials));
+        sendSuccess(request.id, await login(request.payload.credentials));
         return;
       case "getAccounts":
         ensureConnected();
@@ -69,7 +75,9 @@ async function handleRequest(request: AnyFubonGatewayRequest): Promise<void> {
   }
 }
 
-function login(credentials: FubonCredentials): { accounts: Account[] } {
+async function login(
+  credentials: FubonCredentials,
+): Promise<{ accounts: Account[] }> {
   logout();
   sdk = credentials.testEnvironment
     ? new FubonSDK(30, 2, TEST_ENVIRONMENT_URL)
@@ -96,7 +104,6 @@ function login(credentials: FubonCredentials): { accounts: Account[] } {
   }
 
   accounts = result.data ?? [];
-  sdk.initRealtime();
   sdk.setOnEvent((code, message) => {
     const event: FubonGatewayEvent = {
       type: "event",
@@ -105,6 +112,12 @@ function login(credentials: FubonCredentials): { accounts: Account[] } {
     };
     process.send?.(event);
   });
+  try {
+    await openMarketDataHeartbeatConnection();
+  } catch (error) {
+    logout();
+    throw error;
+  }
 
   return { accounts };
 }
@@ -171,6 +184,7 @@ function readProperty(value: unknown, property: string): unknown {
 }
 
 function logout(): boolean {
+  closeMarketDataHeartbeatConnection();
   closeAllMarketDataWebSockets();
 
   if (!sdk) {
@@ -187,7 +201,7 @@ function logout(): boolean {
 
 interface MarketDataWebSocketClient {
   connect(): Promise<unknown>;
-  disconnect(): void;
+  disconnect(): unknown;
   on(event: "message", listener: (message: unknown) => void): void;
   off(event: "message", listener: (message: unknown) => void): void;
   subscribe(params: { channel: string; [key: string]: unknown }): void;
@@ -196,10 +210,61 @@ interface MarketDataWebSocketClient {
   subscriptions(): void;
 }
 
+interface MarketDataHeartbeatSession {
+  client: MarketDataWebSocketClient;
+  listener: (message: unknown) => void;
+  watchdog: MarketDataHeartbeatWatchdog;
+}
+
 interface MarketDataWebSocketSession {
   client: MarketDataWebSocketClient;
   listener: (message: unknown) => void;
   ready: Promise<unknown>;
+}
+
+async function openMarketDataHeartbeatConnection(): Promise<void> {
+  if (!sdk) {
+    throw new Error("Fubon SDK is not connected");
+  }
+
+  sdk.initRealtime();
+  const client = sdk.marketdata.webSocketClient.stock as MarketDataWebSocketClient;
+  const watchdog = new MarketDataHeartbeatWatchdog(() => {
+    const event: FubonGatewayEvent = {
+      type: "event",
+      event: "marketDataHeartbeatTimeout",
+      data: { timeoutMs: MARKET_DATA_HEARTBEAT_TIMEOUT_MS },
+    };
+    process.send?.(event);
+  });
+  const listener = (message: unknown) => {
+    if (isMarketDataHeartbeat(message)) {
+      watchdog.heartbeat();
+    }
+  };
+
+  client.on("message", listener);
+  heartbeatSession = { client, listener, watchdog };
+
+  try {
+    await client.connect();
+    watchdog.start();
+  } catch (error) {
+    closeMarketDataHeartbeatConnection();
+    throw error;
+  }
+}
+
+function closeMarketDataHeartbeatConnection(): void {
+  if (!heartbeatSession) {
+    return;
+  }
+
+  const { client, listener, watchdog } = heartbeatSession;
+  heartbeatSession = undefined;
+  watchdog.stop();
+  client.off("message", listener);
+  void client.disconnect();
 }
 
 async function openMarketDataWebSocket(
@@ -212,7 +277,7 @@ async function openMarketDataWebSocket(
     throw new Error("Fubon SDK is not connected");
   }
 
-  if (marketDataWebSockets.size >= 5) {
+  if (marketDataWebSockets.size >= 4) {
     throw new Error("Fubon market data WebSocket connection limit reached");
   }
 

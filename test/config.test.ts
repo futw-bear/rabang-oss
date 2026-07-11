@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { loadFubonCredentials, loadPort } from "../src/config.ts";
+import {
+  loadFubonCredentials,
+  loadFubonOfflineRecoveryStrategy,
+  loadPort,
+} from "../src/config.ts";
 
 describe("loadFubonCredentials", () => {
   test("loads password credentials and defaults the certificate password", () => {
@@ -103,5 +107,30 @@ describe("loadPort", () => {
 
   test("rejects invalid ports", () => {
     expect(() => loadPort({ PORT: "invalid" })).toThrow("Invalid PORT");
+  });
+});
+
+describe("loadFubonOfflineRecoveryStrategy", () => {
+  test("defaults to retrying a login in the existing gateway", () => {
+    expect(loadFubonOfflineRecoveryStrategy({})).toBe("relogin");
+    expect(
+      loadFubonOfflineRecoveryStrategy({ FUBON_GATEWAY_RECOVERY: "relogin" }),
+    ).toBe("relogin");
+  });
+
+  test("supports restarting the gateway process", () => {
+    expect(
+      loadFubonOfflineRecoveryStrategy({
+        FUBON_GATEWAY_RECOVERY: "restart-gateway",
+      }),
+    ).toBe("restartGateway");
+  });
+
+  test("rejects unsupported strategies", () => {
+    expect(() =>
+      loadFubonOfflineRecoveryStrategy({
+        FUBON_GATEWAY_RECOVERY: "unsupported",
+      }),
+    ).toThrow("Invalid FUBON_GATEWAY_RECOVERY");
   });
 });

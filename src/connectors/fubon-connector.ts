@@ -30,6 +30,8 @@ type DisconnectListener = () => void;
 type MarketDataWebSocketListener = (message: MarketDataWebSocketMessage) => void;
 type Logger = Pick<Console, "info">;
 
+export type FubonOfflineRecoveryStrategy = "relogin" | "restartGateway";
+
 export interface FubonGateway {
   readonly isRunning: boolean;
   start(): Promise<void>;
@@ -278,11 +280,17 @@ export class FubonConnector implements Connector {
     private readonly credentials: FubonCredentials,
     private readonly gateway: FubonGateway = new FubonGatewayClient(),
     private readonly logger: Logger = console,
+    private readonly offlineRecoveryStrategy: FubonOfflineRecoveryStrategy =
+      "relogin",
   ) {
     this.gateway.onExit(() => this.markDisconnected());
     this.gateway.onEvent((event) => {
-      if (event.event === "sdk" && event.data.code === "300") {
-        this.markDisconnected();
+      if (event.event === "marketDataHeartbeatTimeout") {
+        this.logger.info("Fubon market data heartbeat timed out", {
+          timeoutMs: event.data.timeoutMs,
+          recoveryStrategy: this.offlineRecoveryStrategy,
+        });
+        void this.recoverFromOfflineGateway();
       }
 
       if (event.event === "marketDataWebSocket") {
@@ -382,6 +390,23 @@ export class FubonConnector implements Connector {
     for (const listener of this.#disconnectListeners) {
       listener();
     }
+  }
+
+  private async recoverFromOfflineGateway(): Promise<void> {
+    if (this.#status === "attempting") {
+      return;
+    }
+
+    if (this.offlineRecoveryStrategy === "restartGateway") {
+      try {
+        await this.gateway.close();
+      } finally {
+        this.markDisconnected();
+      }
+      return;
+    }
+
+    this.markDisconnected();
   }
 }
 
