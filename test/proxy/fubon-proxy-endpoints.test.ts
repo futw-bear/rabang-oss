@@ -23,7 +23,7 @@ describe("FUBON_PROXY_ENDPOINTS", () => {
     ).toBe("GET");
     expect(
       FUBON_PROXY_ENDPOINTS.get(
-        "/proxy/trading/account-management/balance",
+        "/proxy/trading/account-management/bank-remain",
       )?.httpMethod,
     ).toBe("GET");
     expect(
