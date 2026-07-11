@@ -141,7 +141,7 @@ const endpointEntries: EndpointEntry[] = [
   marketData("market-data-future", "marketDataFutopt", "intraday", "trades"),
   marketData("market-data-future", "marketDataFutopt", "intraday", "volumes"),
 
-  ordered("trading/account-management/balance", QUERY, "accounting", ["bankRemain"], ["account"]),
+  ordered("trading/account-management/bank-remain", QUERY, "accounting", ["bankRemain"], ["account"]),
   ordered("trading/account-management/inventories", QUERY, "accounting", ["inventories"], ["account"]),
   ordered("trading/account-management/maintenance", QUERY, "accounting", ["maintenance"], ["account"]),
   ordered("trading/account-management/query-settlement", QUERY, "accounting", ["querySettlement"], ["account", "range"]),

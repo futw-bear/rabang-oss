@@ -1,4 +1,5 @@
 import type { Connector } from "../connectors/connector.ts";
+import type { FubonAccount } from "../connectors/fubon-connector.ts";
 import { createRequestHandler } from "./app.ts";
 import {
   MarketDataWebSocketProxy,
@@ -7,7 +8,10 @@ import {
 } from "./market-data-websocket.ts";
 
 export function startHttpServer(
-  connector: Connector & MarketDataWebSocketConnector,
+  connector: Connector &
+    MarketDataWebSocketConnector & {
+      readonly accounts: readonly FubonAccount[];
+    },
   port: number,
 ): ReturnType<typeof Bun.serve> {
   const requestHandler = createRequestHandler(connector);

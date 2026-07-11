@@ -107,6 +107,76 @@ describe("Fubon proxy API", () => {
     ]);
   });
 
+  test("uses the first authenticated account when account is omitted", async () => {
+    const accounts = [
+      { name: "First", branchNo: "1000", account: "000001", accountType: "stock" },
+      { name: "Second", branchNo: "2000", account: "000002", accountType: "stock" },
+    ];
+    const connector = new StubConnector("connected", {}, accounts);
+    const handler = createRequestHandler(connector);
+    const response = await handler(
+      new Request("http://localhost/proxy/trading/account-management/inventories"),
+    );
+
+    expect(response.status).toBe(200);
+    expect(connector.invocations[0]?.arguments).toEqual([accounts[0]]);
+  });
+
+  test("selects an authenticated account by its query index", async () => {
+    const accounts = [
+      { name: "First", branchNo: "1000", account: "000001", accountType: "stock" },
+      { name: "Second", branchNo: "2000", account: "000002", accountType: "stock" },
+    ];
+    const connector = new StubConnector("connected", {}, accounts);
+    const handler = createRequestHandler(connector);
+    const response = await handler(
+      new Request(
+        "http://localhost/proxy/trading/account-management/inventories?account=1",
+      ),
+    );
+
+    expect(response.status).toBe(200);
+    expect(connector.invocations[0]?.arguments).toEqual([accounts[1]]);
+  });
+
+  test("accepts an account index in the query for POST endpoints", async () => {
+    const accounts = [
+      { name: "First", branchNo: "1000", account: "000001", accountType: "stock" },
+      { name: "Second", branchNo: "2000", account: "000002", accountType: "stock" },
+    ];
+    const connector = new StubConnector("connected", {}, accounts);
+    const handler = createRequestHandler(connector);
+    const order = { symbol: "2330", quantity: 1000 };
+    const response = await handler(
+      new Request("http://localhost/proxy/trading/trade/place-order?account=1", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order }),
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(connector.invocations[0]?.arguments).toEqual([accounts[1], order]);
+  });
+
+  test("rejects unavailable authenticated account indexes", async () => {
+    const connector = new StubConnector("connected", {}, [
+      { name: "First", branchNo: "1000", account: "000001", accountType: "stock" },
+    ]);
+    const handler = createRequestHandler(connector);
+    const response = await handler(
+      new Request(
+        "http://localhost/proxy/trading/account-management/inventories?account=1",
+      ),
+    );
+
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      status: "invalid_request",
+      message: "Authenticated account index is unavailable: 1",
+    });
+  });
+
   test("decodes object and array GET parameters from JSON", async () => {
     const connector = new StubConnector("connected", { isSuccess: true });
     const handler = createRequestHandler(connector);
@@ -144,13 +214,13 @@ describe("Fubon proxy API", () => {
     const connector = new StubConnector("connected");
     const handler = createRequestHandler(connector);
     const response = await handler(
-      new Request("http://localhost/proxy/trading/trade/get-order-results"),
+      new Request("http://localhost/proxy/trading/trade/order-history"),
     );
 
     expect(response.status).toBe(400);
     expect(await response.json()).toEqual({
       status: "invalid_request",
-      message: "Missing required parameter: account",
+      message: "Missing required parameter: startDate",
     });
   });
 
@@ -168,11 +238,22 @@ describe("Fubon proxy API", () => {
 
 class StubConnector implements Connector {
   readonly invocations: FubonProxyInvocation[] = [];
+  readonly accounts;
 
   constructor(
     readonly status: ConnectorStatus,
     private readonly proxyResult: unknown = {},
-  ) {}
+    accounts = [
+      {
+        name: "Test Account",
+        branchNo: "1234",
+        account: "567890",
+        accountType: "stock",
+      },
+    ],
+  ) {
+    this.accounts = accounts;
+  }
 
   async connect(): Promise<void> {}
 

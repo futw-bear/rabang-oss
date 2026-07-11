@@ -1,4 +1,5 @@
 import type { Connector } from "../connectors/connector.ts";
+import type { FubonAccount } from "../connectors/fubon-connector.ts";
 import {
   matchFubonProxyEndpoint,
   type FubonProxyEndpoint,
@@ -9,8 +10,12 @@ import type {
 
 class InvalidProxyRequestError extends Error {}
 
+type AccountConnector = Connector & {
+  readonly accounts: readonly FubonAccount[];
+};
+
 export function createRequestHandler(
-  connector: Connector,
+  connector: AccountConnector,
 ): (request: Request) => Promise<Response> {
   return async (request) => {
     const url = new URL(request.url);
@@ -49,7 +54,13 @@ export function createRequestHandler(
         endpoint.httpMethod === "GET"
           ? readQueryParameters(url.searchParams)
           : await readJsonParameters(request);
+      addAccountQueryParameter(
+        requestParameters,
+        endpoint.httpMethod,
+        url.searchParams,
+      );
       const parameters = mergePathParameters(requestParameters, pathParameters);
+      selectAuthenticatedAccount(endpoint, parameters, connector.accounts);
       const invocation = createInvocation(endpoint, parameters);
       const result = await connector.invokeProxy(invocation);
 
@@ -71,6 +82,30 @@ export function createRequestHandler(
       );
     }
   };
+}
+
+function addAccountQueryParameter(
+  parameters: Record<string, unknown>,
+  method: string,
+  searchParameters: URLSearchParams,
+): void {
+  if (method === "GET" || !searchParameters.has("account")) {
+    return;
+  }
+
+  const rawAccount = searchParameters.get("account");
+  if (rawAccount === null) {
+    return;
+  }
+
+  const account = decodeQueryValue("account", rawAccount);
+  if (Object.hasOwn(parameters, "account") && parameters.account !== account) {
+    throw new InvalidProxyRequestError(
+      "Query parameter account conflicts with the request body",
+    );
+  }
+
+  parameters.account = account;
 }
 
 function readQueryParameters(
@@ -199,6 +234,57 @@ function createInvocation(
     target: endpoint.target,
     arguments: arguments_,
   };
+}
+
+function selectAuthenticatedAccount(
+  endpoint: FubonProxyEndpoint,
+  parameters: Record<string, unknown>,
+  accounts: readonly FubonAccount[],
+): void {
+  if (
+    endpoint.argumentStyle !== "ordered" ||
+    !endpoint.parameterNames.includes("account")
+  ) {
+    return;
+  }
+
+  const requestedAccount = parameters.account;
+  if (
+    requestedAccount !== undefined &&
+    typeof requestedAccount !== "string" &&
+    typeof requestedAccount !== "number"
+  ) {
+    return;
+  }
+
+  const accountIndex =
+    requestedAccount === undefined ? 0 : parseAccountIndex(requestedAccount);
+  const account = accounts[accountIndex];
+
+  if (!account) {
+    throw new InvalidProxyRequestError(
+      `Authenticated account index is unavailable: ${accountIndex}`,
+    );
+  }
+
+  parameters.account = account;
+}
+
+function parseAccountIndex(value: string | number): number {
+  const index =
+    typeof value === "number"
+      ? value
+      : /^\d+$/.test(value)
+        ? Number(value)
+        : Number.NaN;
+
+  if (!Number.isInteger(index) || index < 0) {
+    throw new InvalidProxyRequestError(
+      "account must be a non-negative authenticated account index",
+    );
+  }
+
+  return index;
 }
 
 function coerceOrderedParameter(name: string, value: unknown): unknown {
