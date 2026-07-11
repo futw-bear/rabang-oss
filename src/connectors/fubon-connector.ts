@@ -1,4 +1,9 @@
 import type { Connector, ConnectorStatus } from "./connector.ts";
+import type {
+  FubonProxyInvocation,
+  MarketDataWebSocketMessage,
+  MarketDataWebSocketMode,
+} from "../proxy/fubon-proxy-types.ts";
 import {
   isFubonGatewayMessage,
   type FubonAccount,
@@ -22,7 +27,10 @@ const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
 type GatewayEventListener = (event: FubonGatewayEvent) => void;
 type GatewayExitListener = (error: Error) => void;
 type DisconnectListener = () => void;
+type MarketDataWebSocketListener = (message: MarketDataWebSocketMessage) => void;
 type Logger = Pick<Console, "info">;
+
+export type FubonOfflineRecoveryStrategy = "relogin" | "restartGateway";
 
 export interface FubonGateway {
   readonly isRunning: boolean;
@@ -266,16 +274,29 @@ export class FubonConnector implements Connector {
   #status: ConnectorStatus = "attempting";
   #accounts: FubonAccount[] = [];
   #disconnectListeners = new Set<DisconnectListener>();
+  #marketDataWebSocketListeners = new Set<MarketDataWebSocketListener>();
 
   constructor(
     private readonly credentials: FubonCredentials,
     private readonly gateway: FubonGateway = new FubonGatewayClient(),
     private readonly logger: Logger = console,
+    private readonly offlineRecoveryStrategy: FubonOfflineRecoveryStrategy =
+      "relogin",
   ) {
     this.gateway.onExit(() => this.markDisconnected());
     this.gateway.onEvent((event) => {
-      if (event.data.code === "300") {
-        this.markDisconnected();
+      if (event.event === "marketDataHeartbeatTimeout") {
+        this.logger.info("Fubon market data heartbeat timed out", {
+          timeoutMs: event.data.timeoutMs,
+          recoveryStrategy: this.offlineRecoveryStrategy,
+        });
+        void this.recoverFromOfflineGateway();
+      }
+
+      if (event.event === "marketDataWebSocket") {
+        for (const listener of this.#marketDataWebSocketListeners) {
+          listener(event.data);
+        }
       }
     });
   }
@@ -319,6 +340,35 @@ export class FubonConnector implements Connector {
     return this.gateway.request(method, payload);
   }
 
+  invokeProxy(invocation: FubonProxyInvocation): Promise<unknown> {
+    return this.request("invoke", invocation);
+  }
+
+  async openMarketDataWebSocket(
+    id: string,
+    mode: MarketDataWebSocketMode,
+  ): Promise<void> {
+    await this.request("openMarketDataWebSocket", { id, mode });
+  }
+
+  async sendMarketDataWebSocket(
+    id: string,
+    message: string,
+  ): Promise<void> {
+    await this.request("sendMarketDataWebSocket", { id, message });
+  }
+
+  async closeMarketDataWebSocket(id: string): Promise<void> {
+    await this.request("closeMarketDataWebSocket", { id });
+  }
+
+  onMarketDataWebSocketMessage(
+    listener: MarketDataWebSocketListener,
+  ): () => void {
+    this.#marketDataWebSocketListeners.add(listener);
+    return () => this.#marketDataWebSocketListeners.delete(listener);
+  }
+
   onDisconnect(listener: DisconnectListener): () => void {
     this.#disconnectListeners.add(listener);
     return () => this.#disconnectListeners.delete(listener);
@@ -340,6 +390,23 @@ export class FubonConnector implements Connector {
     for (const listener of this.#disconnectListeners) {
       listener();
     }
+  }
+
+  private async recoverFromOfflineGateway(): Promise<void> {
+    if (this.#status === "attempting") {
+      return;
+    }
+
+    if (this.offlineRecoveryStrategy === "restartGateway") {
+      try {
+        await this.gateway.close();
+      } finally {
+        this.markDisconnected();
+      }
+      return;
+    }
+
+    this.markDisconnected();
   }
 }
 

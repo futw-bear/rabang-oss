@@ -1,4 +1,5 @@
 import type { FubonCredentials } from "./connectors/fubon-gateway-protocol.ts";
+import type { FubonOfflineRecoveryStrategy } from "./connectors/fubon-connector.ts";
 
 type Environment = Record<string, string | undefined>;
 
@@ -66,8 +67,25 @@ export function loadPort(environment: Environment): number {
   return port;
 }
 
-function requireValue(value: string | undefined, name: string): string {
+export function loadFubonOfflineRecoveryStrategy(
+  environment: Environment,
+): FubonOfflineRecoveryStrategy {
+  const strategy = environment.SERVER_GATEWAY_RECOVERY ?? "relogin";
 
+  if (strategy === "relogin") {
+    return "relogin";
+  }
+
+  if (strategy === "restart-gateway") {
+    return "restartGateway";
+  }
+
+  throw new Error(
+    `Invalid SERVER_GATEWAY_RECOVERY: ${strategy}; expected relogin or restart-gateway`,
+  );
+}
+
+function requireValue(value: string | undefined, name: string): string {
   if (!value) {
     throw new Error(`Missing required environment variable: ${name}`);
   }

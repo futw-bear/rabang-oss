@@ -1,3 +1,9 @@
+import type {
+  FubonProxyInvocation,
+  MarketDataWebSocketMessage,
+  MarketDataWebSocketMode,
+} from "../proxy/fubon-proxy-types.ts";
+
 export interface FubonAccount {
   name: string;
   branchNo: string;
@@ -39,6 +45,22 @@ export interface FubonGatewayCommandMap {
     request: Record<string, never>;
     response: { success: boolean };
   };
+  invoke: {
+    request: FubonProxyInvocation;
+    response: unknown;
+  };
+  openMarketDataWebSocket: {
+    request: { id: string; mode: MarketDataWebSocketMode };
+    response: Record<string, never>;
+  };
+  sendMarketDataWebSocket: {
+    request: MarketDataWebSocketMessage;
+    response: Record<string, never>;
+  };
+  closeMarketDataWebSocket: {
+    request: { id: string };
+    response: Record<string, never>;
+  };
 }
 
 export type FubonGatewayMethod = keyof FubonGatewayCommandMap;
@@ -71,14 +93,22 @@ export type FubonGatewayResponse =
       };
     };
 
-export type FubonGatewayEvent = {
-  type: "event";
-  event: "sdk";
-  data: {
-    code: string;
-    message: string;
-  };
-};
+export type FubonGatewayEvent =
+  | {
+      type: "event";
+      event: "sdk";
+      data: { code: string; message: string };
+    }
+  | {
+      type: "event";
+      event: "marketDataWebSocket";
+      data: MarketDataWebSocketMessage;
+    }
+  | {
+      type: "event";
+      event: "marketDataHeartbeatTimeout";
+      data: { timeoutMs: number };
+    };
 
 export type FubonGatewayReady = { type: "ready" };
 
@@ -100,7 +130,11 @@ export function isFubonGatewayRequest(
     typeof request.id === "string" &&
     (request.method === "login" ||
       request.method === "getAccounts" ||
-      request.method === "logout") &&
+      request.method === "logout" ||
+      request.method === "invoke" ||
+      request.method === "openMarketDataWebSocket" ||
+      request.method === "sendMarketDataWebSocket" ||
+      request.method === "closeMarketDataWebSocket") &&
     typeof request.payload === "object" &&
     request.payload !== null
   );
@@ -132,10 +166,23 @@ export function isFubonGatewayMessage(
 
   if (message.type === "event") {
     const event = message as FubonGatewayEvent;
+    if (event.event === "sdk") {
+      return (
+        typeof event.data?.code === "string" &&
+        typeof event.data.message === "string"
+      );
+    }
+
+    if (event.event === "marketDataWebSocket") {
+      return (
+        typeof event.data?.id === "string" &&
+        typeof event.data.message === "string"
+      );
+    }
+
     return (
-      event.event === "sdk" &&
-      typeof event.data?.code === "string" &&
-      typeof event.data.message === "string"
+      event.event === "marketDataHeartbeatTimeout" &&
+      typeof event.data?.timeoutMs === "number"
     );
   }
 

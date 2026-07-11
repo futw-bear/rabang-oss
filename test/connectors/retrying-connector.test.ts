@@ -4,6 +4,7 @@ import type {
   ConnectorStatus,
 } from "../../src/connectors/connector.ts";
 import { RetryingConnector } from "../../src/connectors/retrying-connector.ts";
+import type { FubonProxyInvocation } from "../../src/proxy/fubon-proxy-types.ts";
 
 describe("RetryingConnector", () => {
   test("retries after 60 seconds until the connector succeeds", async () => {
@@ -77,6 +78,10 @@ class FlakyConnector implements Connector {
     }
 
     this.status = "connected";
+  }
+
+  async invokeProxy(_invocation: FubonProxyInvocation): Promise<unknown> {
+    return undefined;
   }
 
   onDisconnect(listener: () => void): () => void {

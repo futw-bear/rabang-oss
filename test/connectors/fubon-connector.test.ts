@@ -70,6 +70,28 @@ describe("FubonConnector", () => {
     expect(result.accounts).toEqual([...connector.accounts]);
   });
 
+  test("forwards proxy invocations after connecting", async () => {
+    const gateway = new FakeGateway();
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
+    await connector.connect();
+
+    const invocation = {
+      target: {
+        service: "marketDataStock" as const,
+        methodPath: ["intraday", "ticker"],
+      },
+      arguments: [{ symbol: "2330" }],
+    };
+    await connector.invokeProxy(invocation);
+
+    expect(gateway.proxyInvocation).toEqual(invocation);
+    expect(gateway.requestedMethods).toEqual([
+      "login",
+      "getAccounts",
+      "invoke",
+    ]);
+  });
+
   test("returns to attempting when the gateway exits", async () => {
     const gateway = new FakeGateway();
     const connector = new FubonConnector(credentials, gateway, noOpLogger);
@@ -84,6 +106,67 @@ describe("FubonConnector", () => {
     expect(connector.status).toBe("attempting");
     expect(connector.accounts).toEqual([]);
     expect(disconnects).toBe(1);
+  });
+
+  test("uses RetryingConnector login recovery after a heartbeat timeout by default", async () => {
+    const gateway = new FakeGateway();
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
+    let disconnects = 0;
+    connector.onDisconnect(() => {
+      disconnects += 1;
+    });
+    await connector.connect();
+
+    gateway.emitEvent({
+      type: "event",
+      event: "marketDataHeartbeatTimeout",
+      data: { timeoutMs: 60_000 },
+    });
+    await Bun.sleep(0);
+
+    expect(connector.status).toBe("attempting");
+    expect(disconnects).toBe(1);
+    expect(gateway.closeCalls).toBe(0);
+  });
+
+  test("restarts the gateway process after a heartbeat timeout when configured", async () => {
+    const gateway = new FakeGateway();
+    const connector = new FubonConnector(
+      credentials,
+      gateway,
+      noOpLogger,
+      "restartGateway",
+    );
+    let disconnects = 0;
+    connector.onDisconnect(() => {
+      disconnects += 1;
+    });
+    await connector.connect();
+
+    gateway.emitEvent({
+      type: "event",
+      event: "marketDataHeartbeatTimeout",
+      data: { timeoutMs: 60_000 },
+    });
+    await Bun.sleep(0);
+
+    expect(gateway.closeCalls).toBe(1);
+    expect(connector.status).toBe("attempting");
+    expect(disconnects).toBe(1);
+  });
+
+  test("does not use trading socket events for offline detection", async () => {
+    const gateway = new FakeGateway();
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
+    await connector.connect();
+
+    gateway.emitEvent({
+      type: "event",
+      event: "sdk",
+      data: { code: "300", message: "Trading socket disconnected" },
+    });
+
+    expect(connector.status).toBe("connected");
   });
 });
 
@@ -147,8 +230,10 @@ describe("FubonGatewayClient", () => {
 
 class FakeGateway implements FubonGateway {
   isRunning = true;
+  closeCalls = 0;
   loginCredentials: FubonCredentials | undefined;
   loginError: Error | undefined;
+  proxyInvocation: FubonGatewayCommandMap["invoke"]["request"] | undefined;
   requestedMethods: FubonGatewayMethod[] = [];
   readonly accounts = [
     {
@@ -183,6 +268,11 @@ class FakeGateway implements FubonGateway {
       return { success: true } as FubonGatewayCommandMap[M]["response"];
     }
 
+    if (method === "invoke") {
+      this.proxyInvocation = payload as FubonGatewayCommandMap["invoke"]["request"];
+      return { ok: true } as FubonGatewayCommandMap[M]["response"];
+    }
+
     return { accounts: this.accounts } as FubonGatewayCommandMap[M]["response"];
   }
 
@@ -196,7 +286,16 @@ class FakeGateway implements FubonGateway {
     return () => this.#exitListeners.delete(listener);
   }
 
-  async close(): Promise<void> {}
+  async close(): Promise<void> {
+    this.closeCalls += 1;
+    this.isRunning = false;
+  }
+
+  emitEvent(event: FubonGatewayEvent): void {
+    for (const listener of this.#eventListeners) {
+      listener(event);
+    }
+  }
 
   emitExit(error: Error): void {
     for (const listener of this.#exitListeners) {
