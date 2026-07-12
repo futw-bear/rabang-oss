@@ -1,225 +1,248 @@
-import type { FubonAccount } from "../connectors/fubon-connector.ts";
-import type { Connector } from "../connectors/connector.ts";
+import {
+  type BridgeConnector,
+  bridgeError,
+  BridgeHttpError,
+  readJsonObject,
+  unsupported,
+} from "./common.ts";
+import { LocalBridgeApi } from "./local-api.ts";
+import { handleMarketData } from "./market-data.ts";
+import { handleOrders } from "./orders.ts";
+import { handlePortfolio } from "./portfolio.ts";
+import { BridgeStreaming } from "./streaming.ts";
 
 export const BRIDGE_PREFIX = "/bridge";
 
-type BridgeConnector = Connector & {
-  readonly accounts: readonly FubonAccount[];
-};
-
-interface FubonResult<T> {
-  isSuccess: boolean;
-  data?: T;
-  message?: string;
-}
-
-interface FubonBankRemain {
-  availableBalance: number | string;
-}
-
-class BridgeRequestError extends Error {}
+export const BRIDGE_ENDPOINT_METHODS: ReadonlyMap<string, string> = new Map([
+  ["/openapi.json", "GET"],
+  ["/api/v1/health", "GET"],
+  ["/api/v1/info", "GET"],
+  ["/api/v1/auth/usage", "GET"],
+  ["/api/v1/auth/accounts", "GET"],
+  ["/api/v1/auth/ca_expiretime", "GET"],
+  ["/api/v1/auth/subscribe_trade", "POST"],
+  ["/api/v1/auth/unsubscribe_trade", "POST"],
+  ["/api/v1/data/snapshots", "POST"],
+  ["/api/v1/data/ticks", "POST"],
+  ["/api/v1/data/kbars", "POST"],
+  ["/api/v1/data/daily_quotes", "POST"],
+  ["/api/v1/data/credit_enquire", "POST"],
+  ["/api/v1/data/scanner", "POST"],
+  ["/api/v1/data/regulatory_punish", "GET"],
+  ["/api/v1/data/regulatory_notice", "GET"],
+  ["/api/v1/data/short_stock_sources", "POST"],
+  ["/api/v1/data/contracts", "POST"],
+  ["/api/v1/order/place_order", "POST"],
+  ["/api/v1/order/cancel_order", "POST"],
+  ["/api/v1/order/update_price", "POST"],
+  ["/api/v1/order/update_qty", "POST"],
+  ["/api/v1/order/trades", "POST"],
+  ["/api/v1/order/place_comboorder", "POST"],
+  ["/api/v1/order/cancel_comboorder", "POST"],
+  ["/api/v1/order/combotrades", "POST"],
+  ["/api/v1/order/stock_reserve_summary", "POST"],
+  ["/api/v1/order/stock_reserve_detail", "POST"],
+  ["/api/v1/order/reserve_stock", "POST"],
+  ["/api/v1/order/earmarking_detail", "POST"],
+  ["/api/v1/order/reserve_earmarking", "POST"],
+  ["/api/v1/order/order_deal_records", "POST"],
+  ["/api/v1/portfolio/account_balance", "POST"],
+  ["/api/v1/portfolio/margin", "POST"],
+  ["/api/v1/portfolio/position_unit", "POST"],
+  ["/api/v1/portfolio/position_detail", "POST"],
+  ["/api/v1/portfolio/settlements", "POST"],
+  ["/api/v1/portfolio/settlement", "POST"],
+  ["/api/v1/portfolio/trading_limits", "POST"],
+  ["/api/v1/portfolio/profit_loss", "POST"],
+  ["/api/v1/portfolio/profit_loss_detail", "POST"],
+  ["/api/v1/portfolio/profitloss_sum", "POST"],
+  ["/api/v1/stream/subscribe", "POST"],
+  ["/api/v1/stream/unsubscribe", "POST"],
+  ["/api/v1/stream/receivers", "GET"],
+  ["/api/v1/stream/status", "GET"],
+  ["/api/v1/stream/data", "GET"],
+  ["/api/v1/stream/data/tick_stk", "GET"],
+  ["/api/v1/stream/data/bidask_stk", "GET"],
+  ["/api/v1/stream/data/tick_fop", "GET"],
+  ["/api/v1/stream/data/bidask_fop", "GET"],
+  ["/api/v1/stream/data/quote_stk", "GET"],
+  ["/api/v1/stream/data/quote_fop", "GET"],
+  ["/api/v1/stream/data/order_event", "GET"],
+  ["/api/v1/watchlist", "GET, POST"],
+  ["/api/v1/apps", "GET"],
+]);
 
 export function createBridgeRequestHandler(
   connector: BridgeConnector,
   now: () => Date = () => new Date(),
 ): (request: Request) => Promise<Response | undefined> {
+  const local = new LocalBridgeApi();
+  const streaming = new BridgeStreaming(connector, now);
+
   return async (request) => {
     const url = new URL(request.url);
-    if (!url.pathname.startsWith(`${BRIDGE_PREFIX}/`)) {
-      return undefined;
-    }
+    if (!url.pathname.startsWith(`${BRIDGE_PREFIX}/`)) return undefined;
+    const path = url.pathname.slice(BRIDGE_PREFIX.length);
 
-    const bridgePath = url.pathname.slice(BRIDGE_PREFIX.length);
-    if (bridgePath === "/api/v1/portfolio/account_balance") {
-      if (request.method !== "POST") {
+    try {
+      const allowed = allowedMethods(path);
+      if (!allowed) throw new BridgeHttpError(404, "Not found");
+      if (!allowed.includes(request.method)) {
         return bridgeError(405, "Method not allowed", null, {
-          Allow: "POST",
+          Allow: allowed.join(", "),
         });
       }
 
-      if (connector.status !== "connected") {
-        return bridgeError(503, "Fubon gateway is not connected");
+      if (path === "/openapi.json") {
+        return Response.json(createOpenApiDocument(url.origin));
       }
 
-      try {
-        const body = await readAccountRequest(request);
-        const account = selectStockAccount(connector.accounts, body);
-        const result = await connector.invokeProxy({
-          target: { service: "accounting", methodPath: ["bankRemain"] },
-          arguments: [account],
-        });
-
-        return Response.json(toAccountBalance(result, now()));
-      } catch (error) {
-        if (error instanceof BridgeRequestError) {
-          return bridgeError(400, error.message);
-        }
-
-        return bridgeError(
-          500,
-          error instanceof Error ? error.message : "Unknown bridge error",
+      if (path === "/api/v1/health") {
+        return Response.json(
+          {
+            status: connector.status === "connected" ? "healthy" : "unhealthy",
+            version: "bridge-1.0.0",
+            timestamp: now().toISOString(),
+            token_expires_in_seconds: null,
+            token_stale: null,
+            contract_count: null,
+            next_maintenance: null,
+            ca_expires_in_days: null,
+            ca_expired: null,
+          },
+          { status: connector.status === "connected" ? 200 : 503 },
         );
       }
-    }
+      if (path === "/api/v1/info") {
+        return Response.json({
+          name: "Rabang Shioaji API Bridge",
+          version: "1.0.0",
+          description: "Shioaji-compatible HTTP API backed by Fubon Neo",
+          protocols: ["HTTP", "SSE"],
+          simulation: connector.simulation ?? null,
+        });
+      }
+      if (path.startsWith("/apps/")) return local.serveApp(path);
 
-    if (bridgePath.startsWith("/api/v1/")) {
+      if (connector.status !== "connected") {
+        throw new BridgeHttpError(503, "Fubon gateway is not connected");
+      }
+      if (path === "/api/v1/auth/accounts") {
+        return Response.json(
+          connector.accounts.map((account) => ({
+            account_type: account.accountType === "futopt" ? "F" : "S",
+            broker_id: account.branchNo,
+            account_id: account.account,
+            signed: true,
+            username: account.name,
+          })),
+        );
+      }
+      if (path === "/api/v1/auth/usage") {
+        unsupported(
+          path,
+          "Fubon does not expose Shioaji connection and traffic usage statistics",
+        );
+      }
+      if (path === "/api/v1/auth/ca_expiretime") {
+        unsupported(path, "Fubon does not expose a certificate-expiry query");
+      }
+      if (
+        path === "/api/v1/auth/subscribe_trade" ||
+        path === "/api/v1/auth/unsubscribe_trade"
+      ) {
+        if (connector.simulation && path === "/api/v1/auth/unsubscribe_trade") {
+          throw new BridgeHttpError(
+            400,
+            "Trade-event unsubscribe is unavailable in simulation mode",
+          );
+        }
+        const body = await readJsonObject(request);
+        return await streaming.tradeSubscription(
+          path === "/api/v1/auth/subscribe_trade",
+          body,
+        );
+      }
+      if (path.startsWith("/api/v1/data/"))
+        return await handleMarketData(connector, path, request, now);
+      if (path.startsWith("/api/v1/order/"))
+        return await handleOrders(connector, path, request);
+      if (path.startsWith("/api/v1/portfolio/"))
+        return await handlePortfolio(connector, path, request, now);
+      if (path.startsWith("/api/v1/stream/"))
+        return await streaming.handle(path, request);
+      if (path.startsWith("/api/v1/watchlist"))
+        return await local.watchlist(path, request);
+      if (path.startsWith("/api/v1/apps"))
+        return await local.apps(path, request);
+      throw new BridgeHttpError(404, "Not found");
+    } catch (error) {
+      if (error instanceof BridgeHttpError) {
+        return bridgeError(error.status, error.message, error.details);
+      }
       return bridgeError(
-        501,
-        `Shioaji bridge endpoint is not implemented: ${bridgePath}`,
+        500,
+        error instanceof Error ? error.message : "Unknown bridge error",
       );
     }
-
-    return bridgeError(404, "Not found");
   };
 }
 
-interface AccountRequest {
-  account_type?: "S";
-  broker_id?: string;
-  account_id?: string;
-  person_id?: string | null;
+function allowedMethods(path: string): string[] | undefined {
+  const exact = BRIDGE_ENDPOINT_METHODS.get(path);
+  if (exact) return exact.split(", ");
+  if (/^\/api\/v1\/data\/contracts\/[^/]+$/.test(path)) return ["GET"];
+  if (/^\/api\/v1\/watchlist\/[^/]+$/.test(path))
+    return ["GET", "PUT", "DELETE"];
+  if (/^\/api\/v1\/watchlist\/[^/]+\/contracts$/.test(path))
+    return ["POST", "DELETE"];
+  if (/^\/api\/v1\/apps\/[^/]+$/.test(path)) return ["POST", "DELETE"];
+  if (path.startsWith("/apps/")) return ["GET"];
+  return undefined;
 }
 
-async function readAccountRequest(request: Request): Promise<AccountRequest> {
-  let value: unknown;
-
-  try {
-    value = await request.json();
-  } catch {
-    throw new BridgeRequestError("Request body must contain valid JSON");
-  }
-
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
-    throw new BridgeRequestError("Request body must be a JSON object");
-  }
-
-  const body = value as Record<string, unknown>;
-  const allowedFields = new Set([
-    "account_type",
-    "broker_id",
-    "account_id",
-    "person_id",
-  ]);
-  const unknownField = Object.keys(body).find(
-    (field) => !allowedFields.has(field),
-  );
-  if (unknownField) {
-    throw new BridgeRequestError(`Unknown field: ${unknownField}`);
-  }
-
-  if (body.account_type !== undefined && body.account_type !== "S") {
-    throw new BridgeRequestError('account_type must be "S"');
-  }
-  assertOptionalString(body, "broker_id");
-  assertOptionalString(body, "account_id");
-  if (
-    body.person_id !== undefined &&
-    body.person_id !== null &&
-    typeof body.person_id !== "string"
-  ) {
-    throw new BridgeRequestError("person_id must be a string or null");
-  }
-  if (typeof body.person_id === "string") {
-    throw new BridgeRequestError(
-      "person_id account selection is unavailable from Fubon login data",
+function createOpenApiDocument(origin: string): Record<string, unknown> {
+  const paths: Record<string, unknown> = {};
+  for (const [path, methods] of BRIDGE_ENDPOINT_METHODS) {
+    if (!path.startsWith("/api/")) continue;
+    paths[`${BRIDGE_PREFIX}${path}`] = Object.fromEntries(
+      methods.split(", ").map((method) => [
+        method.toLowerCase(),
+        {
+          operationId: `${method.toLowerCase()}_${path.replace(/[^a-zA-Z0-9]+/g, "_")}`,
+          responses: {
+            "200": { description: "Success" },
+            "501": { description: "No equivalent Fubon capability" },
+          },
+        },
+      ]),
     );
   }
-
-  return body as AccountRequest;
-}
-
-function assertOptionalString(
-  body: Record<string, unknown>,
-  field: "broker_id" | "account_id",
-): void {
-  if (body[field] !== undefined && typeof body[field] !== "string") {
-    throw new BridgeRequestError(`${field} must be a string`);
+  for (const [path, methods] of [
+    ["/bridge/api/v1/data/contracts/{code}", ["get"]],
+    ["/bridge/api/v1/watchlist/{id}", ["get", "put", "delete"]],
+    ["/bridge/api/v1/watchlist/{id}/contracts", ["post", "delete"]],
+    ["/bridge/api/v1/apps/{name}", ["post", "delete"]],
+    ["/bridge/apps/{path}", ["get"]],
+  ] as const) {
+    paths[path] = Object.fromEntries(
+      methods.map((method) => [
+        method,
+        {
+          operationId: `${method}_${path.replace(/[^a-zA-Z0-9]+/g, "_")}`,
+          responses: { "200": { description: "Success" } },
+        },
+      ]),
+    );
   }
-}
-
-function selectStockAccount(
-  accounts: readonly FubonAccount[],
-  request: AccountRequest,
-): FubonAccount {
-  const account = accounts.find(
-    (candidate) =>
-      candidate.accountType === "stock" &&
-      (request.broker_id === undefined ||
-        candidate.branchNo === request.broker_id) &&
-      (request.account_id === undefined ||
-        candidate.account === request.account_id),
-  );
-
-  if (!account) {
-    throw new BridgeRequestError("Requested stock account is unavailable");
-  }
-
-  return account;
-}
-
-function toAccountBalance(
-  result: unknown,
-  queryTime: Date,
-): {
-  acc_balance: number;
-  date: string;
-  errmsg: string;
-} {
-  if (!isFubonResult<FubonBankRemain>(result)) {
-    throw new Error("Fubon bankRemain returned an invalid response");
-  }
-
-  if (!result.isSuccess) {
-    return {
-      acc_balance: 0,
-      date: formatShioajiDate(queryTime),
-      errmsg: result.message ?? "Fubon bank balance query failed",
-    };
-  }
-
-  const balance = Number(result.data?.availableBalance);
-  if (!Number.isFinite(balance)) {
-    throw new Error("Fubon bankRemain returned an invalid availableBalance");
-  }
-
   return {
-    acc_balance: balance,
-    date: formatShioajiDate(queryTime),
-    errmsg: "",
+    openapi: "3.0.3",
+    info: {
+      title: "Rabang Shioaji API Bridge",
+      version: "1.0.0",
+      description: "Shioaji-compatible endpoints backed by Fubon Neo",
+    },
+    servers: [{ url: origin }],
+    paths,
   };
-}
-
-function isFubonResult<T>(value: unknown): value is FubonResult<T> {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    typeof (value as Partial<FubonResult<T>>).isSuccess === "boolean"
-  );
-}
-
-function formatShioajiDate(date: Date): string {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Taipei",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hourCycle: "h23",
-  }).formatToParts(date);
-  const part = (type: Intl.DateTimeFormatPartTypes) =>
-    parts.find((candidate) => candidate.type === type)?.value ?? "";
-  const milliseconds = String(date.getUTCMilliseconds()).padStart(3, "0");
-
-  return `${part("year")}-${part("month")}-${part("day")} ${part("hour")}:${part("minute")}:${part("second")}.${milliseconds}000`;
-}
-
-function bridgeError(
-  status: number,
-  message: string,
-  details: unknown = null,
-  headers?: Record<string, string>,
-): Response {
-  return Response.json({ code: status, message, details }, { status, headers });
 }

@@ -85,9 +85,9 @@ describe("Shioaji API bridge", () => {
       }),
     );
 
-    expect(response?.status).toBe(400);
+    expect(response?.status).toBe(501);
     expect(await response?.json()).toEqual({
-      code: 400,
+      code: 501,
       message:
         "person_id account selection is unavailable from Fubon login data",
       details: null,
@@ -100,7 +100,7 @@ describe("Shioaji API bridge", () => {
       new StubConnector("connected", {}),
     );
     const response = await handler(
-      new Request("http://localhost/bridge/api/v1/order/place_order", {
+      new Request("http://localhost/bridge/api/v1/order/cancel_order", {
         method: "POST",
         body: "{}",
       }),
@@ -110,7 +110,7 @@ describe("Shioaji API bridge", () => {
     expect(await response?.json()).toEqual({
       code: 501,
       message:
-        "Shioaji bridge endpoint is not implemented: /api/v1/order/place_order",
+        "Fubon requires the original order-result object; bridge trade correlation is not implemented",
       details: null,
     });
   });

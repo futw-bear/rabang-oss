@@ -29,8 +29,7 @@ export interface FubonApiKeyCredentials extends BaseFubonCredentials {
 }
 
 export type FubonCredentials =
-  | FubonPasswordCredentials
-  | FubonApiKeyCredentials;
+  FubonPasswordCredentials | FubonApiKeyCredentials;
 
 export interface FubonGatewayCommandMap {
   login: {
@@ -50,7 +49,11 @@ export interface FubonGatewayCommandMap {
     response: unknown;
   };
   openMarketDataWebSocket: {
-    request: { id: string; mode: MarketDataWebSocketMode };
+    request: {
+      id: string;
+      mode: MarketDataWebSocketMode;
+      product?: "stock" | "futopt";
+    };
     response: Record<string, never>;
   };
   sendMarketDataWebSocket: {
@@ -108,14 +111,21 @@ export type FubonGatewayEvent =
       type: "event";
       event: "marketDataHeartbeatTimeout";
       data: { timeoutMs: number };
+    }
+  | {
+      type: "event";
+      event: "trading";
+      data: {
+        kind: "order" | "orderChanged" | "filled";
+        code: string;
+        content: unknown;
+      };
     };
 
 export type FubonGatewayReady = { type: "ready" };
 
 export type FubonGatewayMessage =
-  | FubonGatewayReady
-  | FubonGatewayResponse
-  | FubonGatewayEvent;
+  FubonGatewayReady | FubonGatewayResponse | FubonGatewayEvent;
 
 export function isFubonGatewayRequest(
   value: unknown,
@@ -177,6 +187,15 @@ export function isFubonGatewayMessage(
       return (
         typeof event.data?.id === "string" &&
         typeof event.data.message === "string"
+      );
+    }
+
+    if (event.event === "trading") {
+      return (
+        (event.data?.kind === "order" ||
+          event.data?.kind === "orderChanged" ||
+          event.data?.kind === "filled") &&
+        typeof event.data.code === "string"
       );
     }
 

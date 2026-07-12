@@ -168,6 +168,32 @@ describe("FubonConnector", () => {
 
     expect(connector.status).toBe("connected");
   });
+
+  test("forwards order and fill callback events from the gateway", async () => {
+    const gateway = new FakeGateway();
+    const connector = new FubonConnector(credentials, gateway, noOpLogger);
+    const events: unknown[] = [];
+    connector.onTradingEvent((event) => events.push(event));
+    await connector.connect();
+
+    gateway.emitEvent({
+      type: "event",
+      event: "trading",
+      data: {
+        kind: "filled",
+        code: "00",
+        content: { stockNo: "2330", filledQty: 1000 },
+      },
+    });
+
+    expect(events).toEqual([
+      {
+        kind: "filled",
+        code: "00",
+        content: { stockNo: "2330", filledQty: 1000 },
+      },
+    ]);
+  });
 });
 
 describe("FubonGatewayClient", () => {
@@ -180,7 +206,8 @@ describe("FubonGatewayClient", () => {
 
     const resultPromise = client.request("getAccounts", {});
     await Bun.sleep(0);
-    const request = process.sentMessages[0] as FubonGatewayRequest<"getAccounts">;
+    const request = process
+      .sentMessages[0] as FubonGatewayRequest<"getAccounts">;
     process.emitMessage({
       type: "response",
       id: request.id,
@@ -269,7 +296,8 @@ class FakeGateway implements FubonGateway {
     }
 
     if (method === "invoke") {
-      this.proxyInvocation = payload as FubonGatewayCommandMap["invoke"]["request"];
+      this.proxyInvocation =
+        payload as FubonGatewayCommandMap["invoke"]["request"];
       return { ok: true } as FubonGatewayCommandMap[M]["response"];
     }
 
