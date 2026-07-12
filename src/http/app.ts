@@ -4,9 +4,8 @@ import {
   matchFubonProxyEndpoint,
   type FubonProxyEndpoint,
 } from "../proxy/fubon-proxy-endpoints.ts";
-import type {
-  FubonProxyInvocation,
-} from "../proxy/fubon-proxy-types.ts";
+import type { FubonProxyInvocation } from "../proxy/fubon-proxy-types.ts";
+import { createBridgeRequestHandler } from "../bridge/bridge.ts";
 
 class InvalidProxyRequestError extends Error {}
 
@@ -17,8 +16,15 @@ type AccountConnector = Connector & {
 export function createRequestHandler(
   connector: AccountConnector,
 ): (request: Request) => Promise<Response> {
+  const bridgeRequestHandler = createBridgeRequestHandler(connector);
+
   return async (request) => {
     const url = new URL(request.url);
+
+    const bridgeResponse = await bridgeRequestHandler(request);
+    if (bridgeResponse) {
+      return bridgeResponse;
+    }
 
     if (request.method === "GET" && url.pathname === "/") {
       if (connector.status === "connected") {
@@ -294,9 +300,7 @@ function coerceOrderedParameter(name: string, value: unknown): unknown {
   ) {
     const number = Number(value);
     if (!Number.isFinite(number)) {
-      throw new InvalidProxyRequestError(
-        `Parameter ${name} must be a number`,
-      );
+      throw new InvalidProxyRequestError(`Parameter ${name} must be a number`);
     }
 
     return number;
