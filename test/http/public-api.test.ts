@@ -11,6 +11,8 @@ const TSE_PRICES_URL =
   "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL";
 const OTC_PRICES_URL =
   "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes";
+const MARKET_INDEX_URL =
+  "https://openapi.twse.com.tw/v1/exchangeReport/MI_INDEX";
 
 describe("GET /api/pub/securities", () => {
   test("returns the upstream securities resource with public cache headers", async () => {
@@ -178,6 +180,63 @@ describe("GET /api/pub/prices", () => {
     });
     const response = await handler(
       new Request("http://localhost/api/pub/prices?market=OTC"),
+    );
+
+    expect(response?.status).toBe(502);
+    expect(response?.headers.get("Cache-Control")).toBe("no-store");
+    expect(await response?.json()).toEqual({ status: "upstream_unavailable" });
+  });
+});
+
+describe("GET /api/pub/market_index", () => {
+  test("returns the upstream market index with public cache headers", async () => {
+    const requests: Array<{ input: string | URL | Request; init?: RequestInit }> =
+      [];
+    const marketIndex = [
+      { Date: "1150714", Name: "TAIEX", ClosingIndex: "23500.00" },
+    ];
+    const handler = createPublicApiRequestHandler({
+      fetch: async (input, init) => {
+        requests.push({ input, init });
+        return Response.json(marketIndex);
+      },
+      now: () => new Date("2026-07-14T05:59:30.000Z"),
+    });
+
+    const response = await handler(
+      new Request("http://localhost/api/pub/market_index"),
+    );
+
+    expect(response?.status).toBe(200);
+    expect(response?.headers.get("Content-Type")).toBe(
+      "application/json; charset=utf-8",
+    );
+    expect(response?.headers.get("Cache-Control")).toBe(
+      "public, max-age=30, s-maxage=30",
+    );
+    expect(response?.headers.get("Access-Control-Allow-Origin")).toBe("*");
+    expect(await response?.json()).toEqual(marketIndex);
+    expect(requests).toHaveLength(1);
+    expect(requests[0]?.input).toBe(MARKET_INDEX_URL);
+    expect(requests[0]?.init?.headers).toEqual({ Accept: "application/json" });
+  });
+
+  test("returns 405 for methods other than GET", async () => {
+    const handler = createPublicApiRequestHandler();
+    const response = await handler(
+      new Request("http://localhost/api/pub/market_index", { method: "POST" }),
+    );
+
+    expect(response?.status).toBe(405);
+    expect(response?.headers.get("Allow")).toBe("GET");
+  });
+
+  test("returns 502 without caching when the upstream request fails", async () => {
+    const handler = createPublicApiRequestHandler({
+      fetch: async () => new Response("Unavailable", { status: 503 }),
+    });
+    const response = await handler(
+      new Request("http://localhost/api/pub/market_index"),
     );
 
     expect(response?.status).toBe(502);

@@ -1,12 +1,14 @@
 const SECURITIES_URL =
-  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities-json.json";
+  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities-full.json";
 const PRICE_URLS = {
   TSE: "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL",
   OTC: "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes",
 } as const;
+const MARKET_INDEX_URL =
+  "https://openapi.twse.com.tw/v1/exchangeReport/MI_INDEX";
 const TAIPEI_UTC_OFFSET_MS = 8 * 60 * 60 * 1000;
 const SECURITIES_REFRESH_HOUR = 6;
-const PRICES_REFRESH_HOUR = 14;
+const MARKET_DATA_REFRESH_HOUR = 14;
 const PUBLIC_API_HEADERS = { "Access-Control-Allow-Origin": "*" } as const;
 
 export type PublicApiRequestHandler = (
@@ -33,7 +35,8 @@ export function createPublicApiRequestHandler(
     const url = new URL(request.url);
     if (
       url.pathname !== "/api/pub/securities" &&
-      url.pathname !== "/api/pub/prices"
+      url.pathname !== "/api/pub/prices" &&
+      url.pathname !== "/api/pub/market_index"
     ) {
       return undefined;
     }
@@ -58,6 +61,16 @@ export function createPublicApiRequestHandler(
       );
     }
 
+    if (url.pathname === "/api/pub/market_index") {
+      return fetchPublicResource(
+        request,
+        MARKET_INDEX_URL,
+        MARKET_DATA_REFRESH_HOUR,
+        fetchUpstream,
+        now,
+      );
+    }
+
     const market = url.searchParams.get("market");
     if (!isPriceMarket(market)) {
       return invalidMarketResponse();
@@ -66,7 +79,7 @@ export function createPublicApiRequestHandler(
     return fetchPublicResource(
       request,
       PRICE_URLS[market],
-      PRICES_REFRESH_HOUR,
+      MARKET_DATA_REFRESH_HOUR,
       fetchUpstream,
       now,
     );
@@ -78,7 +91,7 @@ export function secondsUntilNextSecuritiesRefresh(now: Date): number {
 }
 
 export function secondsUntilNextPricesRefresh(now: Date): number {
-  return secondsUntilNextRefresh(now, PRICES_REFRESH_HOUR);
+  return secondsUntilNextRefresh(now, MARKET_DATA_REFRESH_HOUR);
 }
 
 function secondsUntilNextRefresh(now: Date, refreshHour: number): number {

@@ -65,6 +65,26 @@ describe("GET /api/pub/prices", () => {
   });
 });
 
+describe("GET /api/pub/market_index", () => {
+  test("is available while the connector is attempting to connect", async () => {
+    const publicApiRequestHandler = createPublicApiRequestHandler({
+      fetch: async () => Response.json([{ Name: "TAIEX" }]),
+    });
+    const handler = createRequestHandler(
+      new StubConnector("attempting"),
+      undefined,
+      publicApiRequestHandler,
+    );
+
+    const response = await handler(
+      new Request("http://localhost/api/pub/market_index"),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual([{ Name: "TAIEX" }]);
+  });
+});
+
 describe("Fubon proxy API", () => {
   test("forwards market data query parameters without renaming keys", async () => {
     const connector = new StubConnector("connected", {
