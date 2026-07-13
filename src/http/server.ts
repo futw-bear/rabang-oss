@@ -8,6 +8,19 @@ import {
   type MarketDataWebSocketConnector,
 } from "./market-data-websocket.ts";
 
+const BRIDGE_SSE_PATH = "/bridge/api/v1/stream/data";
+
+export function isBridgeSseRequest(request: Request): boolean {
+  if (request.method !== "GET") {
+    return false;
+  }
+
+  const pathname = new URL(request.url).pathname;
+  return (
+    pathname === BRIDGE_SSE_PATH || pathname.startsWith(`${BRIDGE_SSE_PATH}/`)
+  );
+}
+
 export function startHttpServer(
   connector: Connector &
     MarketDataWebSocketConnector & {
@@ -26,6 +39,10 @@ export function startHttpServer(
     port,
     fetch(request, server) {
       const url = new URL(request.url);
+
+      if (isBridgeSseRequest(request)) {
+        server.timeout(request, 0);
+      }
 
       if (url.pathname === "/proxy/market-data/ws") {
         if (request.method !== "GET") {
