@@ -5,7 +5,7 @@ import {
 } from "../../src/http/public-api.ts";
 
 const SECURITIES_URL =
-  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities-full.json";
+  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities.json";
 
 describe("GET /api/pub/securities", () => {
   test("returns the upstream securities resource with public cache headers", async () => {

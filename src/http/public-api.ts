@@ -1,5 +1,5 @@
 const SECURITIES_URL =
-  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities-full.json";
+  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities.json";
 const TAIPEI_UTC_OFFSET_MS = 8 * 60 * 60 * 1000;
 const SECURITIES_REFRESH_HOUR = 6;
 const PUBLIC_API_HEADERS = { "Access-Control-Allow-Origin": "*" } as const;
