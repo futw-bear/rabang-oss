@@ -170,7 +170,7 @@ function mapStockOrder(
   return {
     buySell: action,
     symbol: code,
-    price: requiredNumber(order, "price"),
+    price: String(requiredNumber(order, "price")),
     quantity: lot === "Common" || lot === "Fixing" ? quantity * 1000 : quantity,
     marketType: lot,
     priceType:
@@ -214,7 +214,7 @@ function mapFuturesOrder(
   return {
     buySell: action,
     symbol: code,
-    price: requiredNumber(order, "price"),
+    price: String(requiredNumber(order, "price")),
     lot: requiredPositiveNumber(order, "quantity"),
     marketType: securityType === "OPT" ? "Option" : "Future",
     priceType:

@@ -312,6 +312,7 @@ describe("order adapters", () => {
     expect(response.status).toBe(200);
     expect(connector.invocations[0]?.arguments[1]).toMatchObject({
       symbol: "2330",
+      price: "600",
       quantity: 2000,
       priceType: "Limit",
       marketType: "Common",
@@ -480,6 +481,13 @@ describe("order adapters", () => {
         },
       }),
     );
+    expect(connector.invocations[0]?.arguments[1]).toMatchObject({
+      symbol: "TXF",
+      price: "20000",
+      lot: 2,
+      priceType: "Limit",
+      marketType: "Future",
+    });
     const response = await handler(
       jsonRequest("/order/update_qty", "POST", {
         trade_id: "F0001",
