@@ -33,6 +33,7 @@ certs/*
 .eslintcache
 .cache
 *.tsbuildinfo
+rabang.sqlite*
 
 # IntelliJ based IDEs
 .idea

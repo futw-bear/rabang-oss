@@ -3,6 +3,7 @@ import {
   BRIDGE_ENDPOINT_METHODS,
   createBridgeRequestHandler,
 } from "../../src/bridge/bridge.ts";
+import { SqliteOrderStore } from "../../src/bridge/order-store.ts";
 import type { FubonProxyInvocation } from "../../src/proxy/fubon-proxy-types.ts";
 
 describe("bridge endpoint inventory", () => {
@@ -43,9 +44,6 @@ describe("bridge endpoint inventory", () => {
       ["POST", "/data/daily_quotes"],
       ["GET", "/data/regulatory_punish"],
       ["GET", "/data/regulatory_notice"],
-      ["POST", "/order/cancel_order"],
-      ["POST", "/order/update_price"],
-      ["POST", "/order/update_qty"],
       ["POST", "/order/place_comboorder"],
       ["POST", "/order/cancel_comboorder"],
       ["POST", "/order/combotrades"],
@@ -320,6 +318,185 @@ describe("order adapters", () => {
     });
     expect(trade.order?.id).toBe("00001");
     expect(trade.status?.status).toBe("Submitted");
+  });
+
+  test("updates and cancels a persisted stock order", async () => {
+    const databasePath = `${process.env.TMPDIR ?? "/tmp"}/rabang-orders-${crypto.randomUUID()}.sqlite`;
+    const original = {
+      seqNo: "00002",
+      orderNo: "A002",
+      buySell: "Buy",
+      price: 600,
+      afterPrice: 600,
+      quantity: 2000,
+      unit: 1000,
+      afterQty: 2000,
+      filledQty: 0,
+      status: 10,
+    };
+    const connector = new FlexibleConnector((invocation) => {
+      const method = invocation.target.methodPath[0];
+      if (method === "placeOrder") return { isSuccess: true, data: original };
+      if (method?.startsWith("makeModify")) {
+        return { generatedBy: method, args: invocation.arguments };
+      }
+      if (method === "modifyPrice") {
+        return {
+          isSuccess: true,
+          data: { ...original, afterPrice: 590, functionType: 15 },
+        };
+      }
+      if (method === "modifyQuantity") {
+        return {
+          isSuccess: true,
+          data: {
+            ...original,
+            afterPrice: 590,
+            afterQty: 1000,
+            functionType: 20,
+          },
+        };
+      }
+      if (method === "cancelOrder") {
+        return {
+          isSuccess: true,
+          data: { ...original, afterPrice: 590, afterQty: 0, status: 30 },
+        };
+      }
+      throw new Error(`Unexpected method: ${method}`);
+    });
+
+    let store = new SqliteOrderStore(databasePath);
+    let handler = createBridgeRequestHandler(connector, undefined, store);
+    await handler(
+      jsonRequest("/order/place_order", "POST", {
+        contract: { security_type: "STK", exchange: "TSE", code: "2330" },
+        stock_order: {
+          action: "Buy",
+          price: 600,
+          quantity: 2,
+          price_type: "LMT",
+          order_type: "ROD",
+          order_lot: "Common",
+        },
+      }),
+    );
+    store.close();
+
+    store = new SqliteOrderStore(databasePath);
+    handler = createBridgeRequestHandler(connector, undefined, store);
+    const priceResponse = await handler(
+      jsonRequest("/order/update_price", "POST", {
+        trade_id: "00002",
+        price: 590,
+      }),
+    );
+    const quantityResponse = await handler(
+      jsonRequest("/order/update_qty", "POST", {
+        trade_id: "00002",
+        quantity: 1,
+      }),
+    );
+    const cancelResponse = await handler(
+      jsonRequest("/order/cancel_order", "POST", { trade_id: "00002" }),
+    );
+    store.close();
+    await Bun.file(databasePath).delete();
+
+    expect(priceResponse?.status).toBe(200);
+    expect(await priceResponse?.json()).toMatchObject({
+      order: { price: 590, quantity: 2 },
+    });
+    expect(await quantityResponse?.json()).toMatchObject({
+      order: { quantity: 1 },
+      status: { order_quantity: 1, cancel_quantity: 1 },
+    });
+    expect(await cancelResponse?.json()).toMatchObject({
+      order: { quantity: 2 },
+      status: { status: "Cancelled", order_quantity: 0, cancel_quantity: 2 },
+    });
+    expect(
+      connector.invocations.map((item) => item.target.methodPath[0]),
+    ).toEqual([
+      "placeOrder",
+      "makeModifyPriceObj",
+      "modifyPrice",
+      "makeModifyQuantityObj",
+      "modifyQuantity",
+      "cancelOrder",
+    ]);
+    expect(connector.invocations[3]?.arguments[1]).toBe(1000);
+  });
+
+  test("uses futures lot modification methods", async () => {
+    const connector = new FlexibleConnector((invocation) => {
+      const method = invocation.target.methodPath[0];
+      if (method === "placeOrder") {
+        return {
+          isSuccess: true,
+          data: {
+            seqNo: "F0001",
+            orderNo: "F001",
+            assetType: 1,
+            symbol: "TXF",
+            buySell: "Buy",
+            price: 20000,
+            lot: 2,
+            afterLot: 2,
+            filledLot: 0,
+            status: 10,
+          },
+        };
+      }
+      if (method === "makeModifyLotObj") return { lot: 1 };
+      if (method === "modifyLot") {
+        return {
+          isSuccess: true,
+          data: {
+            seqNo: "F0001",
+            orderNo: "F001",
+            assetType: 1,
+            symbol: "TXF",
+            price: 20000,
+            lot: 2,
+            afterLot: 1,
+            filledLot: 0,
+            status: 10,
+          },
+        };
+      }
+      throw new Error(`Unexpected method: ${method}`);
+    });
+    const handler = createBridgeRequestHandler(connector);
+    await handler(
+      jsonRequest("/order/place_order", "POST", {
+        contract: { security_type: "FUT", exchange: "TAIFEX", code: "TXF" },
+        futures_order: {
+          action: "Buy",
+          price: 20000,
+          quantity: 2,
+          price_type: "LMT",
+          order_type: "ROD",
+        },
+      }),
+    );
+    const response = await handler(
+      jsonRequest("/order/update_qty", "POST", {
+        trade_id: "F0001",
+        quantity: 1,
+      }),
+    );
+
+    expect(response?.status).toBe(200);
+    expect(connector.invocations.slice(-2)).toMatchObject([
+      {
+        target: { service: "futopt", methodPath: ["makeModifyLotObj"] },
+        arguments: [expect.any(Object), 1],
+      },
+      {
+        target: { service: "futopt", methodPath: ["modifyLot"] },
+      },
+    ]);
   });
 });
 

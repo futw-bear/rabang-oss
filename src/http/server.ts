@@ -1,6 +1,7 @@
 import type { Connector } from "../connectors/connector.ts";
 import type { FubonAccount } from "../connectors/fubon-connector.ts";
 import { createRequestHandler } from "./app.ts";
+import { SqliteOrderStore } from "../bridge/order-store.ts";
 import {
   MarketDataWebSocketProxy,
   parseMarketDataWebSocketMode,
@@ -13,8 +14,12 @@ export function startHttpServer(
       readonly accounts: readonly FubonAccount[];
     },
   port: number,
+  databasePath: string,
 ): ReturnType<typeof Bun.serve> {
-  const requestHandler = createRequestHandler(connector);
+  const requestHandler = createRequestHandler(
+    connector,
+    new SqliteOrderStore(databasePath),
+  );
   const marketDataWebSocketProxy = new MarketDataWebSocketProxy(connector);
 
   return Bun.serve<{ id: string; mode: "speed" | "normal" }>({
@@ -37,7 +42,10 @@ export function startHttpServer(
         const mode = parseMarketDataWebSocketMode(url.searchParams.get("mode"));
         if (!mode) {
           return Response.json(
-            { status: "invalid_request", message: "mode must be speed or normal" },
+            {
+              status: "invalid_request",
+              message: "mode must be speed or normal",
+            },
             { status: 400 },
           );
         }

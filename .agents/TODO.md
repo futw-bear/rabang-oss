@@ -51,10 +51,10 @@
 
 | Method | Shioaji route | Bridge route | Function | Status | Remaining work or limitation |
 | --- | --- | --- | --- | --- | --- |
-| POST | `/api/v1/order/place_order` | `/bridge/api/v1/order/place_order` | 下單一般股票、期貨或選擇權委託。 | Partial | 轉換請求列舉值與數量，並回傳巢狀的 Shioaji 形式 `Trade`；部分 Shioaji 狀態時間戳與成交詳細資料為合成值或無法取得。正式模式會送出真正的 Fubon 委託。 |
-| POST | `/api/v1/order/cancel_order` | `/bridge/api/v1/order/cancel_order` | 依 Shioaji trade ID 刪單。 | Not implemented (501) | Shioaji 傳送 `Trade.order.id`，Fubon 則需要原始完整的 order-result object；需要持久化關聯儲存。 |
-| POST | `/api/v1/order/update_price` | `/bridge/api/v1/order/update_price` | 依 trade ID 修改委託價格。 | Not implemented (501) | 同樣需要持久化的 Shioaji trade-ID 與 Fubon order-result 關聯儲存。 |
-| POST | `/api/v1/order/update_qty` | `/bridge/api/v1/order/update_qty` | 依 trade ID 減少委託數量。 | Not implemented (501) | 同樣需要持久化的 Shioaji trade-ID 與 Fubon order-result 關聯儲存。 |
+| POST | `/api/v1/order/place_order` | `/bridge/api/v1/order/place_order` | 下單一般股票、期貨或選擇權委託。 | Partial | 轉換請求列舉值與數量，並回傳巢狀的 Shioaji 形式 `Trade`；部分 Shioaji 狀態時間戳與成交詳細資料為合成值或無法取得。正式模式會送出真正的 Fubon 委託，並將完整 OrderResult 寫入 SQLite 關聯儲存。 |
+| POST | `/api/v1/order/cancel_order` | `/bridge/api/v1/order/cancel_order` | 依 Shioaji trade ID 刪單。 | Partial | SQLite 會保存完整 Fubon order-result 與帳戶關聯，並呼叫股票或期貨／選擇權 `cancelOrder`；部分 Shioaji 事件欄位仍需由 Fubon 回報推導。 |
+| POST | `/api/v1/order/update_price` | `/bridge/api/v1/order/update_price` | 依 trade ID 修改委託價格。 | Partial | 透過 SQLite 關聯資料重建 Fubon 修改物件，再呼叫 `makeModifyPriceObj` 與 `modifyPrice`；修改後 Trade ID 可跨程序重啟使用。 |
+| POST | `/api/v1/order/update_qty` | `/bridge/api/v1/order/update_qty` | 依 trade ID 減少委託數量。 | Partial | 僅接受小於目前有效數量的正整數；股票整股會轉換為股數，期貨／選擇權使用 lot；部分成交與交易所狀態欄位仍受 Fubon 回報限制。 |
 | POST | `/api/v1/order/trades` | `/bridge/api/v1/order/trades` | 重新整理並列出股票或期貨／選擇權委託。 | Partial | Fubon order results 會轉換成巢狀的 Shioaji 形式交易；完整成交陣列、交易所時間戳及所有 Shioaji 狀態欄位均無法取得。 |
 | POST | `/api/v1/order/place_comboorder` | `/bridge/api/v1/order/place_comboorder` | 下單期貨／選擇權組合委託。 | Not implemented (501) | 沒有記錄任何能保留 Shioaji 組合合約與組合腿語意的 Fubon 流程。 |
 | POST | `/api/v1/order/cancel_comboorder` | `/bridge/api/v1/order/cancel_comboorder` | 取消組合委託。 | Not implemented (501) | 沒有對應的 Fubon 組合交易物件或穩定的組合 trade ID。 |
@@ -121,12 +121,11 @@
 
 ## 優先 TODO
 
-1. 新增持久化的交易關聯儲存，然後實作 `cancel_order`、`update_price` 與 `update_qty`。
-2. 封存固定版本的 Shioaji 1.5 `/openapi.json`，並加入 request／response／SSE contract fixture，以精確比對欄位與 optional value。
-3. 新增具帳戶擁有權的持久化自選清單與應用程式儲存。
-4. 將完整的 Shioaji OpenAPI component schemas 加入 `/bridge/openapi.json`。
-5. 在定義穩定的跨券商識別模型後，重新檢視期貨／選擇權合約中繼資料與已實現損益。
-6. 在存在等價且可測試的 Fubon 資料來源前，讓組合、預約、圈存、法規、CA 到期、使用量、每日報價、detail-ID 與交易限額路由維持 HTTP 501。
+1. 封存固定版本的 Shioaji 1.5 `/openapi.json`，並加入 request／response／SSE contract fixture，以精確比對欄位與 optional value。
+2. 新增具帳戶擁有權的持久化自選清單與應用程式儲存。
+3. 將完整的 Shioaji OpenAPI component schemas 加入 `/bridge/openapi.json`。
+4. 在定義穩定的跨券商識別模型後，重新檢視期貨／選擇權合約中繼資料與已實現損益。
+5. 在存在等價且可測試的 Fubon 資料來源前，讓組合、預約、圈存、法規、CA 到期、使用量、每日報價、detail-ID 與交易限額路由維持 HTTP 501。
 
 ## 來源參考
 

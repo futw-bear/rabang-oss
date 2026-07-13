@@ -58,18 +58,26 @@ are not treated as UTC Shioaji market times.
 
 ### Regular orders
 
-| Endpoint                                     | Implementation                                                                                            |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `order/place_order`                          | Converts stock, futures, and options request enums, units, account selectors, and nested Trade responses. |
-| `order/trades`                               | Converts Fubon stock/futures order results into Shioaji nested Trade objects.                             |
-| `order/order_deal_records`                   | Converts reconciled Fubon order results into Shioaji order-event records.                                 |
-| `cancel_order`, `update_price`, `update_qty` | HTTP `501` until a stable trade-ID correlation store is implemented.                                      |
-| Combo-order endpoints                        | HTTP `501`; no equivalent Fubon combo workflow exists.                                                    |
-| Reserve and earmarking endpoints             | HTTP `501`; no equivalent Fubon workflow exists.                                                          |
+| Endpoint                                     | Implementation                                                                                                        |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `order/place_order`                          | Converts stock, futures, and options request enums, units, account selectors, and nested Trade responses.             |
+| `order/trades`                               | Converts Fubon stock/futures order results into Shioaji nested Trade objects.                                         |
+| `order/order_deal_records`                   | Converts reconciled Fubon order results into Shioaji order-event records.                                             |
+| `cancel_order`, `update_price`, `update_qty` | Resolves the persisted `trade_id`, calls the stock or futures SDK modification method, and returns the updated Trade. |
+| Combo-order endpoints                        | HTTP `501`; no equivalent Fubon combo workflow exists.                                                                |
+| Reserve and earmarking endpoints             | HTTP `501`; no equivalent Fubon workflow exists.                                                                      |
 
 Order conversion rejects unknown enum values and invalid TAIFEX combinations
 before invoking Fubon. A stock `Common` quantity is converted from Shioaji lots
 to Fubon shares. Odd-lot quantities remain shares.
+
+Successful `place_order` results and records returned by `trades` are stored in
+SQLite with their Fubon account, complete order-result object, contract, and
+original Shioaji order. This correlation data allows later order modifications
+to survive a bridge restart. The database defaults to `./rabang.sqlite`; set
+`RABANG_DATABASE_PATH` to use another file. The configured parent directory
+must already exist and be writable. `update_qty` accepts only a positive integer
+smaller than the order's current effective quantity.
 
 Production requests execute real broker operations. Tests use connector stubs
 and do not submit orders.
@@ -139,6 +147,7 @@ Shioaji HTTP/SSE client
           +-- regular-order adapters
           +-- portfolio adapters
           +-- shared SSE subscription manager
+          +-- SQLite order-correlation store
           +-- local watchlist/app store
           |
           v

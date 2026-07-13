@@ -1,4 +1,5 @@
 import type { FubonAccount } from "../connectors/fubon-connector.ts";
+import type { OrderStore, StoredOrder } from "./order-store.ts";
 import {
   asNumber,
   asString,
@@ -17,21 +18,10 @@ import {
 
 export async function handleOrders(
   connector: BridgeConnector,
+  orderStore: OrderStore,
   path: string,
   request: Request,
 ): Promise<Response> {
-  if (
-    [
-      "/api/v1/order/cancel_order",
-      "/api/v1/order/update_price",
-      "/api/v1/order/update_qty",
-    ].includes(path)
-  ) {
-    unsupported(
-      path,
-      "Fubon requires the original order-result object; bridge trade correlation is not implemented",
-    );
-  }
   if (
     [
       "/api/v1/order/place_comboorder",
@@ -59,11 +49,17 @@ export async function handleOrders(
   const body = await readJsonObject(request);
   switch (path) {
     case "/api/v1/order/place_order":
-      return placeOrder(connector, body);
+      return placeOrder(connector, orderStore, body);
+    case "/api/v1/order/cancel_order":
+      return changeOrder(connector, orderStore, body, "cancel");
+    case "/api/v1/order/update_price":
+      return changeOrder(connector, orderStore, body, "price");
+    case "/api/v1/order/update_qty":
+      return changeOrder(connector, orderStore, body, "quantity");
     case "/api/v1/order/trades":
-      return trades(connector, body);
+      return trades(connector, orderStore, body);
     case "/api/v1/order/order_deal_records":
-      return orderDealRecords(connector, body);
+      return orderDealRecords(connector, orderStore, body);
     default:
       unsupported(path);
   }
@@ -71,6 +67,7 @@ export async function handleOrders(
 
 async function placeOrder(
   connector: BridgeConnector,
+  orderStore: OrderStore,
   body: Record<string, unknown>,
 ): Promise<Response> {
   assertAllowedFields(body, ["contract", "stock_order", "futures_order"]);
@@ -92,7 +89,9 @@ async function placeOrder(
         "stock.placeOrder",
       ),
     );
-    return Response.json(mapTrade(result, contract, order, false));
+    const trade = mapTrade(result, contract, order, false);
+    persistOrder(orderStore, account, result, contract, order, false);
+    return Response.json(trade);
   }
   if (securityType === "FUT" || securityType === "OPT") {
     const order = objectField(body, "futures_order", true)!;
@@ -107,7 +106,9 @@ async function placeOrder(
         "futopt.placeOrder",
       ),
     );
-    return Response.json(mapTrade(result, contract, order, true));
+    const trade = mapTrade(result, contract, order, true);
+    persistOrder(orderStore, account, result, contract, order, true);
+    return Response.json(trade);
   }
   throw new BridgeHttpError(
     400,
@@ -235,8 +236,136 @@ function mapFuturesOrder(
   };
 }
 
+type OrderChange = "cancel" | "price" | "quantity";
+
+async function changeOrder(
+  connector: BridgeConnector,
+  orderStore: OrderStore,
+  body: Record<string, unknown>,
+  change: OrderChange,
+): Promise<Response> {
+  const allowed =
+    change === "price"
+      ? ["trade_id", "price"]
+      : change === "quantity"
+        ? ["trade_id", "quantity"]
+        : ["trade_id"];
+  assertAllowedFields(body, allowed);
+  const tradeId = stringField(body, "trade_id", true)!;
+  const stored = orderStore.get(tradeId);
+  if (!stored) {
+    throw new BridgeHttpError(404, `Trade not found: ${tradeId}`);
+  }
+
+  const account = selectAccount(
+    connector.accounts,
+    {
+      account_type: stored.accountType,
+      broker_id: stored.brokerId,
+      account_id: stored.accountId,
+    },
+    stored.accountType,
+  );
+  const service = stored.future ? "futopt" : "stock";
+  let method: string;
+  let argument: Record<string, unknown> = stored.orderResult;
+
+  if (change === "cancel") {
+    method = "cancelOrder";
+  } else if (change === "price") {
+    const price = requiredPositiveNumber(body, "price");
+    method = "modifyPrice";
+    argument = record(
+      await connector.invokeProxy({
+        target: { service, methodPath: ["makeModifyPriceObj"] },
+        arguments: [stored.orderResult, String(price)],
+      }),
+    );
+  } else {
+    const quantity = requiredPositiveInteger(body, "quantity");
+    const currentQuantity = effectiveQuantity(stored);
+    if (quantity >= currentQuantity) {
+      throw new BridgeHttpError(
+        400,
+        `quantity must be less than the current quantity (${currentQuantity})`,
+      );
+    }
+    method = stored.future ? "modifyLot" : "modifyQuantity";
+    const factory = stored.future
+      ? "makeModifyLotObj"
+      : "makeModifyQuantityObj";
+    argument = record(
+      await connector.invokeProxy({
+        target: { service, methodPath: [factory] },
+        arguments: [stored.orderResult, brokerQuantity(stored, quantity)],
+      }),
+    );
+  }
+
+  const result = record(
+    unwrapFubon(
+      await connector.invokeProxy({
+        target: { service, methodPath: [method] },
+        arguments: [account, argument, false],
+      }),
+      `${service}.${method}`,
+    ),
+  );
+  orderStore.put({ ...stored, orderResult: result });
+  return Response.json(
+    mapTrade(
+      result,
+      stored.contract,
+      stored.orderInput,
+      stored.future,
+      tradeId,
+    ),
+  );
+}
+
+function persistOrder(
+  orderStore: OrderStore,
+  account: FubonAccount,
+  orderResult: Record<string, unknown>,
+  contract: Record<string, unknown>,
+  orderInput: Record<string, unknown>,
+  future: boolean,
+): void {
+  const tradeId = asString(orderResult.seqNo || orderResult.orderNo);
+  if (!tradeId) throw new Error("Fubon order result has no trade identifier");
+  orderStore.put({
+    tradeId,
+    accountType: future ? "F" : "S",
+    brokerId: account.branchNo,
+    accountId: account.account,
+    future,
+    contract,
+    orderInput,
+    orderResult,
+  });
+}
+
+function brokerQuantity(stored: StoredOrder, quantity: number): number {
+  if (stored.future) return quantity;
+  const lot = asString(stored.orderInput.order_lot, "Common");
+  return lot === "Common" || lot === "Fixing" ? quantity * 1000 : quantity;
+}
+
+function effectiveQuantity(stored: StoredOrder): number {
+  if (stored.future) {
+    return asNumber(
+      stored.orderResult.afterLot,
+      asNumber(stored.orderInput.quantity),
+    );
+  }
+  const unit = Math.max(1, asNumber(stored.orderResult.unit, 1000));
+  const fallback = brokerQuantity(stored, asNumber(stored.orderInput.quantity));
+  return asNumber(stored.orderResult.afterQty, fallback) / unit;
+}
+
 async function trades(
   connector: BridgeConnector,
+  orderStore: OrderStore,
   body: Record<string, unknown>,
 ): Promise<Response> {
   assertAllowedFields(body, [
@@ -260,14 +389,28 @@ async function trades(
       "getOrderResults",
     ),
   );
-  return Response.json(data.map((item) => mapTradeFromResult(item, isFuture)));
+  return Response.json(
+    data.map((item) => {
+      const trade = mapTradeFromResult(item, isFuture);
+      persistOrder(
+        orderStore,
+        account,
+        item,
+        record(trade.contract),
+        record(trade.order),
+        isFuture,
+      );
+      return trade;
+    }),
+  );
 }
 
 async function orderDealRecords(
   connector: BridgeConnector,
+  orderStore: OrderStore,
   body: Record<string, unknown>,
 ): Promise<Response> {
-  const response = await trades(connector, body);
+  const response = await trades(connector, orderStore, body);
   const values = (await response.json()) as Record<string, unknown>[];
   return Response.json(
     values.map((trade) => {
@@ -312,19 +455,20 @@ function mapTrade(
   contract: Record<string, unknown>,
   orderInput: Record<string, unknown>,
   future: boolean,
+  tradeId?: string,
 ): Record<string, unknown> {
-  const quantity = future
-    ? asNumber(result.lot ?? orderInput.quantity)
-    : orderInput.quantity !== undefined
-      ? asNumber(orderInput.quantity)
-      : asNumber(result.quantity) / Math.max(1, asNumber(result.unit, 1000));
-  const filledRaw = asNumber(future ? result.filledLot : result.filledQty);
   const stockUnit = Math.max(1, asNumber(result.unit, 1000));
+  const quantity = future
+    ? asNumber(result.lot, asNumber(orderInput.quantity))
+    : result.quantity !== undefined
+      ? asNumber(result.quantity) / stockUnit
+      : asNumber(orderInput.quantity);
+  const filledRaw = asNumber(future ? result.filledLot : result.filledQty);
   const filled = future ? filledRaw : filledRaw / stockUnit;
   const effectiveQuantity = future
     ? asNumber(result.afterLot, quantity)
     : asNumber(result.afterQty, quantity * stockUnit) / stockUnit;
-  const id = asString(result.seqNo || result.orderNo);
+  const id = tradeId ?? asString(result.seqNo || result.orderNo);
   return {
     contract,
     order: {
@@ -332,8 +476,8 @@ function mapTrade(
       seqno: asString(result.seqNo),
       ordno: asString(result.orderNo),
       action: result.buySell ?? orderInput.action,
-      price: asNumber(result.price ?? orderInput.price),
-      quantity,
+      price: asNumber(result.afterPrice ?? result.price ?? orderInput.price),
+      quantity: asNumber(result.status) === 30 ? quantity : effectiveQuantity,
       price_type:
         orderInput.price_type ?? reversePriceType(result.priceType, future),
       order_type: orderInput.order_type ?? asString(result.timeInForce, "ROD"),
@@ -345,7 +489,7 @@ function mapTrade(
       id,
       status: mapOrderStatus(asNumber(result.status), filled, quantity),
       status_code: asString(result.status),
-      order_quantity: quantity,
+      order_quantity: effectiveQuantity,
       deal_quantity: filled,
       cancel_quantity: Math.max(0, quantity - effectiveQuantity),
       modified_price: asNumber(result.afterPrice ?? result.price),
@@ -422,5 +566,16 @@ function requiredPositiveNumber(
   const value = requiredNumber(object, field);
   if (value <= 0)
     throw new BridgeHttpError(400, `${field} must be greater than zero`);
+  return value;
+}
+
+function requiredPositiveInteger(
+  object: Record<string, unknown>,
+  field: string,
+): number {
+  const value = requiredPositiveNumber(object, field);
+  if (!Number.isInteger(value)) {
+    throw new BridgeHttpError(400, `${field} must be an integer`);
+  }
   return value;
 }

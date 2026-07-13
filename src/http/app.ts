@@ -6,6 +6,7 @@ import {
 } from "../proxy/fubon-proxy-endpoints.ts";
 import type { FubonProxyInvocation } from "../proxy/fubon-proxy-types.ts";
 import { createBridgeRequestHandler } from "../bridge/bridge.ts";
+import { type OrderStore, SqliteOrderStore } from "../bridge/order-store.ts";
 
 class InvalidProxyRequestError extends Error {}
 
@@ -15,8 +16,13 @@ type AccountConnector = Connector & {
 
 export function createRequestHandler(
   connector: AccountConnector,
+  orderStore: OrderStore = new SqliteOrderStore(),
 ): (request: Request) => Promise<Response> {
-  const bridgeRequestHandler = createBridgeRequestHandler(connector);
+  const bridgeRequestHandler = createBridgeRequestHandler(
+    connector,
+    undefined,
+    orderStore,
+  );
 
   return async (request) => {
     const url = new URL(request.url);

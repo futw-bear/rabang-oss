@@ -95,22 +95,21 @@ describe("Shioaji API bridge", () => {
     expect(connector.invocations).toEqual([]);
   });
 
-  test("returns an explicit capability error for unimplemented endpoints", async () => {
+  test("returns not found when an order mutation has no persisted trade", async () => {
     const handler = createBridgeRequestHandler(
       new StubConnector("connected", {}),
     );
     const response = await handler(
       new Request("http://localhost/bridge/api/v1/order/cancel_order", {
         method: "POST",
-        body: "{}",
+        body: JSON.stringify({ trade_id: "missing" }),
       }),
     );
 
-    expect(response?.status).toBe(501);
+    expect(response?.status).toBe(404);
     expect(await response?.json()).toEqual({
-      code: 501,
-      message:
-        "Fubon requires the original order-result object; bridge trade correlation is not implemented",
+      code: 404,
+      message: "Trade not found: missing",
       details: null,
     });
   });

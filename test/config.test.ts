@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
+  loadDatabasePath,
   loadFubonCredentials,
   loadFubonOfflineRecoveryStrategy,
   loadPort,
@@ -107,6 +108,21 @@ describe("loadPort", () => {
 
   test("rejects invalid ports", () => {
     expect(() => loadPort({ PORT: "invalid" })).toThrow("Invalid PORT");
+  });
+});
+
+describe("loadDatabasePath", () => {
+  test("uses a persistent local database by default", () => {
+    expect(loadDatabasePath({})).toBe("./rabang.sqlite");
+  });
+
+  test("accepts an override and rejects an empty path", () => {
+    expect(
+      loadDatabasePath({ RABANG_DATABASE_PATH: "/data/orders.sqlite" }),
+    ).toBe("/data/orders.sqlite");
+    expect(() => loadDatabasePath({ RABANG_DATABASE_PATH: "  " })).toThrow(
+      "RABANG_DATABASE_PATH must not be empty",
+    );
   });
 });
 

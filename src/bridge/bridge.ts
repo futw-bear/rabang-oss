@@ -8,6 +8,7 @@ import {
 import { LocalBridgeApi } from "./local-api.ts";
 import { handleMarketData } from "./market-data.ts";
 import { handleOrders } from "./orders.ts";
+import { type OrderStore, SqliteOrderStore } from "./order-store.ts";
 import { handlePortfolio } from "./portfolio.ts";
 import { BridgeStreaming } from "./streaming.ts";
 
@@ -75,6 +76,7 @@ export const BRIDGE_ENDPOINT_METHODS: ReadonlyMap<string, string> = new Map([
 export function createBridgeRequestHandler(
   connector: BridgeConnector,
   now: () => Date = () => new Date(),
+  orderStore: OrderStore = new SqliteOrderStore(),
 ): (request: Request) => Promise<Response | undefined> {
   const local = new LocalBridgeApi();
   const streaming = new BridgeStreaming(connector, now);
@@ -166,7 +168,7 @@ export function createBridgeRequestHandler(
       if (path.startsWith("/api/v1/data/"))
         return await handleMarketData(connector, path, request, now);
       if (path.startsWith("/api/v1/order/"))
-        return await handleOrders(connector, path, request);
+        return await handleOrders(connector, orderStore, path, request);
       if (path.startsWith("/api/v1/portfolio/"))
         return await handlePortfolio(connector, path, request, now);
       if (path.startsWith("/api/v1/stream/"))
