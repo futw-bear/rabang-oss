@@ -45,6 +45,26 @@ describe("GET /api/pub/securities", () => {
   });
 });
 
+describe("GET /api/pub/prices", () => {
+  test("is available while the connector is attempting to connect", async () => {
+    const publicApiRequestHandler = createPublicApiRequestHandler({
+      fetch: async () => Response.json([{ Code: "2330" }]),
+    });
+    const handler = createRequestHandler(
+      new StubConnector("attempting"),
+      undefined,
+      publicApiRequestHandler,
+    );
+
+    const response = await handler(
+      new Request("http://localhost/api/pub/prices?market=TSE"),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual([{ Code: "2330" }]);
+  });
+});
+
 describe("Fubon proxy API", () => {
   test("forwards market data query parameters without renaming keys", async () => {
     const connector = new StubConnector("connected", {

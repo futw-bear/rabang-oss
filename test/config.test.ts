@@ -102,8 +102,8 @@ describe("loadFubonCredentials", () => {
 });
 
 describe("loadPort", () => {
-  test("uses port 3000 by default", () => {
-    expect(loadPort({})).toBe(3000);
+  test("uses port 4000 by default", () => {
+    expect(loadPort({})).toBe(4000);
   });
 
   test("rejects invalid ports", () => {
