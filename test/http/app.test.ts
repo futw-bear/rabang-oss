@@ -5,6 +5,7 @@ import type {
 } from "../../src/connectors/connector.ts";
 import { createRequestHandler } from "../../src/http/app.ts";
 import type { FubonProxyInvocation } from "../../src/proxy/fubon-proxy-types.ts";
+import { createPublicApiRequestHandler } from "../../src/http/public-api.ts";
 
 describe("GET /", () => {
   test("returns 503 while the connector is attempting to connect", async () => {
@@ -21,6 +22,26 @@ describe("GET /", () => {
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ status: "ok" });
+  });
+});
+
+describe("GET /api/pub/securities", () => {
+  test("is available while the connector is attempting to connect", async () => {
+    const publicApiRequestHandler = createPublicApiRequestHandler({
+      fetch: async () => Response.json([{ code: "2330" }]),
+    });
+    const handler = createRequestHandler(
+      new StubConnector("attempting"),
+      undefined,
+      publicApiRequestHandler,
+    );
+
+    const response = await handler(
+      new Request("http://localhost/api/pub/securities"),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual([{ code: "2330" }]);
   });
 });
 
