@@ -1,6 +1,7 @@
 import {
   loadFubonCredentials,
   loadFubonOfflineRecoveryStrategy,
+  loadDatabasePath,
   loadPort,
 } from "./src/config.ts";
 import { FubonConnector } from "./src/connectors/fubon-connector.ts";
@@ -13,7 +14,11 @@ const connector = new FubonConnector(
   undefined,
   loadFubonOfflineRecoveryStrategy(Bun.env),
 );
-const server = startHttpServer(connector, loadPort(Bun.env));
+const server = startHttpServer(
+  connector,
+  loadPort(Bun.env),
+  loadDatabasePath(Bun.env),
+);
 
 console.log(`HTTP server listening on ${server.url}`);
 

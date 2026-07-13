@@ -10,7 +10,9 @@ const TEST_ENVIRONMENT_DEFAULTS = {
   certPassword: "12345678",
 };
 
-export function loadFubonCredentials(environment: Environment): FubonCredentials {
+export function loadFubonCredentials(
+  environment: Environment,
+): FubonCredentials {
   const testEnvironment = environment.FUBON_TESTENV === "1";
 
   if (testEnvironment) {
@@ -22,7 +24,10 @@ export function loadFubonCredentials(environment: Environment): FubonCredentials
   }
 
   const apiKey = environment.FUBON_API_KEY;
-  const personalId = requireValue(environment.FUBON_PERSONAL_ID, "FUBON_PERSONAL_ID");
+  const personalId = requireValue(
+    environment.FUBON_PERSONAL_ID,
+    "FUBON_PERSONAL_ID",
+  );
   const certPath = requireValue(environment.FUBON_CERT_PATH, "FUBON_CERT_PATH");
   const certPassword = environment.FUBON_CERT_PASSWORD || personalId;
   const password = environment.FUBON_PASSWORD;
@@ -65,6 +70,14 @@ export function loadPort(environment: Environment): number {
   }
 
   return port;
+}
+
+export function loadDatabasePath(environment: Environment): string {
+  const path = environment.RABANG_DATABASE_PATH ?? "./rabang.sqlite";
+  if (path.trim().length === 0) {
+    throw new Error("RABANG_DATABASE_PATH must not be empty");
+  }
+  return path;
 }
 
 export function loadFubonOfflineRecoveryStrategy(

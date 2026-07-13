@@ -1,0 +1,4 @@
+interface:
+  display_name: "Shioaji API"
+  short_description: "Build and debug Shioaji API integrations"
+  default_prompt: "Use $shioaji-api to build a Shioaji integration from the official documentation."

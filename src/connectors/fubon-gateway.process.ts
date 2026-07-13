@@ -48,14 +48,15 @@ async function handleRequest(request: AnyFubonGatewayRequest): Promise<void> {
       case "invoke":
         sendSuccess(
           request.id,
-          await invokeProxy(
-            request.payload.target,
-            request.payload.arguments,
-          ),
+          await invokeProxy(request.payload.target, request.payload.arguments),
         );
         return;
       case "openMarketDataWebSocket":
-        await openMarketDataWebSocket(request.payload.id, request.payload.mode);
+        await openMarketDataWebSocket(
+          request.payload.id,
+          request.payload.mode,
+          request.payload.product ?? "stock",
+        );
         sendSuccess(request.id, {});
         return;
       case "sendMarketDataWebSocket":
@@ -112,6 +113,15 @@ async function login(
     };
     process.send?.(event);
   });
+  sdk.setOnOrder((error, content) =>
+    sendTradingEvent("order", error?.message ?? "00", content),
+  );
+  sdk.setOnOrderChanged((error, content) =>
+    sendTradingEvent("orderChanged", error?.message ?? "00", content),
+  );
+  sdk.setOnFilled((error, content) =>
+    sendTradingEvent("filled", error?.message ?? "00", content),
+  );
   try {
     await openMarketDataHeartbeatConnection();
   } catch (error) {
@@ -193,6 +203,9 @@ function logout(): boolean {
   }
 
   sdk.setOnEvent(() => {});
+  sdk.setOnOrder(() => {});
+  sdk.setOnOrderChanged(() => {});
+  sdk.setOnFilled(() => {});
   const success = sdk.logout();
   sdk = undefined;
   accounts = [];
@@ -228,7 +241,8 @@ async function openMarketDataHeartbeatConnection(): Promise<void> {
   }
 
   sdk.initRealtime();
-  const client = sdk.marketdata.webSocketClient.stock as MarketDataWebSocketClient;
+  const client = sdk.marketdata.webSocketClient
+    .stock as MarketDataWebSocketClient;
   const watchdog = new MarketDataHeartbeatWatchdog(() => {
     const event: FubonGatewayEvent = {
       type: "event",
@@ -270,6 +284,7 @@ function closeMarketDataHeartbeatConnection(): void {
 async function openMarketDataWebSocket(
   id: string,
   mode: MarketDataWebSocketMode,
+  product: "stock" | "futopt" = "stock",
 ): Promise<void> {
   ensureConnected();
 
@@ -282,7 +297,9 @@ async function openMarketDataWebSocket(
   }
 
   sdk.initRealtime(mode === "speed" ? Mode.Speed : Mode.Normal);
-  const client = sdk.marketdata.webSocketClient.stock as MarketDataWebSocketClient;
+  const client = sdk.marketdata.webSocketClient[
+    product
+  ] as MarketDataWebSocketClient;
   const listener = (message: unknown) => {
     const event: FubonGatewayEvent = {
       type: "event",
@@ -336,7 +353,9 @@ async function sendMarketDataWebSocket(
   }
 }
 
-function parseMarketDataWebSocketCommand(rawMessage: string):
+function parseMarketDataWebSocketCommand(
+  rawMessage: string,
+):
   | { event: "subscribe"; data: { channel: string; [key: string]: unknown } }
   | { event: "unsubscribe"; data: { id?: string; ids?: string[] } }
   | { event: "ping"; data: { state?: unknown } }
@@ -412,6 +431,19 @@ function sendSuccess(id: string, data: unknown): void {
     data,
   };
   process.send?.(response);
+}
+
+function sendTradingEvent(
+  kind: "order" | "orderChanged" | "filled",
+  code: string,
+  content: unknown,
+): void {
+  const event: FubonGatewayEvent = {
+    type: "event",
+    event: "trading",
+    data: { kind, code, content },
+  };
+  process.send?.(event);
 }
 
 function sendFailure(id: string, error: unknown): void {

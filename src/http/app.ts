@@ -4,9 +4,9 @@ import {
   matchFubonProxyEndpoint,
   type FubonProxyEndpoint,
 } from "../proxy/fubon-proxy-endpoints.ts";
-import type {
-  FubonProxyInvocation,
-} from "../proxy/fubon-proxy-types.ts";
+import type { FubonProxyInvocation } from "../proxy/fubon-proxy-types.ts";
+import { createBridgeRequestHandler } from "../bridge/bridge.ts";
+import { type OrderStore, SqliteOrderStore } from "../bridge/order-store.ts";
 
 class InvalidProxyRequestError extends Error {}
 
@@ -16,9 +16,21 @@ type AccountConnector = Connector & {
 
 export function createRequestHandler(
   connector: AccountConnector,
+  orderStore: OrderStore = new SqliteOrderStore(),
 ): (request: Request) => Promise<Response> {
+  const bridgeRequestHandler = createBridgeRequestHandler(
+    connector,
+    undefined,
+    orderStore,
+  );
+
   return async (request) => {
     const url = new URL(request.url);
+
+    const bridgeResponse = await bridgeRequestHandler(request);
+    if (bridgeResponse) {
+      return bridgeResponse;
+    }
 
     if (request.method === "GET" && url.pathname === "/") {
       if (connector.status === "connected") {
@@ -294,9 +306,7 @@ function coerceOrderedParameter(name: string, value: unknown): unknown {
   ) {
     const number = Number(value);
     if (!Number.isFinite(number)) {
-      throw new InvalidProxyRequestError(
-        `Parameter ${name} must be a number`,
-      );
+      throw new InvalidProxyRequestError(`Parameter ${name} must be a number`);
     }
 
     return number;

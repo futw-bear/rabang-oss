@@ -27,7 +27,14 @@ const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
 type GatewayEventListener = (event: FubonGatewayEvent) => void;
 type GatewayExitListener = (error: Error) => void;
 type DisconnectListener = () => void;
-type MarketDataWebSocketListener = (message: MarketDataWebSocketMessage) => void;
+type MarketDataWebSocketListener = (
+  message: MarketDataWebSocketMessage,
+) => void;
+export type FubonTradingEvent = Extract<
+  FubonGatewayEvent,
+  { event: "trading" }
+>["data"];
+type TradingEventListener = (event: FubonTradingEvent) => void;
 type Logger = Pick<Console, "info">;
 
 export type FubonOfflineRecoveryStrategy = "relogin" | "restartGateway";
@@ -78,8 +85,7 @@ export class FubonGatewayClient implements FubonGateway {
 
   constructor(
     private readonly requestTimeoutMs = DEFAULT_REQUEST_TIMEOUT_MS,
-    private readonly processFactory: GatewayProcessFactory =
-      spawnFubonGatewayProcess,
+    private readonly processFactory: GatewayProcessFactory = spawnFubonGatewayProcess,
   ) {}
 
   get isRunning(): boolean {
@@ -275,13 +281,13 @@ export class FubonConnector implements Connector {
   #accounts: FubonAccount[] = [];
   #disconnectListeners = new Set<DisconnectListener>();
   #marketDataWebSocketListeners = new Set<MarketDataWebSocketListener>();
+  #tradingEventListeners = new Set<TradingEventListener>();
 
   constructor(
     private readonly credentials: FubonCredentials,
     private readonly gateway: FubonGateway = new FubonGatewayClient(),
     private readonly logger: Logger = console,
-    private readonly offlineRecoveryStrategy: FubonOfflineRecoveryStrategy =
-      "relogin",
+    private readonly offlineRecoveryStrategy: FubonOfflineRecoveryStrategy = "relogin",
   ) {
     this.gateway.onExit(() => this.markDisconnected());
     this.gateway.onEvent((event) => {
@@ -298,6 +304,12 @@ export class FubonConnector implements Connector {
           listener(event.data);
         }
       }
+
+      if (event.event === "trading") {
+        for (const listener of this.#tradingEventListeners) {
+          listener(event.data);
+        }
+      }
     });
   }
 
@@ -307,6 +319,10 @@ export class FubonConnector implements Connector {
 
   get accounts(): readonly FubonAccount[] {
     return this.#accounts;
+  }
+
+  get simulation(): boolean {
+    return this.credentials.testEnvironment === true;
   }
 
   async connect(): Promise<void> {
@@ -347,14 +363,12 @@ export class FubonConnector implements Connector {
   async openMarketDataWebSocket(
     id: string,
     mode: MarketDataWebSocketMode,
+    product: "stock" | "futopt" = "stock",
   ): Promise<void> {
-    await this.request("openMarketDataWebSocket", { id, mode });
+    await this.request("openMarketDataWebSocket", { id, mode, product });
   }
 
-  async sendMarketDataWebSocket(
-    id: string,
-    message: string,
-  ): Promise<void> {
+  async sendMarketDataWebSocket(id: string, message: string): Promise<void> {
     await this.request("sendMarketDataWebSocket", { id, message });
   }
 
@@ -367,6 +381,11 @@ export class FubonConnector implements Connector {
   ): () => void {
     this.#marketDataWebSocketListeners.add(listener);
     return () => this.#marketDataWebSocketListeners.delete(listener);
+  }
+
+  onTradingEvent(listener: TradingEventListener): () => void {
+    this.#tradingEventListeners.add(listener);
+    return () => this.#tradingEventListeners.delete(listener);
   }
 
   onDisconnect(listener: DisconnectListener): () => void {

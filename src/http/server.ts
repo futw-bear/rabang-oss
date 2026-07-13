@@ -1,11 +1,25 @@
 import type { Connector } from "../connectors/connector.ts";
 import type { FubonAccount } from "../connectors/fubon-connector.ts";
 import { createRequestHandler } from "./app.ts";
+import { SqliteOrderStore } from "../bridge/order-store.ts";
 import {
   MarketDataWebSocketProxy,
   parseMarketDataWebSocketMode,
   type MarketDataWebSocketConnector,
 } from "./market-data-websocket.ts";
+
+const BRIDGE_SSE_PATH = "/bridge/api/v1/stream/data";
+
+export function isBridgeSseRequest(request: Request): boolean {
+  if (request.method !== "GET") {
+    return false;
+  }
+
+  const pathname = new URL(request.url).pathname;
+  return (
+    pathname === BRIDGE_SSE_PATH || pathname.startsWith(`${BRIDGE_SSE_PATH}/`)
+  );
+}
 
 export function startHttpServer(
   connector: Connector &
@@ -13,14 +27,22 @@ export function startHttpServer(
       readonly accounts: readonly FubonAccount[];
     },
   port: number,
+  databasePath: string,
 ): ReturnType<typeof Bun.serve> {
-  const requestHandler = createRequestHandler(connector);
+  const requestHandler = createRequestHandler(
+    connector,
+    new SqliteOrderStore(databasePath),
+  );
   const marketDataWebSocketProxy = new MarketDataWebSocketProxy(connector);
 
   return Bun.serve<{ id: string; mode: "speed" | "normal" }>({
     port,
     fetch(request, server) {
       const url = new URL(request.url);
+
+      if (isBridgeSseRequest(request)) {
+        server.timeout(request, 0);
+      }
 
       if (url.pathname === "/proxy/market-data/ws") {
         if (request.method !== "GET") {
@@ -37,7 +59,10 @@ export function startHttpServer(
         const mode = parseMarketDataWebSocketMode(url.searchParams.get("mode"));
         if (!mode) {
           return Response.json(
-            { status: "invalid_request", message: "mode must be speed or normal" },
+            {
+              status: "invalid_request",
+              message: "mode must be speed or normal",
+            },
             { status: 400 },
           );
         }
