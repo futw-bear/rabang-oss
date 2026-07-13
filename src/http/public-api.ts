@@ -1,5 +1,5 @@
 const SECURITIES_URL =
-  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities.json";
+  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities-json.json";
 const PRICE_URLS = {
   TSE: "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL",
   OTC: "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes",

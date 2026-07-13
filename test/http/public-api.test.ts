@@ -6,7 +6,7 @@ import {
 } from "../../src/http/public-api.ts";
 
 const SECURITIES_URL =
-  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities.json";
+  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities-full.json";
 const TSE_PRICES_URL =
   "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL";
 const OTC_PRICES_URL =
