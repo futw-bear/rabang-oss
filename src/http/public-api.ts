@@ -5,8 +5,10 @@ const PRICE_URLS = {
   TSE: "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL",
   OTC: "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes",
 } as const;
-const MARKET_INDEX_URL =
-  "https://openapi.twse.com.tw/v1/exchangeReport/MI_INDEX";
+const MARKET_INDEX_URLS = {
+  TSE: "https://openapi.twse.com.tw/v1/exchangeReport/MI_INDEX",
+  OTC: "https://www.tpex.org.tw/openapi/v1/tpex_index",
+} as const;
 const TAIPEI_UTC_OFFSET_MS = 8 * 60 * 60 * 1000;
 const SECURITIES_REFRESH_HOUR = 6;
 const MARKET_DATA_REFRESH_HOUR = 14;
@@ -68,9 +70,14 @@ export function createPublicApiRequestHandler(
     }
 
     if (url.pathname === "/api/pub/market_index") {
+      const market = url.searchParams.get("market") ?? "TSE";
+      if (!isMarket(market)) {
+        return invalidMarketResponse();
+      }
+
       return fetchPublicResource(
         request,
-        MARKET_INDEX_URL,
+        MARKET_INDEX_URLS[market],
         MARKET_DATA_REFRESH_HOUR,
         fetchUpstream,
         now,
@@ -78,7 +85,7 @@ export function createPublicApiRequestHandler(
     }
 
     const market = url.searchParams.get("market");
-    if (!isPriceMarket(market)) {
+    if (!isMarket(market)) {
       return invalidMarketResponse();
     }
 
@@ -165,9 +172,9 @@ async function fetchPublicResource(
   }
 }
 
-function isPriceMarket(
+function isMarket(
   market: string | null,
-): market is keyof typeof PRICE_URLS {
+): market is keyof typeof PRICE_URLS & keyof typeof MARKET_INDEX_URLS {
   return market === "TSE" || market === "OTC";
 }
 

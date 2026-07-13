@@ -13,8 +13,10 @@ const TSE_PRICES_URL =
   "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL";
 const OTC_PRICES_URL =
   "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes";
-const MARKET_INDEX_URL =
+const TSE_MARKET_INDEX_URL =
   "https://openapi.twse.com.tw/v1/exchangeReport/MI_INDEX";
+const OTC_MARKET_INDEX_URL =
+  "https://www.tpex.org.tw/openapi/v1/tpex_index";
 
 describe("GET /api/pub/securities", () => {
   test("returns the upstream securities resource with public cache headers", async () => {
@@ -233,7 +235,7 @@ describe("GET /api/pub/prices", () => {
 });
 
 describe("GET /api/pub/market_index", () => {
-  test("returns the upstream market index with public cache headers", async () => {
+  test("defaults to the TSE market index with public cache headers", async () => {
     const requests: Array<{ input: string | URL | Request; init?: RequestInit }> =
       [];
     const marketIndex = [
@@ -261,9 +263,54 @@ describe("GET /api/pub/market_index", () => {
     expect(response?.headers.get("Access-Control-Allow-Origin")).toBe("*");
     expect(await response?.json()).toEqual(marketIndex);
     expect(requests).toHaveLength(1);
-    expect(requests[0]?.input).toBe(MARKET_INDEX_URL);
+    expect(requests[0]?.input).toBe(TSE_MARKET_INDEX_URL);
     expect(requests[0]?.init?.headers).toEqual({ Accept: "application/json" });
   });
+
+  test.each([
+    ["TSE", TSE_MARKET_INDEX_URL],
+    ["OTC", OTC_MARKET_INDEX_URL],
+  ])("selects the %s market index upstream", async (market, upstreamUrl) => {
+    const requests: Array<string | URL | Request> = [];
+    const handler = createPublicApiRequestHandler({
+      fetch: async (input) => {
+        requests.push(input);
+        return Response.json([]);
+      },
+    });
+
+    const response = await handler(
+      new Request(`http://localhost/api/pub/market_index?market=${market}`),
+    );
+
+    expect(response?.status).toBe(200);
+    expect(requests).toEqual([upstreamUrl]);
+  });
+
+  test.each(["", "TWSE", "tse"])(
+    "returns 400 for unsupported market value %p",
+    async (market) => {
+      let fetched = false;
+      const handler = createPublicApiRequestHandler({
+        fetch: async () => {
+          fetched = true;
+          return Response.json([]);
+        },
+      });
+
+      const response = await handler(
+        new Request(`http://localhost/api/pub/market_index?market=${market}`),
+      );
+
+      expect(response?.status).toBe(400);
+      expect(response?.headers.get("Cache-Control")).toBe("no-store");
+      expect(await response?.json()).toEqual({
+        status: "invalid_request",
+        message: "market must be TSE or OTC",
+      });
+      expect(fetched).toBe(false);
+    },
+  );
 
   test("returns 405 for methods other than GET", async () => {
     const handler = createPublicApiRequestHandler();
