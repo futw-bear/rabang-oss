@@ -1,5 +1,6 @@
-const SECURITIES_URL =
-  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities-full.json";
+const SECURITIES_URL_BASE =
+  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities";
+const SECURITIES_URL = `${SECURITIES_URL_BASE}-full.json`;
 const PRICE_URLS = {
   TSE: "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL",
   OTC: "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes",
@@ -52,9 +53,14 @@ export function createPublicApiRequestHandler(
     }
 
     if (url.pathname === "/api/pub/securities") {
+      const upstreamUrl = securitiesUrl(url.searchParams);
+      if (!upstreamUrl) {
+        return invalidSecuritiesTypeResponse();
+      }
+
       return fetchPublicResource(
         request,
-        SECURITIES_URL,
+        upstreamUrl,
         SECURITIES_REFRESH_HOUR,
         fetchUpstream,
         now,
@@ -84,6 +90,23 @@ export function createPublicApiRequestHandler(
       now,
     );
   };
+}
+
+function securitiesUrl(searchParams: URLSearchParams): string | undefined {
+  if (!searchParams.has("type")) {
+    return SECURITIES_URL;
+  }
+
+  const type = searchParams.get("type") ?? "";
+  if (!isInteger(type)) {
+    return undefined;
+  }
+
+  return `${SECURITIES_URL_BASE}-${type}.json`;
+}
+
+function isInteger(value: string): boolean {
+  return /^-?\d+$/.test(value);
 }
 
 export function secondsUntilNextSecuritiesRefresh(now: Date): number {
@@ -151,6 +174,16 @@ function isPriceMarket(
 function invalidMarketResponse(): Response {
   return Response.json(
     { status: "invalid_request", message: "market must be TSE or OTC" },
+    {
+      status: 400,
+      headers: { ...PUBLIC_API_HEADERS, "Cache-Control": "no-store" },
+    },
+  );
+}
+
+function invalidSecuritiesTypeResponse(): Response {
+  return Response.json(
+    { status: "invalid_request", message: "type must be an integer" },
     {
       status: 400,
       headers: { ...PUBLIC_API_HEADERS, "Cache-Control": "no-store" },

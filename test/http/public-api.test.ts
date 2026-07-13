@@ -7,6 +7,8 @@ import {
 
 const SECURITIES_URL =
   "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities-full.json";
+const TYPE_ONE_SECURITIES_URL =
+  "https://raw.githubusercontent.com/futw-bear/securities-list/refs/heads/main/data/parsed/securities-1.json";
 const TSE_PRICES_URL =
   "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL";
 const OTC_PRICES_URL =
@@ -61,6 +63,48 @@ describe("GET /api/pub/securities", () => {
     expect(response?.headers.get("Allow")).toBe("GET");
     expect(fetched).toBe(false);
   });
+
+  test("forwards an integer type parameter to the corresponding securities file", async () => {
+    const requests: Array<string | URL | Request> = [];
+    const handler = createPublicApiRequestHandler({
+      fetch: async (input) => {
+        requests.push(input);
+        return Response.json([{ code: "2330", name: "TSMC" }]);
+      },
+    });
+
+    const response = await handler(
+      new Request("http://localhost/api/pub/securities?type=1"),
+    );
+
+    expect(response?.status).toBe(200);
+    expect(requests).toEqual([TYPE_ONE_SECURITIES_URL]);
+  });
+
+  test.each(["stock", "1.5", "1e3", ""])(
+    "rejects non-integer type value %p",
+    async (type) => {
+      let fetched = false;
+      const handler = createPublicApiRequestHandler({
+        fetch: async () => {
+          fetched = true;
+          return Response.json([]);
+        },
+      });
+
+      const response = await handler(
+        new Request(`http://localhost/api/pub/securities?type=${type}`),
+      );
+
+      expect(response?.status).toBe(400);
+      expect(response?.headers.get("Cache-Control")).toBe("no-store");
+      expect(await response?.json()).toEqual({
+        status: "invalid_request",
+        message: "type must be an integer",
+      });
+      expect(fetched).toBe(false);
+    },
+  );
 
   test("returns 502 when the upstream request fails", async () => {
     const handler = createPublicApiRequestHandler({
