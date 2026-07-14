@@ -70,7 +70,7 @@ export function createPublicApiRequestHandler(
     }
 
     if (url.pathname === "/api/pub/market_index") {
-      const market = url.searchParams.get("market") ?? "TSE";
+      const market = url.searchParams.get("market");
       if (!isMarket(market)) {
         return invalidMarketResponse();
       }

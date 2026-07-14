@@ -77,7 +77,7 @@ describe("GET /api/pub/market_index", () => {
     );
 
     const response = await handler(
-      new Request("http://localhost/api/pub/market_index"),
+      new Request("http://localhost/api/pub/market_index?market=TSE"),
     );
 
     expect(response.status).toBe(200);

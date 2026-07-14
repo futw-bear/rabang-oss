@@ -235,7 +235,7 @@ describe("GET /api/pub/prices", () => {
 });
 
 describe("GET /api/pub/market_index", () => {
-  test("defaults to the TSE market index with public cache headers", async () => {
+  test("returns the TSE market index with public cache headers", async () => {
     const requests: Array<{ input: string | URL | Request; init?: RequestInit }> =
       [];
     const marketIndex = [
@@ -250,7 +250,7 @@ describe("GET /api/pub/market_index", () => {
     });
 
     const response = await handler(
-      new Request("http://localhost/api/pub/market_index"),
+      new Request("http://localhost/api/pub/market_index?market=TSE"),
     );
 
     expect(response?.status).toBe(200);
@@ -312,6 +312,15 @@ describe("GET /api/pub/market_index", () => {
     },
   );
 
+  test("returns 400 when market is missing", async () => {
+    const handler = createPublicApiRequestHandler();
+    const response = await handler(
+      new Request("http://localhost/api/pub/market_index"),
+    );
+
+    expect(response?.status).toBe(400);
+  });
+
   test("returns 405 for methods other than GET", async () => {
     const handler = createPublicApiRequestHandler();
     const response = await handler(
@@ -327,7 +336,7 @@ describe("GET /api/pub/market_index", () => {
       fetch: async () => new Response("Unavailable", { status: 503 }),
     });
     const response = await handler(
-      new Request("http://localhost/api/pub/market_index"),
+      new Request("http://localhost/api/pub/market_index?market=TSE"),
     );
 
     expect(response?.status).toBe(502);
