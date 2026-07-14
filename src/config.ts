@@ -62,7 +62,7 @@ export function loadFubonCredentials(
 }
 
 export function loadPort(environment: Environment): number {
-  const rawPort = environment.PORT ?? "3000";
+  const rawPort = environment.PORT ?? "4000";
   const port = Number(rawPort);
 
   if (!Number.isInteger(port) || port < 1 || port > 65_535) {

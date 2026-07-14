@@ -45,7 +45,7 @@ $ bun i
 
 3. 建立 `.env`，並在其中加入以下內容
 ```
-VITE_API_TARGET=http://127.0.0.1:3000/bridge
+VITE_API_TARGET=http://127.0.0.1:4000/bridge
 ```
 
 4. 啟動 Shioaji Pro
