@@ -41,7 +41,6 @@ describe("GET /api/pub/securities", () => {
     expect(response?.headers.get("Cache-Control")).toBe(
       "public, max-age=30, s-maxage=30",
     );
-    expect(response?.headers.get("Access-Control-Allow-Origin")).toBe("*");
     expect(await response?.json()).toEqual([{ code: "2330", name: "TSMC" }]);
     expect(requests).toHaveLength(1);
     expect(requests[0]?.input).toBe(SECURITIES_URL);
@@ -118,7 +117,6 @@ describe("GET /api/pub/securities", () => {
     );
 
     expect(response?.status).toBe(502);
-    expect(response?.headers.get("Access-Control-Allow-Origin")).toBe("*");
     expect(response?.headers.get("Cache-Control")).toBe("no-store");
     expect(await response?.json()).toEqual({ status: "upstream_unavailable" });
   });
@@ -162,7 +160,6 @@ describe("GET /api/pub/prices", () => {
       expect(response?.headers.get("Cache-Control")).toBe(
         "public, max-age=30, s-maxage=30",
       );
-      expect(response?.headers.get("Access-Control-Allow-Origin")).toBe("*");
       expect(await response?.json()).toEqual([
         { Code: "2330", ClosingPrice: "1100.00" },
       ]);
@@ -260,7 +257,6 @@ describe("GET /api/pub/market_index", () => {
     expect(response?.headers.get("Cache-Control")).toBe(
       "public, max-age=30, s-maxage=30",
     );
-    expect(response?.headers.get("Access-Control-Allow-Origin")).toBe("*");
     expect(await response?.json()).toEqual(marketIndex);
     expect(requests).toHaveLength(1);
     expect(requests[0]?.input).toBe(TSE_MARKET_INDEX_URL);

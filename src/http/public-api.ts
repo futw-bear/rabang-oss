@@ -12,7 +12,6 @@ const MARKET_INDEX_URLS = {
 const TAIPEI_UTC_OFFSET_MS = 8 * 60 * 60 * 1000;
 const SECURITIES_REFRESH_HOUR = 6;
 const MARKET_DATA_REFRESH_HOUR = 14;
-const PUBLIC_API_HEADERS = { "Access-Control-Allow-Origin": "*" } as const;
 
 export type PublicApiRequestHandler = (
   request: Request,
@@ -49,7 +48,7 @@ export function createPublicApiRequestHandler(
         { status: "method_not_allowed" },
         {
           status: 405,
-          headers: { ...PUBLIC_API_HEADERS, Allow: "GET" },
+          headers: { Allow: "GET" },
         },
       );
     }
@@ -162,7 +161,6 @@ async function fetchPublicResource(
     return new Response(upstreamResponse.body, {
       status: 200,
       headers: {
-        ...PUBLIC_API_HEADERS,
         "Cache-Control": `public, max-age=${maxAge}, s-maxage=${maxAge}`,
         "Content-Type": "application/json; charset=utf-8",
       },
@@ -183,7 +181,7 @@ function invalidMarketResponse(): Response {
     { status: "invalid_request", message: "market must be TSE or OTC" },
     {
       status: 400,
-      headers: { ...PUBLIC_API_HEADERS, "Cache-Control": "no-store" },
+      headers: { "Cache-Control": "no-store" },
     },
   );
 }
@@ -193,7 +191,7 @@ function invalidSecuritiesTypeResponse(): Response {
     { status: "invalid_request", message: "type must be an integer" },
     {
       status: 400,
-      headers: { ...PUBLIC_API_HEADERS, "Cache-Control": "no-store" },
+      headers: { "Cache-Control": "no-store" },
     },
   );
 }
@@ -203,7 +201,7 @@ function upstreamErrorResponse(): Response {
     { status: "upstream_unavailable" },
     {
       status: 502,
-      headers: { ...PUBLIC_API_HEADERS, "Cache-Control": "no-store" },
+      headers: { "Cache-Control": "no-store" },
     },
   );
 }
